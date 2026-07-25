@@ -3,11 +3,12 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using TaskManagement.Application.Common.Interfaces;
 using TaskManagement.Domain.Entities;
 
 namespace TaskManagement.Infrastructure.Identity;
 
-public class JwtTokenService
+public class JwtTokenService : IJwtTokenService
 {
     private readonly IConfiguration _configuration;
 

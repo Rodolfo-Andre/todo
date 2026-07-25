@@ -34,4 +34,14 @@ public class BaseResponse<T>
             Errors = new List<string> { error }
         };
     }
+
+    public static BaseResponse<T> Failure(List<string> errors)
+    {
+        return CreateFailure(errors);
+    }
+
+    public static BaseResponse<T> Failure(string error)
+    {
+        return CreateFailure(error);
+    }
 }

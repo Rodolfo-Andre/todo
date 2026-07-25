@@ -67,7 +67,7 @@ public static class DependencyInjection
         // Services
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
-        services.AddScoped<JwtTokenService>();
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
 
         // Repositories
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
