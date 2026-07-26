@@ -34,8 +34,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsUnique();
 
         builder.HasIndex(u => u.IsActive);
-
-        builder.Ignore(u => u.SecurityStamp);
-        builder.Ignore(u => u.ConcurrencyStamp);
     }
 }

@@ -1,6 +1,12 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
+using TaskManagement.Api.Middleware;
 using TaskManagement.Application;
+using TaskManagement.Domain.Entities;
 using TaskManagement.Infrastructure;
+using TaskManagement.Infrastructure.Data;
+using TaskManagement.Infrastructure.Data.Seeds;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +21,11 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // Add services to the container
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -71,6 +81,22 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Run database seeds
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    var roleManager = services.GetRequiredService<RoleManager<Role>>();
+    var userManager = services.GetRequiredService<UserManager<User>>();
+
+    await context.Database.MigrateAsync();
+    await RoleSeed.SeedAsync(context, roleManager);
+    await AdminUserSeed.SeedAsync(context, userManager);
+}
+
+// Exception handling middleware (must be first)
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())

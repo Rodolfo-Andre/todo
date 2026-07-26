@@ -136,7 +136,8 @@ export class RegisterComponent {
     if (this.registerForm.invalid) return;
 
     this.errorMessage = null;
-    this.authService.register(this.registerForm.value).subscribe({
+    const { confirmPassword, ...registerData } = this.registerForm.value;
+    this.authService.register(registerData).subscribe({
       next: (response) => {
         if (response.success) {
           this.router.navigate(['/dashboard']);

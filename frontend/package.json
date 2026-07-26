@@ -27,6 +27,7 @@
     "@angular/forms": "^20.1.0",
     "@angular/platform-browser": "^20.1.0",
     "@angular/router": "^20.1.0",
+    "@primeng/themes": "^21.0.4",
     "chart.js": "^4.5.1",
     "primeicons": "^8.0.0",
     "primeng": "^19.1.4",
@@ -47,7 +48,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "postcss": "^8.5.23",
-    "tailwindcss": "^4.3.3",
+    "tailwindcss": "^3.4.17",
     "typescript": "~5.8.2"
   }
 }

@@ -1,3 +1,9 @@
+@import "primeicons/primeicons.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Custom global styles */
 body {
   margin: 0;

@@ -6,6 +6,7 @@ export interface User {
   avatarUrl?: string;
   isActive: boolean;
   roles: string[];
+  createdAt?: Date;
 }
 
 export interface LoginRequest {

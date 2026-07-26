@@ -8,6 +8,17 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      // For 400 errors (validation errors), pass the backend error message
+      if (error.status === 400 && error.error?.errors) {
+        const backendMessage = error.error.errors[0] || 'Validation error';
+        return throwError(() => new Error(backendMessage));
+      }
+
+      // For 400 errors with a message property
+      if (error.status === 400 && error.error?.message) {
+        return throwError(() => new Error(error.error.message));
+      }
+
       let errorMessage = 'An unexpected error occurred';
 
       if (error.status === 401) {
