@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -62,22 +62,31 @@ import { ProjectService, Project, ProjectMember } from '../projects/project.serv
           <p class="mt-2 text-gray-500">Loading tasks...</p>
         </div>
       } @else {
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 min-h-[600px]">
           <!-- Todo Column -->
-          <div class="bg-gray-50 rounded-lg p-4">
+          <div
+            class="bg-gray-50 rounded-lg p-4 transition-colors"
+            [class.ring-2]="dragOverStatus === 0"
+            [class.ring-gray-400]="dragOverStatus === 0"
+            [class.bg-gray-100]="dragOverStatus === 0"
+            (dragover)="onDragOverColumn($event, 0)"
+            (dragleave)="onDragLeaveColumn()"
+            (drop)="onDropOnColumn($event, 0)"
+          >
             <div class="flex items-center justify-between mb-4">
               <h3 class="font-semibold text-gray-700">Todo</h3>
               <span class="px-2 py-1 bg-gray-200 rounded-full text-sm">{{ taskStore.todoTasks().length }}</span>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-3 min-h-[100px]">
               @for (task of taskStore.todoTasks(); track task.id) {
                 <div
-                  class="bg-white rounded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow border-l-4 border-gray-400"
+                  class="bg-white rounded-lg p-4 shadow-sm cursor-grab hover:shadow-md transition-all border-l-4 border-gray-400"
+                  [class.opacity-50]="draggedTask?.id === task.id"
+                  [class.scale-95]="draggedTask?.id === task.id"
                   (click)="showTaskDetail(task)"
                   draggable="true"
                   (dragstart)="onDragStart($event, task)"
-                  (dragover)="onDragOver($event)"
-                  (drop)="onDrop($event, task, 0)"
+                  (dragend)="onDragEnd()"
                 >
                   <div class="flex items-start justify-between">
                     <h4 class="font-medium text-gray-800">{{ task.title }}</h4>
@@ -115,26 +124,47 @@ import { ProjectService, Project, ProjectMember } from '../projects/project.serv
                   }
                 </div>
               } @empty {
-                <p class="text-center text-gray-400 py-4">No tasks</p>
+                <div
+                  class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-400"
+                  [class.border-blue-400]="dragOverStatus === 0"
+                  [class.text-blue-500]="dragOverStatus === 0"
+                  [class.bg-blue-50]="dragOverStatus === 0"
+                >
+                  @if (dragOverStatus === 0) {
+                    <i class="pi pi-plus-circle text-2xl mb-2"></i>
+                    <p>Drop here</p>
+                  } @else {
+                    <p>No tasks</p>
+                  }
+                </div>
               }
             </div>
           </div>
 
           <!-- In Progress Column -->
-          <div class="bg-blue-50 rounded-lg p-4">
+          <div
+            class="bg-blue-50 rounded-lg p-4 transition-colors"
+            [class.ring-2]="dragOverStatus === 1"
+            [class.ring-blue-400]="dragOverStatus === 1"
+            [class.bg-blue-100]="dragOverStatus === 1"
+            (dragover)="onDragOverColumn($event, 1)"
+            (dragleave)="onDragLeaveColumn()"
+            (drop)="onDropOnColumn($event, 1)"
+          >
             <div class="flex items-center justify-between mb-4">
               <h3 class="font-semibold text-blue-700">In Progress</h3>
               <span class="px-2 py-1 bg-blue-200 rounded-full text-sm">{{ taskStore.inProgressTasks().length }}</span>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-3 min-h-[100px]">
               @for (task of taskStore.inProgressTasks(); track task.id) {
                 <div
-                  class="bg-white rounded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow border-l-4 border-blue-500"
+                  class="bg-white rounded-lg p-4 shadow-sm cursor-grab hover:shadow-md transition-all border-l-4 border-blue-500"
+                  [class.opacity-50]="draggedTask?.id === task.id"
+                  [class.scale-95]="draggedTask?.id === task.id"
                   (click)="showTaskDetail(task)"
                   draggable="true"
                   (dragstart)="onDragStart($event, task)"
-                  (dragover)="onDragOver($event)"
-                  (drop)="onDrop($event, task, 1)"
+                  (dragend)="onDragEnd()"
                 >
                   <div class="flex items-start justify-between">
                     <h4 class="font-medium text-gray-800">{{ task.title }}</h4>
@@ -172,26 +202,47 @@ import { ProjectService, Project, ProjectMember } from '../projects/project.serv
                   }
                 </div>
               } @empty {
-                <p class="text-center text-gray-400 py-4">No tasks</p>
+                <div
+                  class="border-2 border-dashed border-blue-300 rounded-lg p-8 text-center text-blue-400"
+                  [class.border-blue-400]="dragOverStatus === 1"
+                  [class.text-blue-500]="dragOverStatus === 1"
+                  [class.bg-blue-50]="dragOverStatus === 1"
+                >
+                  @if (dragOverStatus === 1) {
+                    <i class="pi pi-plus-circle text-2xl mb-2"></i>
+                    <p>Drop here</p>
+                  } @else {
+                    <p>No tasks</p>
+                  }
+                </div>
               }
             </div>
           </div>
 
           <!-- In Review Column -->
-          <div class="bg-yellow-50 rounded-lg p-4">
+          <div
+            class="bg-yellow-50 rounded-lg p-4 transition-colors"
+            [class.ring-2]="dragOverStatus === 2"
+            [class.ring-yellow-400]="dragOverStatus === 2"
+            [class.bg-yellow-100]="dragOverStatus === 2"
+            (dragover)="onDragOverColumn($event, 2)"
+            (dragleave)="onDragLeaveColumn()"
+            (drop)="onDropOnColumn($event, 2)"
+          >
             <div class="flex items-center justify-between mb-4">
               <h3 class="font-semibold text-yellow-700">In Review</h3>
               <span class="px-2 py-1 bg-yellow-200 rounded-full text-sm">{{ taskStore.inReviewTasks().length }}</span>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-3 min-h-[100px]">
               @for (task of taskStore.inReviewTasks(); track task.id) {
                 <div
-                  class="bg-white rounded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow border-l-4 border-yellow-500"
+                  class="bg-white rounded-lg p-4 shadow-sm cursor-grab hover:shadow-md transition-all border-l-4 border-yellow-500"
+                  [class.opacity-50]="draggedTask?.id === task.id"
+                  [class.scale-95]="draggedTask?.id === task.id"
                   (click)="showTaskDetail(task)"
                   draggable="true"
                   (dragstart)="onDragStart($event, task)"
-                  (dragover)="onDragOver($event)"
-                  (drop)="onDrop($event, task, 2)"
+                  (dragend)="onDragEnd()"
                 >
                   <div class="flex items-start justify-between">
                     <h4 class="font-medium text-gray-800">{{ task.title }}</h4>
@@ -229,26 +280,47 @@ import { ProjectService, Project, ProjectMember } from '../projects/project.serv
                   }
                 </div>
               } @empty {
-                <p class="text-center text-gray-400 py-4">No tasks</p>
+                <div
+                  class="border-2 border-dashed border-yellow-300 rounded-lg p-8 text-center text-yellow-400"
+                  [class.border-yellow-400]="dragOverStatus === 2"
+                  [class.text-yellow-500]="dragOverStatus === 2"
+                  [class.bg-yellow-50]="dragOverStatus === 2"
+                >
+                  @if (dragOverStatus === 2) {
+                    <i class="pi pi-plus-circle text-2xl mb-2"></i>
+                    <p>Drop here</p>
+                  } @else {
+                    <p>No tasks</p>
+                  }
+                </div>
               }
             </div>
           </div>
 
           <!-- Done Column -->
-          <div class="bg-green-50 rounded-lg p-4">
+          <div
+            class="bg-green-50 rounded-lg p-4 transition-colors"
+            [class.ring-2]="dragOverStatus === 3"
+            [class.ring-green-400]="dragOverStatus === 3"
+            [class.bg-green-100]="dragOverStatus === 3"
+            (dragover)="onDragOverColumn($event, 3)"
+            (dragleave)="onDragLeaveColumn()"
+            (drop)="onDropOnColumn($event, 3)"
+          >
             <div class="flex items-center justify-between mb-4">
               <h3 class="font-semibold text-green-700">Done</h3>
               <span class="px-2 py-1 bg-green-200 rounded-full text-sm">{{ taskStore.doneTasks().length }}</span>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-3 min-h-[100px]">
               @for (task of taskStore.doneTasks(); track task.id) {
                 <div
-                  class="bg-white rounded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow border-l-4 border-green-500"
+                  class="bg-white rounded-lg p-4 shadow-sm cursor-grab hover:shadow-md transition-all border-l-4 border-green-500"
+                  [class.opacity-50]="draggedTask?.id === task.id"
+                  [class.scale-95]="draggedTask?.id === task.id"
                   (click)="showTaskDetail(task)"
                   draggable="true"
                   (dragstart)="onDragStart($event, task)"
-                  (dragover)="onDragOver($event)"
-                  (drop)="onDrop($event, task, 3)"
+                  (dragend)="onDragEnd()"
                 >
                   <div class="flex items-start justify-between">
                     <h4 class="font-medium text-gray-800">{{ task.title }}</h4>
@@ -286,7 +358,19 @@ import { ProjectService, Project, ProjectMember } from '../projects/project.serv
                   }
                 </div>
               } @empty {
-                <p class="text-center text-gray-400 py-4">No tasks</p>
+                <div
+                  class="border-2 border-dashed border-green-300 rounded-lg p-8 text-center text-green-400"
+                  [class.border-green-400]="dragOverStatus === 3"
+                  [class.text-green-500]="dragOverStatus === 3"
+                  [class.bg-green-50]="dragOverStatus === 3"
+                >
+                  @if (dragOverStatus === 3) {
+                    <i class="pi pi-plus-circle text-2xl mb-2"></i>
+                    <p>Drop here</p>
+                  } @else {
+                    <p>No tasks</p>
+                  }
+                </div>
               }
             </div>
           </div>
@@ -369,6 +453,7 @@ export class TaskBoardComponent implements OnInit {
   isSaving = false;
 
   draggedTask: Task | null = null;
+  dragOverStatus: number | null = null;
 
   newTask = {
     title: '',
@@ -472,29 +557,54 @@ export class TaskBoardComponent implements OnInit {
     }
   }
 
+  // Drag and Drop handlers
   onDragStart(event: DragEvent, task: Task): void {
     this.draggedTask = task;
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', task.id);
     }
   }
 
-  onDragOver(event: DragEvent): void {
+  onDragEnd(): void {
+    this.draggedTask = null;
+    this.dragOverStatus = null;
+  }
+
+  onDragOverColumn(event: DragEvent, status: number): void {
     event.preventDefault();
+    event.stopPropagation();
     if (event.dataTransfer) {
       event.dataTransfer.dropEffect = 'move';
     }
+    this.dragOverStatus = status;
   }
 
-  async onDrop(event: DragEvent, targetTask: Task, newStatus: number): Promise<void> {
+  onDragLeaveColumn(): void {
+    this.dragOverStatus = null;
+  }
+
+  async onDropOnColumn(event: DragEvent, newStatus: number): Promise<void> {
     event.preventDefault();
-    if (this.draggedTask && this.draggedTask.id !== targetTask.id) {
-      await this.taskStore.changeStatus(this.draggedTask.id, newStatus, this.projectId);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Task status updated'
-      });
+    event.stopPropagation();
+    this.dragOverStatus = null;
+
+    if (this.draggedTask && this.draggedTask.status !== newStatus) {
+      const success = await this.taskStore.changeStatus(this.draggedTask.id, newStatus, this.projectId);
+      if (success) {
+        const statusNames = ['Todo', 'In Progress', 'In Review', 'Done', 'Cancelled'];
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: `Task moved to ${statusNames[newStatus]}`
+        });
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to update task status'
+        });
+      }
     }
     this.draggedTask = null;
   }

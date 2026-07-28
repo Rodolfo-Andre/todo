@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, effect, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -13,8 +13,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TimelineModule } from 'primeng/timeline';
 import { DividerModule } from 'primeng/divider';
 import { DialogModule } from 'primeng/dialog';
+import { FileUploadModule } from 'primeng/fileupload';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { TaskDetail, TaskStatus, TaskPriority } from '../../core/models/task.model';
+import { TaskDetail, TaskStatus, TaskPriority, TaskAttachment } from '../../core/models/task.model';
 import { TaskStore } from './task.store';
 import { ProjectService, ProjectMember } from '../projects/project.service';
 import { UserService } from '../users/user.service';
@@ -37,7 +38,8 @@ import { User } from '../../core/models/user.model';
     ConfirmDialogModule,
     TimelineModule,
     DividerModule,
-    DialogModule
+    DialogModule,
+    FileUploadModule
   ],
   providers: [MessageService, ConfirmationService],
   template: `
@@ -219,6 +221,62 @@ import { User } from '../../core/models/user.model';
               </div>
             </p-card>
 
+            <!-- Attachments -->
+            <p-card>
+              <ng-template pTemplate="header">
+                <div class="px-4 py-3 border-b">
+                  <h2 class="text-lg font-semibold">Attachments ({{ task.attachments?.length || 0 }})</h2>
+                </div>
+              </ng-template>
+
+              <div class="flex flex-col gap-4">
+                <div>
+                  <p-fileUpload
+                    #fileUpload
+                    mode="basic"
+                    name="file"
+                    [auto]="true"
+                    [customUpload]="true"
+                    (uploadHandler)="onFileUpload($event)"
+                    chooseLabel="Upload File"
+                    chooseIcon="pi pi-upload"
+                    styleClass="w-full"
+                  ></p-fileUpload>
+                </div>
+
+                @if (task.attachments && task.attachments.length > 0) {
+                  <div class="flex flex-col gap-2">
+                    @for (attachment of task.attachments; track attachment.id) {
+                      <div class="flex items-center justify-between p-3 bg-gray-50 rounded hover:bg-gray-100">
+                        <div class="flex items-center gap-3">
+                          <i class="pi pi-file text-gray-500"></i>
+                          <div>
+                            <p class="text-sm font-medium">{{ attachment.fileName }}</p>
+                            <p class="text-xs text-gray-500">{{ formatFileSize(attachment.fileSize) }}</p>
+                          </div>
+                        </div>
+                        <div class="flex gap-1">
+                          <p-button
+                            icon="pi pi-download"
+                            styleClass="p-button-text p-button-sm"
+                            (onClick)="downloadAttachment(attachment)"
+                            [routerLink]="[]"
+                          ></p-button>
+                          <p-button
+                            icon="pi pi-trash"
+                            styleClass="p-button-text p-button-danger p-button-sm"
+                            (onClick)="confirmDeleteAttachment(attachment)"
+                          ></p-button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <p class="text-center text-gray-400 py-4">No attachments</p>
+                }
+              </div>
+            </p-card>
+
             <!-- History -->
             <p-card>
               <ng-template pTemplate="header">
@@ -309,7 +367,7 @@ import { User } from '../../core/models/user.model';
     </p-dialog>
   `
 })
-export class TaskDetailComponent implements OnInit {
+export class TaskDetailComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private messageService = inject(MessageService);
@@ -325,6 +383,7 @@ export class TaskDetailComponent implements OnInit {
   newComment = '';
   editDialogVisible = false;
   isSaving = false;
+  private taskId: string = '';
 
   editForm = {
     title: '',
@@ -349,28 +408,26 @@ export class TaskDetailComponent implements OnInit {
     { label: 'Critical', value: 3 }
   ];
 
+  constructor() {
+    effect(() => {
+      const currentTask = this.taskStore.selectedTask();
+      if (currentTask && currentTask.id === this.taskId) {
+        this.task = currentTask as TaskDetail;
+        this.selectedUserId = this.task.assignedToId || '';
+      }
+    });
+  }
+
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.loadTask(id);
+    this.taskId = this.route.snapshot.paramMap.get('id') || '';
+    if (this.taskId) {
+      this.taskStore.loadTask(this.taskId);
       this.loadUsers();
     }
   }
 
-  loadTask(id: string): void {
-    this.taskStore.loadTask(id);
-    // Subscribe to task changes
-    const checkTask = () => {
-      const currentTask = this.taskStore.selectedTask();
-      if (currentTask && currentTask.id === id) {
-        this.task = currentTask as TaskDetail;
-        this.selectedUserId = this.task.assignedToId || '';
-      }
-    };
-    checkTask();
-    // Poll for task changes
-    const interval = setInterval(checkTask, 100);
-    setTimeout(() => clearInterval(interval), 5000);
+  ngOnDestroy(): void {
+    this.taskStore.clearSelectedTask();
   }
 
   loadUsers(): void {
@@ -435,7 +492,6 @@ export class TaskDetailComponent implements OnInit {
         summary: 'Success',
         detail: 'Status updated successfully'
       });
-      this.loadTask(this.task.id);
     } else {
       this.messageService.add({
         severity: 'error',
@@ -455,7 +511,6 @@ export class TaskDetailComponent implements OnInit {
         summary: 'Success',
         detail: 'Task assigned successfully'
       });
-      this.loadTask(this.task.id);
     } else {
       this.messageService.add({
         severity: 'error',
@@ -476,7 +531,6 @@ export class TaskDetailComponent implements OnInit {
         detail: 'Comment added successfully'
       });
       this.newComment = '';
-      this.loadTask(this.task.id);
     } else {
       this.messageService.add({
         severity: 'error',
@@ -484,6 +538,75 @@ export class TaskDetailComponent implements OnInit {
         detail: 'Failed to add comment'
       });
     }
+  }
+
+  async onFileUpload(event: any): Promise<void> {
+    if (!this.task || !event.files || event.files.length === 0) return;
+
+    const file = event.files[0];
+    const success = await this.taskStore.uploadAttachment(this.task.id, file);
+    
+    if (success) {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'File uploaded successfully'
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to upload file'
+      });
+    }
+  }
+
+  downloadAttachment(attachment: TaskAttachment): void {
+    // TODO: Implement download when backend file serving is ready
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Info',
+      detail: 'Download functionality will be available when file serving is configured'
+    });
+  }
+
+  confirmDeleteAttachment(attachment: TaskAttachment): void {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete "${attachment.fileName}"?`,
+      header: 'Confirm Delete',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.deleteAttachment(attachment);
+      }
+    });
+  }
+
+  async deleteAttachment(attachment: TaskAttachment): Promise<void> {
+    if (!this.task) return;
+
+    const success = await this.taskStore.deleteAttachment(attachment.id, this.task.id);
+    if (success) {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Attachment deleted successfully'
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to delete attachment'
+      });
+    }
+  }
+
+  formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
   showEditDialog(): void {
@@ -519,7 +642,6 @@ export class TaskDetailComponent implements OnInit {
         detail: 'Task updated successfully'
       });
       this.editDialogVisible = false;
-      this.loadTask(this.task.id);
     } else {
       this.messageService.add({
         severity: 'error',

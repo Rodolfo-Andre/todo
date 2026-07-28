@@ -4,9 +4,12 @@ using TaskManagement.Application.Features.Tasks.Commands.AddComment;
 using TaskManagement.Application.Features.Tasks.Commands.AssignTask;
 using TaskManagement.Application.Features.Tasks.Commands.ChangeStatus;
 using TaskManagement.Application.Features.Tasks.Commands.CreateTask;
+using TaskManagement.Application.Features.Tasks.Commands.DeleteAttachment;
 using TaskManagement.Application.Features.Tasks.Commands.DeleteTask;
 using TaskManagement.Application.Features.Tasks.Commands.ReorderTask;
 using TaskManagement.Application.Features.Tasks.Commands.UpdateTask;
+using TaskManagement.Application.Features.Tasks.Commands.UploadAttachment;
+using TaskManagement.Application.Features.Tasks.Queries.GetAttachmentsByTask;
 using TaskManagement.Application.Features.Tasks.Queries.GetMyTasks;
 using TaskManagement.Application.Features.Tasks.Queries.GetTaskById;
 using TaskManagement.Application.Features.Tasks.Queries.GetTasksByProject;
@@ -193,6 +196,50 @@ public class TasksController : ControllerBase
             Content = request.Content
         };
 
+        var result = await _mediator.Send(command);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpPost("{taskId}/attachments")]
+    public async Task<IActionResult> UploadAttachment(Guid taskId, IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest(new { Success = false, Message = "No file uploaded" });
+
+        var command = new UploadAttachmentCommand
+        {
+            TaskId = taskId,
+            File = file
+        };
+
+        var result = await _mediator.Send(command);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{taskId}/attachments")]
+    public async Task<IActionResult> GetAttachments(Guid taskId)
+    {
+        var query = new GetAttachmentsByTaskQuery { TaskId = taskId };
+        var result = await _mediator.Send(query);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpDelete("attachments/{attachmentId}")]
+    public async Task<IActionResult> DeleteAttachment(Guid attachmentId)
+    {
+        var command = new DeleteAttachmentCommand { AttachmentId = attachmentId };
         var result = await _mediator.Send(command);
 
         if (!result.Success)

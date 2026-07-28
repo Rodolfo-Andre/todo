@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../../core/models/api-response.model';
-import { Task, TaskDetail, TaskComment } from '../../core/models/task.model';
+import { Task, TaskDetail, TaskComment, TaskAttachment } from '../../core/models/task.model';
 
 export interface CreateTaskRequest {
   title: string;
@@ -102,5 +102,19 @@ export class TaskService {
 
   addComment(taskId: string, content: string): Observable<ApiResponse<string>> {
     return this.http.post<ApiResponse<string>>(`${this.apiUrl}/${taskId}/comments`, { content });
+  }
+
+  uploadAttachment(taskId: string, file: File): Observable<ApiResponse<TaskAttachment>> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<ApiResponse<TaskAttachment>>(`${this.apiUrl}/${taskId}/attachments`, formData);
+  }
+
+  getAttachments(taskId: string): Observable<ApiResponse<TaskAttachment[]>> {
+    return this.http.get<ApiResponse<TaskAttachment[]>>(`${this.apiUrl}/${taskId}/attachments`);
+  }
+
+  deleteAttachment(attachmentId: string): Observable<ApiResponse<boolean>> {
+    return this.http.delete<ApiResponse<boolean>>(`${this.apiUrl}/attachments/${attachmentId}`);
   }
 }

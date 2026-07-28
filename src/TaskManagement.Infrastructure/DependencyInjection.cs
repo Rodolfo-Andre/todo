@@ -68,6 +68,7 @@ public static class DependencyInjection
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IFileStorageService, FileStorageService>();
 
         // Repositories
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

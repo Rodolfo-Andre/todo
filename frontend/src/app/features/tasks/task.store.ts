@@ -237,6 +237,46 @@ export class TaskStore {
     });
   }
 
+  uploadAttachment(taskId: string, file: File): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.taskService.uploadAttachment(taskId, file).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.loadTask(taskId);
+            resolve(true);
+          } else {
+            this._error.set(response.errors?.[0] || 'Failed to upload attachment');
+            resolve(false);
+          }
+        },
+        error: (error) => {
+          this._error.set('Failed to upload attachment');
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  deleteAttachment(attachmentId: string, taskId: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.taskService.deleteAttachment(attachmentId).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.loadTask(taskId);
+            resolve(true);
+          } else {
+            this._error.set(response.errors?.[0] || 'Failed to delete attachment');
+            resolve(false);
+          }
+        },
+        error: (error) => {
+          this._error.set('Failed to delete attachment');
+          resolve(false);
+        }
+      });
+    });
+  }
+
   setFilters(filters: TaskFilters): void {
     this._filters.set(filters);
   }
