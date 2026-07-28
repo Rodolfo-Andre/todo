@@ -77,6 +77,17 @@ import { AuthService } from '../../core/auth/auth.service';
             }
           </a>
 
+          <a routerLink="/my-tasks"
+             routerLinkActive="bg-slate-700 text-white"
+             [pTooltip]="!sidebarExpanded() ? 'My Tasks' : ''"
+             tooltipPosition="right"
+             class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+            <i class="pi pi-check-square text-lg flex-shrink-0"></i>
+            @if (sidebarExpanded()) {
+              <span class="whitespace-nowrap">My Tasks</span>
+            }
+          </a>
+
           <a routerLink="/notifications"
              routerLinkActive="bg-slate-700 text-white"
              [pTooltip]="!sidebarExpanded() ? 'Notifications' : ''"

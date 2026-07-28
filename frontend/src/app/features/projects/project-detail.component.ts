@@ -52,6 +52,8 @@ import { User } from '../../core/models/user.model';
           }
         </div>
         <div class="flex gap-2">
+          <p-button label="Board" icon="pi pi-columns" styleClass="p-button-outlined" [routerLink]="['/projects', project?.id, 'board']"></p-button>
+          <p-button label="List" icon="pi pi-list" styleClass="p-button-outlined" [routerLink]="['/projects', project?.id, 'list']"></p-button>
           <p-button label="Edit" icon="pi pi-pencil" (onClick)="showEditDialog()"></p-button>
         </div>
       </div>

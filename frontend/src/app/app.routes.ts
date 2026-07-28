@@ -31,12 +31,24 @@ export const routes: Routes = [
         loadComponent: () => import('./features/projects/project-detail.component').then(m => m.ProjectDetailComponent)
       },
       {
+        path: 'projects/:id/board',
+        loadComponent: () => import('./features/tasks/task-board.component').then(m => m.TaskBoardComponent)
+      },
+      {
+        path: 'projects/:id/list',
+        loadComponent: () => import('./features/tasks/task-list.component').then(m => m.TaskListComponent)
+      },
+      {
         path: 'tasks/:id',
         loadComponent: () => import('./features/tasks/task-detail.component').then(m => m.TaskDetailComponent)
       },
       {
         path: 'notifications',
         loadComponent: () => import('./features/notifications/notification-list.component').then(m => m.NotificationListComponent)
+      },
+      {
+        path: 'my-tasks',
+        loadComponent: () => import('./features/tasks/my-tasks.component').then(m => m.MyTasksComponent)
       },
       {
         path: 'profile',
