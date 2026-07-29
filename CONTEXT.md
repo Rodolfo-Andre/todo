@@ -103,7 +103,6 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 |--------|--------|-------|
 | Project Create/Edit | ❌ | Solo list y detail |
 | Project Settings/Members | ❌ | No implementado |
-| Notifications | ❌ | No implementado |
 | Profile | ❌ | No implementado |
 | Shared Components | ❌ | Header, Sidebar, ConfirmDialog, etc. |
 
@@ -159,10 +158,9 @@ dcf7258 feat: implement Users Management and improve UI
 
 ## 8. Próximos Pasos (Prioridad)
 
-1. **Fase 7 — Notifications:** Sistema de notificaciones (asignaciones, comentarios, vencimientos)
-2. **Fase 8 — Profile:** Gestión de perfil de usuario
-3. **Fase 9 — Project Settings:** Create/Edit, Settings, Members
-4. **Fase 10 — Audit:** Log de auditoría del sistema
+1. **Fase 8 — Profile:** Gestión de perfil de usuario
+2. **Fase 9 — Project Settings:** Create/Edit, Settings, Members
+3. **Fase 10 — Audit:** Log de auditoría del sistema
 
 ---
 

@@ -1,4 +1,4 @@
-import { Component, inject, signal, HostListener } from '@angular/core';
+import { Component, inject, signal, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -6,6 +6,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '../../core/auth/auth.service';
+import { NotificationStore } from '../../features/notifications/notification.store';
 
 @Component({
   selector: 'app-main-layout',
@@ -92,17 +93,17 @@ import { AuthService } from '../../core/auth/auth.service';
              routerLinkActive="bg-slate-700 text-white"
              [pTooltip]="!sidebarExpanded() ? 'Notifications' : ''"
              tooltipPosition="right"
-             class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+             class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors relative">
             <i class="pi pi-bell text-lg flex-shrink-0"></i>
             @if (sidebarExpanded()) {
               <span class="whitespace-nowrap">Notifications</span>
-              @if (unreadCount() > 0) {
+              @if (notificationStore.unreadCount() > 0) {
                 <span class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full flex-shrink-0">
-                  {{ unreadCount() }}
+                  {{ notificationStore.unreadCount() }}
                 </span>
               }
             } @else {
-              @if (unreadCount() > 0) {
+              @if (notificationStore.unreadCount() > 0) {
                 <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               }
             }
@@ -205,9 +206,9 @@ import { AuthService } from '../../core/auth/auth.service';
             <a routerLink="/notifications"
                class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="pi pi-bell text-xl"></i>
-              @if (unreadCount() > 0) {
+              @if (notificationStore.unreadCount() > 0) {
                 <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs flex items-center justify-center rounded-full">
-                  {{ unreadCount() > 9 ? '9+' : unreadCount() }}
+                  {{ notificationStore.unreadCount() > 9 ? '9+' : notificationStore.unreadCount() }}
                 </span>
               }
             </a>
@@ -263,16 +264,20 @@ import { AuthService } from '../../core/auth/auth.service';
     }
   `]
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements OnInit {
   authService = inject(AuthService);
+  notificationStore = inject(NotificationStore);
 
   sidebarExpanded = signal(true);
   sidebarOpen = signal(false);
   isMobile = signal(false);
-  unreadCount = signal(0);
 
   constructor() {
     this.checkScreenSize();
+  }
+
+  ngOnInit(): void {
+    this.notificationStore.loadUnreadCount();
   }
 
   @HostListener('window:resize')

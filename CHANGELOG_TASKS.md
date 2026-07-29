@@ -29,6 +29,43 @@ Implementación completa del sistema de gestión de tareas incluyendo backend (.
 
 ---
 
+### Notifications
+
+#### Backend
+- **NotificationDto**: DTOs para notificaciones (NotificationDto, CreateNotificationRequest, NotificationSummaryDto)
+- **CreateNotificationCommand**: Crear notificaciones
+- **MarkAsReadCommand**: Marcar notificación como leída
+- **MarkAllAsReadCommand**: Marcar todas como leídas
+- **DeleteNotificationCommand**: Eliminar notificación
+- **GetNotificationsByUserQuery**: Obtener notificaciones del usuario
+- **GetUnreadCountQuery**: Obtener cantidad de no leídas
+- **NotificationsController**: API REST con 6 endpoints
+
+#### Frontend
+- **NotificationService**: Servicio HTTP para CRUD de notificaciones
+- **NotificationStore**: State management con Signals
+- **NotificationListComponent**: Lista completa con:
+  - Sección de no leídas (highlight azul)
+  - Sección de leídas (gray)
+  - Mark as Read individual
+  - Mark All as Read
+  - Delete con confirmación
+  - Iconos por tipo de notificación
+- **Notification Model**: Interfaces TypeScript
+- **MainLayout**: Bell icon con unread count en sidebar y header
+
+#### Endpoints
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/api/notifications` | Obtener notificaciones |
+| GET | `/api/notifications/unread-count` | Obtener cantidad no leídas |
+| POST | `/api/notifications` | Crear notificación |
+| PATCH | `/api/notifications/{id}/read` | Marcar como leída |
+| PATCH | `/api/notifications/read-all` | Marcar todas como leídas |
+| DELETE | `/api/notifications/{id}` | Eliminar notificación |
+
+---
+
 ### Tasks (Fase 5-6)
 
 ### Backend (.NET)
@@ -95,8 +132,10 @@ src/TaskManagement.Shared/DTOs/
 │   ├── AssignTaskRequest.cs
 │   ├── ReorderTaskRequest.cs
 │   └── AddCommentRequest.cs
-└── Dashboard/
-    └── DashboardDto.cs (nuevo)
+├── Dashboard/
+│   └── DashboardDto.cs
+└── Notifications/
+    └── NotificationDto.cs (nuevo)
 
 src/TaskManagement.Application/Common/Interfaces/
 └── IFileStorageService.cs
@@ -118,17 +157,25 @@ src/TaskManagement.Application/Features/
 │       ├── GetTaskById/
 │       ├── GetMyTasks/
 │       └── GetAttachmentsByTask/
-└── Dashboard/
-    └── GetDashboardData/
-        ├── GetDashboardDataQuery.cs (nuevo)
-        └── GetDashboardDataHandler.cs (nuevo)
+├── Dashboard/
+│   └── GetDashboardData/
+└── Notifications/ (nuevo)
+    ├── Commands/
+    │   ├── CreateNotification/
+    │   ├── MarkAsRead/
+    │   ├── MarkAllAsRead/
+    │   └── DeleteNotification/
+    └── Queries/
+        ├── GetNotificationsByUser/
+        └── GetUnreadCount/
 
 src/TaskManagement.Infrastructure/Services/
 └── FileStorageService.cs
 
 src/TaskManagement.Api/Controllers/
 ├── TasksController.cs
-└── DashboardController.cs (nuevo)
+├── DashboardController.cs
+└── NotificationsController.cs (nuevo)
 ```
 
 ### Frontend
@@ -136,20 +183,25 @@ src/TaskManagement.Api/Controllers/
 frontend/src/app/
 ├── core/models/
 │   ├── task.model.ts
-│   └── dashboard.model.ts (nuevo)
+│   ├── dashboard.model.ts
+│   └── notification.model.ts (nuevo)
 ├── features/
 │   ├── dashboard/
-│   │   ├── dashboard.component.ts (actualizado)
-│   │   └── dashboard.service.ts (nuevo)
+│   │   ├── dashboard.component.ts
+│   │   └── dashboard.service.ts
+│   ├── notifications/ (nuevo)
+│   │   ├── notification-list.component.ts (actualizado)
+│   │   ├── notification.service.ts (nuevo)
+│   │   └── notification.store.ts (nuevo)
 │   └── tasks/
-│       ├── task.service.ts (actualizado)
-│       ├── task.store.ts (actualizado)
+│       ├── task.service.ts
+│       ├── task.store.ts
 │       ├── task-board.component.ts
 │       ├── task-list.component.ts
 │       ├── task-detail.component.ts
 │       └── my-tasks.component.ts
 ├── layout/main-layout/
-│   └── main-layout.component.ts
+│   └── main-layout.component.ts (actualizado - notification bell)
 └── app.routes.ts
 ```
 
