@@ -84,20 +84,28 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Layout | ✅ | MainLayout, AuthLayout |
 | State | ✅ | AuthStore (Signals) |
 
-### 4.4 Frontend — Pendiente
+### 4.4 Frontend — Completado
+
+| Módulo | Estado | Componentes |
+|--------|--------|------------|
+| Dashboard | ✅ | DashboardComponent (stats, charts, activity) |
+| Tasks | ✅ | TaskBoard, TaskList, TaskDetail, MyTasks |
+| Auth | ✅ | Login, Register |
+| Users | ✅ | UserList, UserDetail, UserService |
+| Projects | ✅ | ProjectList, ProjectDetail, ProjectService |
+| Core | ✅ | AuthService, Guards, Interceptors, Models |
+| Layout | ✅ | MainLayout, AuthLayout |
+| State | ✅ | AuthStore, TaskStore (Signals) |
+
+### 4.5 Frontend — Pendiente
 
 | Módulo | Estado | Notas |
 |--------|--------|-------|
-| Task Board (Kanban) | ❌ | Componente task-detail existe pero no board |
-| Task List | ❌ | No implementado |
-| Task Create/Edit | ❌ | No implementado |
-| Task Service | ❌ | No implementado |
-| Task Store | ❌ | No implementado |
 | Project Create/Edit | ❌ | Solo list y detail |
 | Project Settings/Members | ❌ | No implementado |
-| Comments | ❌ | No implementado |
-| Attachments | ❌ | No implementado |
-| Shared Components | ❌ | Header, Sidebar, ConfirmDialog, LoadingSpinner, etc. |
+| Notifications | ❌ | No implementado |
+| Profile | ❌ | No implementado |
+| Shared Components | ❌ | Header, Sidebar, ConfirmDialog, etc. |
 
 ---
 
@@ -151,12 +159,10 @@ dcf7258 feat: implement Users Management and improve UI
 
 ## 8. Próximos Pasos (Prioridad)
 
-1. **Fase 4 — Projects Frontend:** Create/Edit, Settings, Members
-2. **Fase 5 — Tasks Backend:** Commands + Queries + Validators
-3. **Fase 5 — Tasks Frontend:** Kanban Board, Task List, Task Detail
-4. **Fase 6 — Comments & Attachments:** Backend + Frontend
-5. **Fase 7 — Notifications & Dashboard:** Backend + Frontend
-6. **Fase 8 — Audit & Profile:** Backend + Frontend
+1. **Fase 7 — Notifications:** Sistema de notificaciones (asignaciones, comentarios, vencimientos)
+2. **Fase 8 — Profile:** Gestión de perfil de usuario
+3. **Fase 9 — Project Settings:** Create/Edit, Settings, Members
+4. **Fase 10 — Audit:** Log de auditoría del sistema
 
 ---
 

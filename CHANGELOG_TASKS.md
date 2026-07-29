@@ -1,12 +1,35 @@
-# CHANGELOG_TASKS.md - Tasks Feature
+# CHANGELOG_TASKS.md - TaskManagement
 
 ## Resumen
 
-Implementación completa de la funcionalidad de **Tasks** incluyendo backend (.NET) y frontend (Angular).
+Implementación completa del sistema de gestión de tareas incluyendo backend (.NET) y frontend (Angular).
 
 ---
 
 ## Funcionalidades Implementadas
+
+### Dashboard
+
+#### Backend
+- **GetDashboardDataQuery**: Query para obtener datos del dashboard (stats, charts, activity)
+- **DashboardDto**: DTOs para estadísticas, gráficas y actividad reciente
+- **DashboardController**: Endpoint `GET /api/dashboard`
+
+#### Frontend
+- **DashboardComponent**: Dashboard completo con:
+  - Stats cards (Projects, Completed, In Progress, Overdue)
+  - My Tasks summary
+  - Doughnut chart: Tasks by Status
+  - Bar chart: Tasks by Priority
+  - Horizontal bar chart: Tasks by Member
+  - Upcoming Deadlines list
+  - Recent Activity feed
+- **DashboardService**: Servicio HTTP para obtener datos del dashboard
+- **Dashboard Models**: Interfaces TypeScript para datos del dashboard
+
+---
+
+### Tasks (Fase 5-6)
 
 ### Backend (.NET)
 
@@ -26,23 +49,32 @@ Implementación completa de la funcionalidad de **Tasks** incluyendo backend (.N
 - **GetTaskByIdQuery**: Obtener detalle completo de una tarea (con comentarios, adjuntos e historial)
 - **GetMyTasksQuery**: Obtener tareas asignadas al usuario actual
 - **GetAttachmentsByTaskQuery**: Obtener archivos adjuntos de una tarea
+- **GetDashboardDataQuery**: Obtener datos del dashboard (stats, charts, activity)
 
-#### Controller
+#### Controllers
 - **TasksController**: API REST completa con 13 endpoints
+- **DashboardController**: Endpoint para datos del dashboard
 
 ### Frontend (Angular)
 
 #### Componentes
+- **DashboardComponent**: Dashboard completo con stats, gráficas y actividad reciente
 - **TaskBoardComponent**: Vista Kanban con 4 columnas (Todo, In Progress, In Review, Done) y drag-and-drop mejorado
 - **TaskListComponent**: Vista de tabla con paginación, filtros y CRUD completo
 - **TaskDetailComponent**: Vista detallada con información, comentarios, historial y gestión de asignación
 - **MyTasksComponent**: Vista personal de tareas asignadas al usuario actual
 
 #### Servicios
+- **DashboardService**: Servicio HTTP para obtener datos del dashboard
 - **TaskService**: Servicio HTTP completo para interactuar con la API (incluye upload/delete attachments)
 - **TaskStore**: State management con Signals para manejo de estado reactivo (incluye attachments)
 
+#### Models
+- **Dashboard Models**: Interfaces TypeScript (DashboardData, DashboardStats, TaskByStatus, etc.)
+- **Task Models**: Interfaces TypeScript (Task, TaskDetail, TaskComment, TaskAttachment)
+
 #### Rutas
+- `/dashboard` - Dashboard principal (ruta por defecto)
 - `/projects/:id/board` - Tablero Kanban del proyecto
 - `/projects/:id/list` - Lista de tareas del proyecto
 - `/tasks/:id` - Detalle de tarea
@@ -54,87 +86,71 @@ Implementación completa de la funcionalidad de **Tasks** incluyendo backend (.N
 
 ### Backend
 ```
-src/TaskManagement.Shared/DTOs/Tasks/
-├── TaskDto.cs
-├── CreateTaskRequest.cs
-├── UpdateTaskRequest.cs
-├── ChangeStatusRequest.cs
-├── AssignTaskRequest.cs
-├── ReorderTaskRequest.cs
-└── AddCommentRequest.cs
+src/TaskManagement.Shared/DTOs/
+├── Tasks/
+│   ├── TaskDto.cs
+│   ├── CreateTaskRequest.cs
+│   ├── UpdateTaskRequest.cs
+│   ├── ChangeStatusRequest.cs
+│   ├── AssignTaskRequest.cs
+│   ├── ReorderTaskRequest.cs
+│   └── AddCommentRequest.cs
+└── Dashboard/
+    └── DashboardDto.cs (nuevo)
 
 src/TaskManagement.Application/Common/Interfaces/
-└── IFileStorageService.cs (nuevo)
+└── IFileStorageService.cs
 
-src/TaskManagement.Application/Features/Tasks/
-├── Commands/
-│   ├── CreateTask/
-│   │   ├── CreateTaskCommand.cs
-│   │   ├── CreateTaskHandler.cs
-│   │   └── CreateTaskValidator.cs
-│   ├── UpdateTask/
-│   │   ├── UpdateTaskCommand.cs
-│   │   ├── UpdateTaskHandler.cs
-│   │   └── UpdateTaskValidator.cs
-│   ├── DeleteTask/
-│   │   ├── DeleteTaskCommand.cs
-│   │   └── DeleteTaskHandler.cs
-│   ├── ChangeStatus/
-│   │   ├── ChangeStatusCommand.cs
-│   │   ├── ChangeStatusHandler.cs
-│   │   └── ChangeStatusValidator.cs
-│   ├── AssignTask/
-│   │   ├── AssignTaskCommand.cs
-│   │   └── AssignTaskHandler.cs
-│   ├── ReorderTask/
-│   │   ├── ReorderTaskCommand.cs
-│   │   └── ReorderTaskHandler.cs
-│   ├── AddComment/
-│   │   ├── AddCommentCommand.cs
-│   │   ├── AddCommentHandler.cs
-│   │   └── AddCommentValidator.cs
-│   ├── UploadAttachment/
-│   │   ├── UploadAttachmentCommand.cs (nuevo)
-│   │   └── UploadAttachmentHandler.cs (nuevo)
-│   └── DeleteAttachment/
-│       ├── DeleteAttachmentCommand.cs (nuevo)
-│       └── DeleteAttachmentHandler.cs (nuevo)
-└── Queries/
-    ├── GetTasksByProject/
-    │   ├── GetTasksByProjectQuery.cs
-    │   └── GetTasksByProjectHandler.cs
-    ├── GetTaskById/
-    │   ├── GetTaskByIdQuery.cs
-    │   └── GetTaskByIdHandler.cs
-    ├── GetMyTasks/
-    │   ├── GetMyTasksQuery.cs
-    │   └── GetMyTasksHandler.cs
-    └── GetAttachmentsByTask/
-        ├── GetAttachmentsByTaskQuery.cs (nuevo)
-        └── GetAttachmentsByTaskHandler.cs (nuevo)
+src/TaskManagement.Application/Features/
+├── Tasks/
+│   ├── Commands/
+│   │   ├── CreateTask/
+│   │   ├── UpdateTask/
+│   │   ├── DeleteTask/
+│   │   ├── ChangeStatus/
+│   │   ├── AssignTask/
+│   │   ├── ReorderTask/
+│   │   ├── AddComment/
+│   │   ├── UploadAttachment/
+│   │   └── DeleteAttachment/
+│   └── Queries/
+│       ├── GetTasksByProject/
+│       ├── GetTaskById/
+│       ├── GetMyTasks/
+│       └── GetAttachmentsByTask/
+└── Dashboard/
+    └── GetDashboardData/
+        ├── GetDashboardDataQuery.cs (nuevo)
+        └── GetDashboardDataHandler.cs (nuevo)
 
 src/TaskManagement.Infrastructure/Services/
-└── FileStorageService.cs (nuevo)
+└── FileStorageService.cs
 
 src/TaskManagement.Api/Controllers/
-└── TasksController.cs (actualizado)
+├── TasksController.cs
+└── DashboardController.cs (nuevo)
 ```
 
 ### Frontend
 ```
 frontend/src/app/
 ├── core/models/
-│   └── task.model.ts (actualizado)
-├── features/tasks/
-│   ├── task.service.ts (actualizado - métodos attachments)
-│   ├── task.store.ts (actualizado - métodos attachments)
-│   ├── task-board.component.ts (fix drag-and-drop)
-│   ├── task-list.component.ts
-│   ├── task-detail.component.ts (mejorado - sección attachments)
-│   └── my-tasks.component.ts (nuevo)
+│   ├── task.model.ts
+│   └── dashboard.model.ts (nuevo)
+├── features/
+│   ├── dashboard/
+│   │   ├── dashboard.component.ts (actualizado)
+│   │   └── dashboard.service.ts (nuevo)
+│   └── tasks/
+│       ├── task.service.ts (actualizado)
+│       ├── task.store.ts (actualizado)
+│       ├── task-board.component.ts
+│       ├── task-list.component.ts
+│       ├── task-detail.component.ts
+│       └── my-tasks.component.ts
 ├── layout/main-layout/
-│   └── main-layout.component.ts (sidebar actualizado)
-└── app.routes.ts (actualizado)
+│   └── main-layout.component.ts
+└── app.routes.ts
 ```
 
 ---
@@ -176,6 +192,9 @@ frontend/src/app/
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
+| **Dashboard** | | |
+| GET | `/api/dashboard` | Obtener datos del dashboard |
+| **Tasks** | | |
 | POST | `/api/tasks` | Crear tarea |
 | GET | `/api/tasks/project/{projectId}` | Obtener tareas por proyecto |
 | GET | `/api/tasks/my` | Obtener mis tareas |
