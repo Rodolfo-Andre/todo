@@ -57,16 +57,16 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Notifications | ✅ | CreateNotification, MarkAsRead, MarkAllAsRead, DeleteNotification, GetNotificationsByUser, GetUnreadCount |
 | Dashboard | ✅ | GetDashboardData |
 | Profile | ✅ | GetProfile, UpdateProfile, ChangePassword |
-| Application Common | ✅ | IUnitOfWork, IRepository, IJwtTokenService, ICurrentUserService, IFileStorageService, Behaviors (Validation, Performance, Logging) |
-| Infrastructure | ✅ | AppDbContext, JwtTokenService, CurrentUserService, UnitOfWork, FileStorageService, Seeds (Roles, Admin) |
-| API Controllers | ✅ | AuthController, UsersController, ProjectsController, TasksController, DashboardController, NotificationsController, ProfileController |
+| Audit | ✅ | GetAuditLogs, GetAuditSummary, IAuditService |
+| Application Common | ✅ | IUnitOfWork, IRepository, IJwtTokenService, ICurrentUserService, IFileStorageService, IAuditService, Behaviors (Validation, Performance, Logging) |
+| Infrastructure | ✅ | AppDbContext, JwtTokenService, CurrentUserService, UnitOfWork, FileStorageService, AuditService, Seeds (Roles, Admin) |
+| API Controllers | ✅ | AuthController, UsersController, ProjectsController, TasksController, DashboardController, NotificationsController, ProfileController, AuditController |
 | Middleware | ✅ | ExceptionHandlingMiddleware |
 
 ### 4.2 Backend — Pendiente
 
 | Módulo | Estado | Notas |
 |--------|--------|-------|
-| Audit | ❌ Vacío | Solo carpetas vacías |
 | Repositories específicos | ❌ | Solo Base/IRepository + UnitOfWork |
 
 ### 4.3 Frontend — Completado
@@ -88,6 +88,7 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Tasks | ✅ | TaskBoard, TaskList, TaskDetail, MyTasks |
 | Notifications | ✅ | NotificationListComponent, NotificationStore |
 | Profile | ✅ | ProfileComponent (edit profile, change password) |
+| Audit | ✅ | AuditLogListComponent (Admin only) |
 | Auth | ✅ | Login, Register |
 | Users | ✅ | UserList, UserDetail, UserService |
 | Projects | ✅ | ProjectList, ProjectDetail, ProjectService |
@@ -99,8 +100,6 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 
 | Módulo | Estado | Notas |
 |--------|--------|-------|
-| Project Create/Edit | ❌ | Solo list y detail |
-| Project Settings/Members | ❌ | No implementado |
 | Shared Components | ❌ | Header, Sidebar, ConfirmDialog, etc. |
 
 ---
@@ -108,6 +107,7 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 ## 5. Git History
 
 ```
+5b54c1f feat: implement Profile feature (backend + frontend)
 e6ce1af feat: implement Notifications feature (backend + frontend)
 6f834ff feat: implement Dashboard feature (backend + frontend)
 d23f374 feat: implement Attachments feature + fix task reactivity
@@ -118,7 +118,7 @@ dcf7258 feat: implement Users Management and improve UI
 ```
 
 **Rama actual:** `master`
-**Último commit:** Notifications feature
+**Último commit:** Profile feature
 
 ---
 
@@ -159,9 +159,9 @@ dcf7258 feat: implement Users Management and improve UI
 
 ## 8. Próximos Pasos (Prioridad)
 
-1. **Fase 8 — Profile:** Gestión de perfil de usuario
-2. **Fase 9 — Project Settings:** Create/Edit, Settings, Members
-3. **Fase 10 — Audit:** Log de auditoría del sistema
+1. **Shared Components:** Componentes reutilizables (ConfirmDialog, LoadingSpinner, etc.)
+2. **Integrar AuditService:** Logging automático en commands principales
+3. **Mejoras futuras:** Filtros avanzados, calendario, exportar, bulk actions
 
 ---
 

@@ -325,18 +325,46 @@ frontend/src/app/
 
 ---
 
+### Fase 10: Audit Log (Registro de Auditoría)
+
+#### Backend
+- **AuditLogDto**: DTOs para logs de auditoría (AuditLogDto, AuditLogFilterDto, AuditLogSummaryDto)
+- **GetAuditLogsQuery**: Obtener logs con filtros (acción, entidad, usuario, fechas)
+- **GetAuditSummaryQuery**: Obtener resumen de auditoría (totales, agrupaciones)
+- **IAuditService**: Interfaz para registrar eventos de auditoría
+- **AuditService**: Implementación del servicio de auditoría
+- **AuditController**: API REST con 2 endpoints (solo Admin)
+
+#### Frontend
+- **AuditLogListComponent**: Página completa de auditoría con:
+  - Tarjetas de resumen (Total Logs, Today, Action Types, Entity Types)
+  - Filtros (Action, Entity, Start Date, End Date)
+  - Tabla de logs con paginación
+  - Detalles de cada log (old/new values)
+- **AuditService**: Servicio HTTP para obtener logs y resumen
+
+#### Endpoints
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/api/audit` | Obtener logs de auditoría con filtros |
+| GET | `/api/audit/summary` | Obtener resumen de auditoría |
+
+#### Seguridad
+- Solo usuarios con rol **Admin** pueden acceder a los logs de auditoría
+- Ruta protegida: `/admin/audit`
+
+---
+
 ## Pendientes / Mejoras Futuras
 
-1. **Project Create/Edit**: Formulario para crear y editar proyectos
-2. **Project Settings/Members**: Configuración de proyecto y gestión de miembros
-3. **Audit Log**: Log de auditoría del sistema (solo admin)
-4. **Filtros avanzados**: Agregar filtros por fecha, etiquetas y miembros
-5. **Vista de calendario**: Mostrar tareas en vista de calendario
-6. **Exportar**: Exportar tareas a CSV/PDF
-7. **Bulk actions**: Acciones masivas (cambiar estado, asignar múltiples)
-8. **Subtareas**: Soporte para subtareas o checklists
-9. **Tiempo registrado**: Tracking de tiempo en tareas
-10. **File serving**: Implementar descarga y preview de archivos
+1. **Filtros avanzados**: Agregar filtros por fecha, etiquetas y miembros
+2. **Vista de calendario**: Mostrar tareas en vista de calendario
+3. **Exportar**: Exportar tareas a CSV/PDF
+4. **Bulk actions**: Acciones masivas (cambiar estado, asignar múltiples)
+5. **Subtareas**: Soporte para subtareas o checklists
+6. **Tiempo registrado**: Tracking de tiempo en tareas
+7. **File serving**: Implementar descarga y preview de archivos
+8. **Integrar AuditService**: Logging automático en commands principales
 
 ---
 
