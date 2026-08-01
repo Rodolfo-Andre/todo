@@ -1,5 +1,6 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 export type Language = 'es' | 'en';
 
@@ -13,27 +14,51 @@ export interface TranslationData {
 export class TranslationService {
   private currentLanguage = signal<Language>('es');
   private translations = signal<TranslationData>({});
+  private loaded = signal<boolean>(false);
 
   language = this.currentLanguage.asReadonly();
+  isLoaded = this.loaded.asReadonly();
 
   constructor(private http: HttpClient) {
-    this.loadLanguage('es');
+    const savedLang = localStorage.getItem('language') as Language;
+    const lang = savedLang && (savedLang === 'es' || savedLang === 'en') ? savedLang : 'es';
+    this.loadLanguage(lang);
   }
 
   async loadLanguage(lang: Language): Promise<void> {
     try {
-      const response = await this.http.get<TranslationData>(`/assets/i18n/${lang}.json`).toPromise();
+      const response = await firstValueFrom(
+        this.http.get<TranslationData>(`/assets/i18n/${lang}.json`)
+      );
       if (response) {
         this.translations.set(response);
         this.currentLanguage.set(lang);
+        this.loaded.set(true);
         localStorage.setItem('language', lang);
       }
     } catch (error) {
       console.error(`Failed to load translations for ${lang}:`, error);
+      // Try to load Spanish as fallback
+      if (lang !== 'es') {
+        try {
+          const response = await firstValueFrom(
+            this.http.get<TranslationData>('/assets/i18n/es.json')
+          );
+          if (response) {
+            this.translations.set(response);
+            this.currentLanguage.set('es');
+            this.loaded.set(true);
+            localStorage.setItem('language', 'es');
+          }
+        } catch (fallbackError) {
+          console.error('Failed to load fallback translations:', fallbackError);
+        }
+      }
     }
   }
 
   setLanguage(lang: Language): void {
+    this.loaded.set(false);
     this.loadLanguage(lang);
   }
 
@@ -43,6 +68,10 @@ export class TranslationService {
   }
 
   translate(key: string, params?: Record<string, string | number>): string {
+    if (!this.loaded()) {
+      return key;
+    }
+
     const keys = key.split('.');
     let result: string | TranslationData = this.translations();
 
