@@ -38,6 +38,7 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Auth | JWT + Refresh Tokens, ASP.NET Core Identity |
 | BD | SQL Server Local (Dev_Todo) |
 | Logs | Serilog (Console + File) |
+| i18n | .NET Localization (.resx), Angular i18n (Signals) |
 | Dev | Swagger/OpenAPI |
 
 ---
@@ -58,6 +59,7 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Dashboard | ✅ | GetDashboardData |
 | Profile | ✅ | GetProfile, UpdateProfile, ChangePassword |
 | Audit | ✅ | GetAuditLogs, GetAuditSummary, IAuditService |
+| i18n | ✅ | Messages.es.resx, Messages.en.resx, Localizer |
 | Application Common | ✅ | IUnitOfWork, IRepository, IJwtTokenService, ICurrentUserService, IFileStorageService, IAuditService, Behaviors (Validation, Performance, Logging) |
 | Infrastructure | ✅ | AppDbContext, JwtTokenService, CurrentUserService, UnitOfWork, FileStorageService, AuditService, Seeds (Roles, Admin) |
 | API Controllers | ✅ | AuthController, UsersController, ProjectsController, TasksController, DashboardController, NotificationsController, ProfileController, AuditController |
@@ -95,12 +97,13 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Core | ✅ | AuthService, Guards, Interceptors, Models |
 | Layout | ✅ | MainLayout, AuthLayout |
 | State | ✅ | AuthStore, TaskStore, NotificationStore (Signals) |
+| i18n | ✅ | TranslationService, TranslatePipe, LanguageSwitcher |
 
 ### 4.5 Frontend — Pendiente
 
 | Módulo | Estado | Notas |
 |--------|--------|-------|
-| Shared Components | ❌ | Header, Sidebar, ConfirmDialog, etc. |
+| Shared Components | ✅ | LanguageSwitcher (parcial) |
 
 ---
 

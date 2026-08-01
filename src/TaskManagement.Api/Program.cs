@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Serilog;
 using TaskManagement.Api.Middleware;
+using TaskManagement.Api.Resources;
 using TaskManagement.Application;
 using TaskManagement.Domain.Entities;
 using TaskManagement.Infrastructure;
@@ -67,6 +69,12 @@ builder.Services.AddApplication();
 // Infrastructure
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<ILocalizer, Localizer>();
+builder.Services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
+
 // CORS
 builder.Services.AddCors(options =>
 {
@@ -81,6 +89,16 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Configure localization
+var supportedCultures = new[] { new CultureInfo("es"), new CultureInfo("en") };
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("es"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+};
+app.UseRequestLocalization(localizationOptions);
 
 // Run database seeds
 using (var scope = app.Services.CreateScope())

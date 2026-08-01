@@ -355,6 +355,46 @@ frontend/src/app/
 
 ---
 
+### Fase 11: i18n (Internacionalización)
+
+#### Backend
+- **Messages.es.resx**: Archivo de recursos en español para todos los mensajes
+- **Messages.en.resx**: Archivo de recursos en inglés para todos los mensajes
+- **ILocalizer**: Interfaz para localización de mensajes
+- **Localizer**: Implementación del servicio de localización con soporte para Accept-Language
+- **Program.cs**: Configuración de localization con soporte para español (es) e inglés (en)
+
+#### Frontend
+- **TranslationService**: Servicio de traducción con Angular Signals
+  - Soporte para español (es) e inglés (en)
+  - Carga dinámica de archivos de traducción
+  - Persistencia de idioma en localStorage
+  - Interpolación de parámetros
+- **TranslatePipe**: Pipe para usar traducciones en templates
+- **LanguageSwitcherComponent**: Componente para cambiar idioma
+- **es.json**: Archivo de traducciones en español
+- **en.json**: Archivo de traducciones en inglés
+- **MainLayout**: Actualizado con traducciones y language switcher
+
+#### Archivos de Traducción
+```
+frontend/src/assets/i18n/
+├── es.json (Español - por defecto)
+└── en.json (Inglés)
+
+src/TaskManagement.Api/Resources/
+├── Messages.es.resx (Español - por defecto)
+├── Messages.en.resx (Inglés)
+└── Localizer.cs (Servicio de localización)
+```
+
+#### Configuración
+- **Backend**: Localización basada en header `Accept-Language`, por defecto español
+- **Frontend**: Localización almacenada en `localStorage`, por defecto español
+- **Idiomas soportados**: Español (es), Inglés (en)
+
+---
+
 ## Pendientes / Mejoras Futuras
 
 1. **Filtros avanzados**: Agregar filtros por fecha, etiquetas y miembros
@@ -374,3 +414,4 @@ frontend/src/app/
 ✅ Frontend compilado exitosamente  
 ✅ Integración completa con arquitectura existente  
 ✅ Patrones y convenciones mantenidos  
+✅ Soporte i18n (es/en) implementado  

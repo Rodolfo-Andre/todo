@@ -7,6 +7,8 @@ import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '../../core/auth/auth.service';
 import { NotificationStore } from '../../features/notifications/notification.store';
+import { TranslationService } from '../../core/i18n/translation.service';
+import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -19,7 +21,8 @@ import { NotificationStore } from '../../features/notifications/notification.sto
     ButtonModule,
     AvatarModule,
     BadgeModule,
-    TooltipModule
+    TooltipModule,
+    LanguageSwitcherComponent
   ],
   template: `
     <!-- Mobile Overlay -->
@@ -58,45 +61,45 @@ import { NotificationStore } from '../../features/notifications/notification.sto
         <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           <a routerLink="/dashboard"
              routerLinkActive="bg-slate-700 text-white"
-             [pTooltip]="!sidebarExpanded() ? 'Dashboard' : ''"
+             [pTooltip]="!sidebarExpanded() ? t('nav.dashboard') : ''"
              tooltipPosition="right"
              class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
             <i class="pi pi-home text-lg flex-shrink-0"></i>
             @if (sidebarExpanded()) {
-              <span class="whitespace-nowrap">Dashboard</span>
+              <span class="whitespace-nowrap">{{ t('nav.dashboard') }}</span>
             }
           </a>
 
           <a routerLink="/projects"
              routerLinkActive="bg-slate-700 text-white"
-             [pTooltip]="!sidebarExpanded() ? 'Projects' : ''"
+             [pTooltip]="!sidebarExpanded() ? t('nav.projects') : ''"
              tooltipPosition="right"
              class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
             <i class="pi pi-folder text-lg flex-shrink-0"></i>
             @if (sidebarExpanded()) {
-              <span class="whitespace-nowrap">Projects</span>
+              <span class="whitespace-nowrap">{{ t('nav.projects') }}</span>
             }
           </a>
 
           <a routerLink="/my-tasks"
              routerLinkActive="bg-slate-700 text-white"
-             [pTooltip]="!sidebarExpanded() ? 'My Tasks' : ''"
+             [pTooltip]="!sidebarExpanded() ? t('nav.myTasks') : ''"
              tooltipPosition="right"
              class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
             <i class="pi pi-check-square text-lg flex-shrink-0"></i>
             @if (sidebarExpanded()) {
-              <span class="whitespace-nowrap">My Tasks</span>
+              <span class="whitespace-nowrap">{{ t('nav.myTasks') }}</span>
             }
           </a>
 
           <a routerLink="/notifications"
              routerLinkActive="bg-slate-700 text-white"
-             [pTooltip]="!sidebarExpanded() ? 'Notifications' : ''"
+             [pTooltip]="!sidebarExpanded() ? t('nav.notifications') : ''"
              tooltipPosition="right"
              class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors relative">
             <i class="pi pi-bell text-lg flex-shrink-0"></i>
             @if (sidebarExpanded()) {
-              <span class="whitespace-nowrap">Notifications</span>
+              <span class="whitespace-nowrap">{{ t('nav.notifications') }}</span>
               @if (notificationStore.unreadCount() > 0) {
                 <span class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full flex-shrink-0">
                   {{ notificationStore.unreadCount() }}
@@ -113,7 +116,7 @@ import { NotificationStore } from '../../features/notifications/notification.sto
           @if (authService.isAdmin()) {
             <div class="pt-4 pb-2">
               @if (sidebarExpanded()) {
-                <p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Admin</p>
+                <p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ t('nav.admin') }}</p>
               } @else {
                 <div class="border-t border-slate-700 mx-2 mb-2"></div>
               }
@@ -121,34 +124,34 @@ import { NotificationStore } from '../../features/notifications/notification.sto
 
             <a routerLink="/admin/users"
                routerLinkActive="bg-slate-700 text-white"
-               [pTooltip]="!sidebarExpanded() ? 'Users' : ''"
+               [pTooltip]="!sidebarExpanded() ? t('nav.users') : ''"
                tooltipPosition="right"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
               <i class="pi pi-users text-lg flex-shrink-0"></i>
               @if (sidebarExpanded()) {
-                <span class="whitespace-nowrap">Users</span>
+                <span class="whitespace-nowrap">{{ t('nav.users') }}</span>
               }
             </a>
 
             <a routerLink="/admin/audit"
                routerLinkActive="bg-slate-700 text-white"
-               [pTooltip]="!sidebarExpanded() ? 'Audit Logs' : ''"
+               [pTooltip]="!sidebarExpanded() ? t('nav.auditLogs') : ''"
                tooltipPosition="right"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
               <i class="pi pi-history text-lg flex-shrink-0"></i>
               @if (sidebarExpanded()) {
-                <span class="whitespace-nowrap">Audit Logs</span>
+                <span class="whitespace-nowrap">{{ t('nav.auditLogs') }}</span>
               }
             </a>
 
             <a routerLink="/admin/settings"
                routerLinkActive="bg-slate-700 text-white"
-               [pTooltip]="!sidebarExpanded() ? 'Settings' : ''"
+               [pTooltip]="!sidebarExpanded() ? t('nav.settings') : ''"
                tooltipPosition="right"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
               <i class="pi pi-cog text-lg flex-shrink-0"></i>
               @if (sidebarExpanded()) {
-                <span class="whitespace-nowrap">Settings</span>
+                <span class="whitespace-nowrap">{{ t('nav.settings') }}</span>
               }
             </a>
           }
@@ -180,7 +183,7 @@ import { NotificationStore } from '../../features/notifications/notification.sto
               [class]="sidebarExpanded()
                 ? 'p-button-text p-button-rounded p-button-danger'
                 : 'p-button-text p-button-rounded p-button-danger p-button-sm'"
-              [pTooltip]="!sidebarExpanded() ? 'Logout' : ''"
+              [pTooltip]="!sidebarExpanded() ? t('nav.logout') : ''"
               tooltipPosition="top"
               (click)="logout()"
             ></button>
@@ -203,6 +206,8 @@ import { NotificationStore } from '../../features/notifications/notification.sto
           </div>
 
           <div class="flex items-center gap-4">
+            <app-language-switcher></app-language-switcher>
+
             <a routerLink="/notifications"
                class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="pi pi-bell text-xl"></i>
@@ -267,6 +272,9 @@ import { NotificationStore } from '../../features/notifications/notification.sto
 export class MainLayoutComponent implements OnInit {
   authService = inject(AuthService);
   notificationStore = inject(NotificationStore);
+  translationService = inject(TranslationService);
+
+  t = this.translationService.translate.bind(this.translationService);
 
   sidebarExpanded = signal(true);
   sidebarOpen = signal(false);

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="xml:space">
+    <value>preserve</value>
+  </resheader>
+
+  <!-- General Messages -->
+  <data name="Success" xml:space="preserve">
+    <value>Operación exitosa</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>No encontrado</value>
+  </data>
+  <data name="ValidationError" xml:space="preserve">
+    <value>Error de validación</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>No autorizado</value>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>Prohibido</value>
+  </data>
+
+  <!-- Auth Messages -->
+  <data name="LoginSuccess" xml:space="preserve">
+    <value>Inicio de sesión exitoso</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Credenciales inválidas</value>
+  </data>
+  <data name="RegisterSuccess" xml:space="preserve">
+    <value>Registro exitoso</value>
+  </data>
+  <data name="RegisterFailed" xml:space="preserve">
+    <value>Error en el registro</value>
+  </data>
+  <data name="LogoutSuccess" xml:space="preserve">
+    <value>Cierre de sesión exitoso</value>
+  </data>
+  <data name="TokenRefreshed" xml:space="preserve">
+    <value>Token refrescado exitosamente</value>
+  </data>
+  <data name="InvalidToken" xml:space="preserve">
+    <value>Token inválido</value>
+  </data>
+  <data name="TokenExpired" xml:space="preserve">
+    <value>Token expirado</value>
+  </data>
+
+  <!-- User Messages -->
+  <data name="UserCreated" xml:space="preserve">
+    <value>Usuario creado exitosamente</value>
+  </data>
+  <data name="UserUpdated" xml:space="preserve">
+    <value>Usuario actualizado exitosamente</value>
+  </data>
+  <data name="UserDeleted" xml:space="preserve">
+    <value>Usuario eliminado exitosamente</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Usuario no encontrado</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>El usuario ya existe</value>
+  </data>
+  <data name="EmailAlreadyTaken" xml:space="preserve">
+    <value>El correo electrónico ya está en uso</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Contraseña cambiada exitosamente</value>
+  </data>
+  <data name="PasswordChangeFailed" xml:space="preserve">
+    <value>Error al cambiar la contraseña</value>
+  </data>
+  <data name="CurrentPasswordIncorrect" xml:space="preserve">
+    <value>La contraseña actual es incorrecta</value>
+  </data>
+
+  <!-- Project Messages -->
+  <data name="ProjectCreated" xml:space="preserve">
+    <value>Proyecto creado exitosamente</value>
+  </data>
+  <data name="ProjectUpdated" xml:space="preserve">
+    <value>Proyecto actualizado exitosamente</value>
+  </data>
+  <data name="ProjectDeleted" xml:space="preserve">
+    <value>Proyecto eliminado exitosamente</value>
+  </data>
+  <data name="ProjectNotFound" xml:space="preserve">
+    <value>Proyecto no encontrado</value>
+  </data>
+  <data name="ProjectKeyAlreadyExists" xml:space="preserve">
+    <value>La clave del proyecto ya existe</value>
+  </data>
+  <data name="MemberAdded" xml:space="preserve">
+    <value>Miembro agregado exitosamente</value>
+  </data>
+  <data name="MemberRemoved" xml:space="preserve">
+    <value>Miembro eliminado exitosamente</value>
+  </data>
+  <data name="MemberNotFound" xml:space="preserve">
+    <value>Miembro no encontrado</value>
+  </data>
+
+  <!-- Task Messages -->
+  <data name="TaskCreated" xml:space="preserve">
+    <value>Tarea creada exitosamente</value>
+  </data>
+  <data name="TaskUpdated" xml:space="preserve">
+    <value>Tarea actualizada exitosamente</value>
+  </data>
+  <data name="TaskDeleted" xml:space="preserve">
+    <value>Tarea eliminada exitosamente</value>
+  </data>
+  <data name="TaskNotFound" xml:space="preserve">
+    <value>Tarea no encontrada</value>
+  </data>
+  <data name="TaskStatusChanged" xml:space="preserve">
+    <value>Estado de la tarea cambiado exitosamente</value>
+  </data>
+  <data name="TaskAssigned" xml:space="preserve">
+    <value>Tarea asignada exitosamente</value>
+  </data>
+  <data name="TaskUnassigned" xml:space="preserve">
+    <value>Tarea desasignada exitosamente</value>
+  </data>
+  <data name="TaskReordered" xml:space="preserve">
+    <value>Tarea reordenada exitosamente</value>
+  </data>
+
+  <!-- Comment Messages -->
+  <data name="CommentAdded" xml:space="preserve">
+    <value>Comentario agregado exitosamente</value>
+  </data>
+  <data name="CommentDeleted" xml:space="preserve">
+    <value>Comentario eliminado exitosamente</value>
+  </data>
+  <data name="CommentNotFound" xml:space="preserve">
+    <value>Comentario no encontrado</value>
+  </data>
+
+  <!-- Attachment Messages -->
+  <data name="AttachmentUploaded" xml:space="preserve">
+    <value>Archivo adjunto subido exitosamente</value>
+  </data>
+  <data name="AttachmentDeleted" xml:space="preserve">
+    <value>Archivo adjunto eliminado exitosamente</value>
+  </data>
+  <data name="AttachmentNotFound" xml:space="preserve">
+    <value>Archivo adjunto no encontrado</value>
+  </data>
+  <data name="FileTooLarge" xml:space="preserve">
+    <value>El archivo es demasiado grande</value>
+  </data>
+  <data name="InvalidFileType" xml:space="preserve">
+    <value>Tipo de archivo no válido</value>
+  </data>
+
+  <!-- Notification Messages -->
+  <data name="NotificationCreated" xml:space="preserve">
+    <value>Notificación creada exitosamente</value>
+  </data>
+  <data name="NotificationMarkedAsRead" xml:space="preserve">
+    <value>Notificación marcada como leída</value>
+  </data>
+  <data name="AllNotificationsMarkedAsRead" xml:space="preserve">
+    <value>Todas las notificaciones marcadas como leídas</value>
+  </data>
+  <data name="NotificationDeleted" xml:space="preserve">
+    <value>Notificación eliminada exitosamente</value>
+  </data>
+  <data name="NotificationNotFound" xml:space="preserve">
+    <value>Notificación no encontrada</value>
+  </data>
+
+  <!-- Profile Messages -->
+  <data name="ProfileUpdated" xml:space="preserve">
+    <value>Perfil actualizado exitosamente</value>
+  </data>
+  <data name="ProfileUpdateFailed" xml:space="preserve">
+    <value>Error al actualizar el perfil</value>
+  </data>
+
+  <!-- Audit Messages -->
+  <data name="AuditLogsRetrieved" xml:space="preserve">
+    <value>Logs de auditoría obtenidos exitosamente</value>
+  </data>
+  <data name="AuditSummaryRetrieved" xml:space="preserve">
+    <value>Resumen de auditoría obtenido exitosamente</value>
+  </data>
+
+  <!-- Dashboard Messages -->
+  <data name="DashboardDataRetrieved" xml:space="preserve">
+    <value>Datos del dashboard obtenidos exitosamente</value>
+  </data>
+
+  <!-- Validation Messages -->
+  <data name="RequiredField" xml:space="preserve">
+    <value>El campo {0} es requerido</value>
+  </data>
+  <data name="MinLength" xml:space="preserve">
+    <value>El campo {0} debe tener al menos {1} caracteres</value>
+  </data>
+  <data name="MaxLength" xml:space="preserve">
+    <value>El campo {0} no puede exceder {1} caracteres</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>El correo electrónico no es válido</value>
+  </data>
+  <data name="PasswordsDoNotMatch" xml:space="preserve">
+    <value>Las contraseñas no coinciden</value>
+  </data>
+  <data name="PasswordTooShort" xml:space="preserve">
+    <value>La contraseña debe tener al menos {0} caracteres</value>
+  </data>
+
+</root>
