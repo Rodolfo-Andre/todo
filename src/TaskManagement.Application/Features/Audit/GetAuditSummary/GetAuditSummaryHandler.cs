@@ -25,11 +25,12 @@ public class GetAuditSummaryHandler : IRequestHandler<GetAuditSummaryQuery, Base
         var todayLogs = await _unitOfWork.AuditLogs.CountAsync(x => x.CreatedAt >= today, cancellationToken);
 
         var last30Days = DateTime.UtcNow.AddDays(-30);
-        var recentLogs = await _unitOfWork.AuditLogs.GetAllAsync(
-            x => x.CreatedAt >= last30Days,
-            orderBy: x => x.OrderByDescending(y => y.CreatedAt),
-            take: 10,
-            cancellationToken: cancellationToken);
+        var allLogs = await _unitOfWork.AuditLogs.FindAsync(x => x.CreatedAt >= last30Days, cancellationToken);
+
+        var recentLogs = allLogs
+            .OrderByDescending(x => x.CreatedAt)
+            .Take(10)
+            .ToList();
 
         // Get user names for recent logs
         var userIds = recentLogs.Where(x => x.UserId.HasValue).Select(x => x.UserId!.Value).Distinct().ToList();
@@ -56,11 +57,6 @@ public class GetAuditSummaryHandler : IRequestHandler<GetAuditSummaryQuery, Base
             EntityId = log.EntityId,
             CreatedAt = log.CreatedAt
         }).ToList();
-
-        // Group by action and entity (simplified - in real app would use proper aggregation)
-        var allLogs = await _unitOfWork.AuditLogs.GetAllAsync(
-            x => x.CreatedAt >= last30Days,
-            cancellationToken: cancellationToken);
 
         var logsByAction = allLogs
             .GroupBy(x => x.Action)

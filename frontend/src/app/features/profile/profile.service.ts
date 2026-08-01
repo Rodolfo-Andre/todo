@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { BaseResponse } from '../../core/models/response.model';
+import { ApiResponse } from '../../core/models/api-response.model';
 import { environment } from '../../../environments/environment';
 
 export interface Profile {
@@ -36,8 +36,8 @@ export class ProfileService {
 
   constructor(private http: HttpClient) {}
 
-  getProfile(): Observable<BaseResponse<Profile>> {
-    return this.http.get<BaseResponse<Profile>>(this.apiUrl).pipe(
+  getProfile(): Observable<ApiResponse<Profile>> {
+    return this.http.get<ApiResponse<Profile>>(this.apiUrl).pipe(
       tap(response => {
         if (response.success && response.data) {
           this.currentProfile.set(response.data);
@@ -46,11 +46,11 @@ export class ProfileService {
     );
   }
 
-  updateProfile(request: UpdateProfileRequest): Observable<BaseResponse<boolean>> {
-    return this.http.put<BaseResponse<boolean>>(this.apiUrl, request);
+  updateProfile(request: UpdateProfileRequest): Observable<ApiResponse<boolean>> {
+    return this.http.put<ApiResponse<boolean>>(this.apiUrl, request);
   }
 
-  changePassword(request: ChangePasswordRequest): Observable<BaseResponse<boolean>> {
-    return this.http.post<BaseResponse<boolean>>(`${this.apiUrl}/change-password`, request);
+  changePassword(request: ChangePasswordRequest): Observable<ApiResponse<boolean>> {
+    return this.http.post<ApiResponse<boolean>>(`${this.apiUrl}/change-password`, request);
   }
 }

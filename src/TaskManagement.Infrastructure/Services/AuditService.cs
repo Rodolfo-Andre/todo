@@ -47,9 +47,10 @@ public class AuditService : IAuditService
         string entityId,
         CancellationToken cancellationToken = default)
     {
-        return await _unitOfWork.AuditLogs.GetAllAsync(
+        var logs = await _unitOfWork.AuditLogs.FindAsync(
             x => x.EntityName == entityName && x.EntityId == entityId,
-            orderBy: x => x.OrderByDescending(y => y.CreatedAt),
-            cancellationToken: cancellationToken);
+            cancellationToken);
+
+        return logs.OrderByDescending(x => x.CreatedAt).ToList();
     }
 }

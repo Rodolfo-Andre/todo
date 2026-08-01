@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
-import { TranslationService, Language } from '../../core/i18n/translation.service';
+import { TranslationService, Language } from '../../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-language-switcher',

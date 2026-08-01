@@ -37,14 +37,14 @@ public class GetAuditLogsHandler : IRequestHandler<GetAuditLogsQuery, BaseRespon
         if (request.EndDate.HasValue)
             filter = x => x.CreatedAt <= request.EndDate.Value.AddDays(1);
 
-        var logs = await _unitOfWork.AuditLogs.GetAllAsync(
-            filter,
-            orderBy: x => x.OrderByDescending(y => y.CreatedAt),
-            skip: (request.Page - 1) * request.PageSize,
-            take: request.PageSize,
-            cancellationToken: cancellationToken);
+        var allLogs = await _unitOfWork.AuditLogs.FindAsync(filter, cancellationToken);
+        var totalLogs = allLogs.Count;
 
-        var totalLogs = await _unitOfWork.AuditLogs.CountAsync(filter, cancellationToken);
+        var logs = allLogs
+            .OrderByDescending(x => x.CreatedAt)
+            .Skip((request.Page - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .ToList();
 
         // Get user names for logs
         var userIds = logs.Where(x => x.UserId.HasValue).Select(x => x.UserId!.Value).Distinct().ToList();
