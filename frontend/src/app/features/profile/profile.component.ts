@@ -9,8 +9,7 @@ import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { AuthService } from '../../core/auth/auth.service';
-import { UserService } from '../users/user.service';
+import { ProfileService } from './profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -42,23 +41,23 @@ import { UserService } from '../users/user.service';
 
           <div class="flex flex-col items-center -mt-12">
             <p-avatar
-              [label]="getInitials(user()?.fullName || '')"
+              [label]="getInitials(profile()?.fullName || '')"
               styleClass="bg-blue-500 text-2xl"
               shape="circle"
               [style]="{ width: '80px', height: '80px', fontSize: '1.5rem' }"
             ></p-avatar>
-            <h2 class="mt-4 text-xl font-semibold">{{ user()?.fullName }}</h2>
-            <p class="text-gray-500">{{ user()?.email }}</p>
+            <h2 class="mt-4 text-xl font-semibold">{{ profile()?.fullName }}</h2>
+            <p class="text-gray-500">{{ profile()?.email }}</p>
 
             <div class="flex gap-2 mt-4">
-              @for (role of user()?.roles; track role) {
+              @for (role of profile()?.roles; track role) {
                 <p-tag [value]="role" [severity]="getRoleSeverity(role)"></p-tag>
               }
             </div>
 
             <div class="mt-4 text-center">
               <p class="text-sm text-gray-500">Member since</p>
-              <p class="font-medium">{{ user()?.createdAt | date:'mediumDate' }}</p>
+              <p class="font-medium">{{ profile()?.createdAt | date:'mediumDate' }}</p>
             </div>
           </div>
         </p-card>
@@ -71,7 +70,7 @@ import { UserService } from '../users/user.service';
             </div>
           </ng-template>
 
-          <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+          <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()" class="flex flex-col gap-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="flex flex-col gap-2">
                 <label for="fullName" class="font-medium text-sm">Full Name</label>
@@ -96,6 +95,36 @@ import { UserService } from '../users/user.service';
         </p-card>
       </div>
 
+      <!-- Change Password -->
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="px-4 py-3 border-b">
+            <h2 class="text-lg font-semibold">Change Password</h2>
+          </div>
+        </ng-template>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="flex flex-col gap-4 max-w-md">
+          <div class="flex flex-col gap-2">
+            <label for="currentPassword" class="font-medium text-sm">Current Password</label>
+            <input pInputText id="currentPassword" formControlName="currentPassword" type="password" class="w-full" />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="newPassword" class="font-medium text-sm">New Password</label>
+            <input pInputText id="newPassword" formControlName="newPassword" type="password" class="w-full" />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="confirmPassword" class="font-medium text-sm">Confirm New Password</label>
+            <input pInputText id="confirmPassword" formControlName="confirmPassword" type="password" class="w-full" />
+          </div>
+
+          <div class="flex justify-end">
+            <p-button label="Change Password" type="submit" [loading]="isChangingPassword" [disabled]="passwordForm.invalid" severity="warn"></p-button>
+          </div>
+        </form>
+      </p-card>
+
       <!-- Account Info -->
       <p-card>
         <ng-template pTemplate="header">
@@ -107,15 +136,15 @@ import { UserService } from '../users/user.service';
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <p class="text-sm text-gray-500 mb-1">Username</p>
-            <p class="font-medium">{{ user()?.userName }}</p>
+            <p class="font-medium">{{ profile()?.userName }}</p>
           </div>
           <div>
             <p class="text-sm text-gray-500 mb-1">Account Status</p>
-            <p-tag [value]="user()?.isActive ? 'Active' : 'Inactive'" [severity]="user()?.isActive ? 'success' : 'danger'"></p-tag>
+            <p-tag [value]="profile()?.isActive ? 'Active' : 'Inactive'" [severity]="profile()?.isActive ? 'success' : 'danger'"></p-tag>
           </div>
           <div>
             <p class="text-sm text-gray-500 mb-1">User ID</p>
-            <p class="font-medium text-sm text-gray-600">{{ user()?.id }}</p>
+            <p class="font-medium text-sm text-gray-600">{{ profile()?.id }}</p>
           </div>
         </div>
       </p-card>
@@ -123,15 +152,16 @@ import { UserService } from '../users/user.service';
   `
 })
 export class ProfileComponent implements OnInit {
-  private authService = inject(AuthService);
-  private userService = inject(UserService);
+  private profileService = inject(ProfileService);
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
 
   profileForm: FormGroup;
+  passwordForm: FormGroup;
   isSaving = false;
+  isChangingPassword = false;
 
-  user = this.authService.user;
+  profile = this.profileService.currentProfile;
 
   constructor() {
     this.profileForm = this.fb.group({
@@ -139,17 +169,30 @@ export class ProfileComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       avatarUrl: ['']
     });
+
+    this.passwordForm = this.fb.group({
+      currentPassword: ['', [Validators.required]],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]]
+    });
   }
 
   ngOnInit(): void {
-    const currentUser = this.user();
-    if (currentUser) {
-      this.profileForm.patchValue({
-        fullName: currentUser.fullName,
-        email: currentUser.email,
-        avatarUrl: currentUser.avatarUrl || ''
-      });
-    }
+    this.loadProfile();
+  }
+
+  loadProfile(): void {
+    this.profileService.getProfile().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.profileForm.patchValue({
+            fullName: response.data.fullName,
+            email: response.data.email,
+            avatarUrl: response.data.avatarUrl || ''
+          });
+        }
+      }
+    });
   }
 
   getInitials(name: string): string {
@@ -171,11 +214,11 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  onSubmit(): void {
-    if (this.profileForm.invalid || !this.user()) return;
+  onUpdateProfile(): void {
+    if (this.profileForm.invalid) return;
 
     this.isSaving = true;
-    this.userService.updateUser(this.user()!.id, this.profileForm.value).subscribe({
+    this.profileService.updateProfile(this.profileForm.value).subscribe({
       next: (response) => {
         if (response.success) {
           this.messageService.add({
@@ -183,8 +226,7 @@ export class ProfileComponent implements OnInit {
             summary: 'Success',
             detail: 'Profile updated successfully'
           });
-          // Refresh user data
-          this.authService.getCurrentUser().subscribe();
+          this.loadProfile();
         } else {
           this.messageService.add({
             severity: 'error',
@@ -201,6 +243,49 @@ export class ProfileComponent implements OnInit {
           detail: 'Failed to update profile'
         });
         this.isSaving = false;
+      }
+    });
+  }
+
+  onChangePassword(): void {
+    if (this.passwordForm.invalid) return;
+
+    const { newPassword, confirmPassword } = this.passwordForm.value;
+    if (newPassword !== confirmPassword) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Passwords do not match'
+      });
+      return;
+    }
+
+    this.isChangingPassword = true;
+    this.profileService.changePassword(this.passwordForm.value).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Password changed successfully'
+          });
+          this.passwordForm.reset();
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: response.errors?.[0] || 'Failed to change password'
+          });
+        }
+        this.isChangingPassword = false;
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to change password'
+        });
+        this.isChangingPassword = false;
       }
     });
   }

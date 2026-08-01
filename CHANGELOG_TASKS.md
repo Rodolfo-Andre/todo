@@ -298,16 +298,45 @@ frontend/src/app/
 
 ---
 
+### Fase 9: Profile (Gestión de Perfil)
+
+#### Backend
+- **ProfileDto**: DTOs para perfil de usuario (ProfileDto, UpdateProfileRequest, ChangePasswordRequest)
+- **GetProfileQuery**: Obtener perfil del usuario actual
+- **UpdateProfileCommand**: Actualizar nombre, email y avatar del usuario
+- **ChangePasswordCommand**: Cambiar contraseña con validación de contraseña actual
+- **ProfileController**: API REST con 3 endpoints
+
+#### Frontend
+- **ProfileComponent**: Página de perfil completa con:
+  - Tarjeta de perfil con avatar, nombre, email, roles y fecha de registro
+  - Formulario de edición de perfil (nombre, email, avatar URL)
+  - Formulario de cambio de contraseña con validación
+  - Información de cuenta (username, estado, ID)
+- **ProfileService**: Servicio HTTP para obtener, actualizar perfil y cambiar contraseña
+- **Profile Store**: Signal para estado reactivo del perfil
+
+#### Endpoints
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/api/profile` | Obtener perfil del usuario actual |
+| PUT | `/api/profile` | Actualizar perfil |
+| POST | `/api/profile/change-password` | Cambiar contraseña |
+
+---
+
 ## Pendientes / Mejoras Futuras
 
-1. **Notificaciones**: Enviar notificaciones al asignar o comentar tareas
-2. **Filtros avanzados**: Agregar filtros por fecha, etiquetas y miembros
-3. **Vista de calendario**: Mostrar tareas en vista de calendario
-4. **Exportar**: Exportar tareas a CSV/PDF
-5. **Bulk actions**: Acciones masivas (cambiar estado, asignar múltiples)
-6. **Subtareas**: Soporte para subtareas o checklists
-7. **Tiempo registrado**: Tracking de tiempo en tareas
-8. **File serving**: Implementar descarga y preview de archivos
+1. **Project Create/Edit**: Formulario para crear y editar proyectos
+2. **Project Settings/Members**: Configuración de proyecto y gestión de miembros
+3. **Audit Log**: Log de auditoría del sistema (solo admin)
+4. **Filtros avanzados**: Agregar filtros por fecha, etiquetas y miembros
+5. **Vista de calendario**: Mostrar tareas en vista de calendario
+6. **Exportar**: Exportar tareas a CSV/PDF
+7. **Bulk actions**: Acciones masivas (cambiar estado, asignar múltiples)
+8. **Subtareas**: Soporte para subtareas o checklists
+9. **Tiempo registrado**: Tracking de tiempo en tareas
+10. **File serving**: Implementar descarga y preview de archivos
 
 ---
 

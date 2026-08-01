@@ -1,6 +1,6 @@
 # CONTEXT.md — Contexto del Proyecto TaskManagement
 
-> **Última actualización:** 2026-07-28
+> **Última actualización:** 2026-08-01
 > **Archivo de referencia:** `.opencode/plans/1784932145450-silent-river.md`
 
 ---
@@ -53,25 +53,21 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Auth | ✅ | Login, Register, Logout, RefreshToken, GetCurrentUser |
 | Users | ✅ | UpdateUser, DeleteUser, ChangeRole, GetUsers, GetUserById |
 | Projects | ✅ | CreateProject, UpdateProject, DeleteProject, AddMember, RemoveMember, GetProjects, GetProjectById, GetProjectMembers |
-| Application Common | ✅ | IUnitOfWork, IRepository, IJwtTokenService, ICurrentUserService, Behaviors (Validation, Performance, Logging) |
-| Infrastructure | ✅ | AppDbContext, JwtTokenService, CurrentUserService, UnitOfWork, Seeds (Roles, Admin) |
-| API Controllers | ✅ | AuthController, UsersController, ProjectsController |
+| Tasks | ✅ | CreateTask, UpdateTask, DeleteTask, ChangeStatus, AssignTask, ReorderTask, AddComment, UploadAttachment, DeleteAttachment |
+| Notifications | ✅ | CreateNotification, MarkAsRead, MarkAllAsRead, DeleteNotification, GetNotificationsByUser, GetUnreadCount |
+| Dashboard | ✅ | GetDashboardData |
+| Profile | ✅ | GetProfile, UpdateProfile, ChangePassword |
+| Application Common | ✅ | IUnitOfWork, IRepository, IJwtTokenService, ICurrentUserService, IFileStorageService, Behaviors (Validation, Performance, Logging) |
+| Infrastructure | ✅ | AppDbContext, JwtTokenService, CurrentUserService, UnitOfWork, FileStorageService, Seeds (Roles, Admin) |
+| API Controllers | ✅ | AuthController, UsersController, ProjectsController, TasksController, DashboardController, NotificationsController, ProfileController |
 | Middleware | ✅ | ExceptionHandlingMiddleware |
 
 ### 4.2 Backend — Pendiente
 
 | Módulo | Estado | Notas |
 |--------|--------|-------|
-| Tasks | ❌ Vacío | Solo carpetas Commands/Queries sin código |
-| Comments | ❌ Vacío | Solo carpetas vacías |
-| Attachments | ❌ Vacío | Solo carpetas vacías |
-| Notifications | ❌ Vacío | Solo carpetas vacías |
-| Dashboard | ❌ Vacío | Solo carpetas vacías |
 | Audit | ❌ Vacío | Solo carpetas vacías |
-| Profile | ❌ Vacío | Solo carpetas vacías |
 | Repositories específicos | ❌ | Solo Base/IRepository + UnitOfWork |
-| Services | ❌ | Solo CurrentUserService |
-| DTOs Tasks/Comments/etc | ❌ | Solo DTOs de Auth, Users, Projects |
 
 ### 4.3 Frontend — Completado
 
@@ -90,12 +86,14 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 |--------|--------|------------|
 | Dashboard | ✅ | DashboardComponent (stats, charts, activity) |
 | Tasks | ✅ | TaskBoard, TaskList, TaskDetail, MyTasks |
+| Notifications | ✅ | NotificationListComponent, NotificationStore |
+| Profile | ✅ | ProfileComponent (edit profile, change password) |
 | Auth | ✅ | Login, Register |
 | Users | ✅ | UserList, UserDetail, UserService |
 | Projects | ✅ | ProjectList, ProjectDetail, ProjectService |
 | Core | ✅ | AuthService, Guards, Interceptors, Models |
 | Layout | ✅ | MainLayout, AuthLayout |
-| State | ✅ | AuthStore, TaskStore (Signals) |
+| State | ✅ | AuthStore, TaskStore, NotificationStore (Signals) |
 
 ### 4.5 Frontend — Pendiente
 
@@ -103,7 +101,6 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 |--------|--------|-------|
 | Project Create/Edit | ❌ | Solo list y detail |
 | Project Settings/Members | ❌ | No implementado |
-| Profile | ❌ | No implementado |
 | Shared Components | ❌ | Header, Sidebar, ConfirmDialog, etc. |
 
 ---
@@ -111,13 +108,17 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 ## 5. Git History
 
 ```
+e6ce1af feat: implement Notifications feature (backend + frontend)
+6f834ff feat: implement Dashboard feature (backend + frontend)
+d23f374 feat: implement Attachments feature + fix task reactivity
+3f64f83 feat: implement Tasks feature (Phase 5)
 dcf7258 feat: implement Users Management and improve UI
 23056a6 feat: implement Authentication feature (backend)
 6b03ce1 feat: initial project setup with Clean Architecture
 ```
 
 **Rama actual:** `master`
-**Último commit:** Users Management + UI improvements
+**Último commit:** Notifications feature
 
 ---
 
