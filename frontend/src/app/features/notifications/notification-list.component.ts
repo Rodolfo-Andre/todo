@@ -8,6 +8,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { NotificationStore } from './notification.store';
 import { Notification } from '../../core/models/notification.model';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-notification-list',
@@ -28,21 +29,21 @@ import { Notification } from '../../core/models/notification.model';
     <div class="space-y-6">
       <div class="flex justify-between items-center">
         <div>
-          <h1 class="text-2xl font-bold">Notifications</h1>
+          <h1 class="text-2xl font-bold">{{ t('notifications.title') }}</h1>
           @if (notificationStore.unreadCount() > 0) {
-            <p class="text-sm text-gray-500">{{ notificationStore.unreadCount() }} unread</p>
+            <p class="text-sm text-gray-500">{{ notificationStore.unreadCount() }} {{ t('notifications.unread') }}</p>
           }
         </div>
         <div class="flex gap-2">
           <p-button
-            label="Mark All as Read"
+            [label]="t('notifications.markAllRead')"
             icon="pi pi-check"
             styleClass="p-button-text"
             (onClick)="markAllAsRead()"
             [disabled]="notificationStore.unreadCount() === 0"
           ></p-button>
           <p-button
-            label="Refresh"
+            [label]="t('common.refresh')"
             icon="pi pi-refresh"
             styleClass="p-button-outlined"
             (onClick)="loadNotifications()"
@@ -53,13 +54,13 @@ import { Notification } from '../../core/models/notification.model';
       @if (notificationStore.isLoading()) {
         <div class="text-center py-8">
           <i class="pi pi-spin pi-spinner text-2xl"></i>
-          <p class="mt-2 text-gray-500">Loading notifications...</p>
+          <p class="mt-2 text-gray-500">{{ t('common.loading') }}</p>
         </div>
       } @else if (notificationStore.notifications().length > 0) {
         <!-- Unread Notifications -->
         @if (notificationStore.unreadNotifications().length > 0) {
           <div>
-            <h2 class="text-lg font-semibold mb-3">New</h2>
+            <h2 class="text-lg font-semibold mb-3">{{ t('notifications.new') }}</h2>
             <div class="flex flex-col gap-3">
               @for (notification of notificationStore.unreadNotifications(); track notification.id) {
                 <div
@@ -94,7 +95,7 @@ import { Notification } from '../../core/models/notification.model';
         <!-- Read Notifications -->
         @if (notificationStore.readNotifications().length > 0) {
           <div>
-            <h2 class="text-lg font-semibold mb-3">Earlier</h2>
+            <h2 class="text-lg font-semibold mb-3">{{ t('notifications.earlier') }}</h2>
             <div class="flex flex-col gap-3">
               @for (notification of notificationStore.readNotifications(); track notification.id) {
                 <div
@@ -127,7 +128,7 @@ import { Notification } from '../../core/models/notification.model';
         <p-card>
           <div class="text-center py-8">
             <i class="pi pi-bell-slash text-4xl text-gray-300 mb-4"></i>
-            <p class="text-gray-500">No notifications</p>
+            <p class="text-gray-500">{{ t('notifications.noNotifications') }}</p>
           </div>
         </p-card>
       }
@@ -137,8 +138,11 @@ import { Notification } from '../../core/models/notification.model';
 export class NotificationListComponent implements OnInit {
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+  private translationService = inject(TranslationService);
 
   notificationStore = inject(NotificationStore);
+
+  t = this.translationService.translate.bind(this.translationService);
 
   ngOnInit(): void {
     this.loadNotifications();
@@ -160,8 +164,8 @@ export class NotificationListComponent implements OnInit {
     if (success) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'All notifications marked as read'
+        summary: this.t('common.success'),
+        detail: this.t('notifications.allMarkedAsRead')
       });
     }
   }
@@ -170,8 +174,8 @@ export class NotificationListComponent implements OnInit {
     event.stopPropagation();
 
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete this notification?',
-      header: 'Confirm Delete',
+      message: this.t('notifications.confirmDelete'),
+      header: this.t('common.confirm'),
       icon: 'pi pi-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',
       accept: async () => {
@@ -179,8 +183,8 @@ export class NotificationListComponent implements OnInit {
         if (success) {
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'Notification deleted'
+            summary: this.t('common.success'),
+            detail: this.t('notifications.deleted')
           });
         }
       }

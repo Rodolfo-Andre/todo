@@ -39,6 +39,13 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API for Task Management System"
     });
 
+    c.CustomSchemaIds(type =>
+    {
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
+            return $"{type.GetGenericArguments()[0].FullName}List";
+        return type.FullName ?? type.Name;
+    });
+
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme",

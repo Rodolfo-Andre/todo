@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { MessageModule } from 'primeng/message';
 import { AuthService } from '../../../core/auth/auth.service';
+import { TranslationService } from '../../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-register',
@@ -27,8 +28,8 @@ import { AuthService } from '../../../core/auth/auth.service';
       <p-card styleClass="w-full max-w-md">
         <ng-template pTemplate="header">
           <div class="text-center py-4">
-            <h1 class="text-2xl font-bold text-primary">Task Management</h1>
-            <p class="text-gray-500">Create your account</p>
+            <h1 class="text-2xl font-bold text-primary">{{ t('common.appName') }}</h1>
+            <p class="text-gray-500">{{ t('auth.registerSubtitle') }}</p>
           </div>
         </ng-template>
 
@@ -38,45 +39,45 @@ import { AuthService } from '../../../core/auth/auth.service';
           }
 
           <div class="flex flex-col gap-2">
-            <label for="fullName" class="font-medium">Full Name</label>
+            <label for="fullName" class="font-medium">{{ t('auth.fullName') }}</label>
             <input
               pInputText
               id="fullName"
               formControlName="fullName"
-              placeholder="Enter your full name"
+              [placeholder]="t('auth.fullNamePlaceholder')"
               class="w-full"
             />
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="userName" class="font-medium">Username</label>
+            <label for="userName" class="font-medium">{{ t('auth.userName') }}</label>
             <input
               pInputText
               id="userName"
               formControlName="userName"
-              placeholder="Choose a username"
+              [placeholder]="t('auth.userNamePlaceholder')"
               class="w-full"
             />
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="email" class="font-medium">Email</label>
+            <label for="email" class="font-medium">{{ t('auth.email') }}</label>
             <input
               pInputText
               id="email"
               formControlName="email"
               type="email"
-              placeholder="Enter your email"
+              [placeholder]="t('auth.emailPlaceholder')"
               class="w-full"
             />
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="password" class="font-medium">Password</label>
+            <label for="password" class="font-medium">{{ t('auth.password') }}</label>
             <p-password
               id="password"
               formControlName="password"
-              placeholder="Create a password"
+              [placeholder]="t('auth.passwordCreatePlaceholder')"
               [toggleMask]="true"
               styleClass="w-full"
               inputStyleClass="w-full"
@@ -84,11 +85,11 @@ import { AuthService } from '../../../core/auth/auth.service';
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="confirmPassword" class="font-medium">Confirm Password</label>
+            <label for="confirmPassword" class="font-medium">{{ t('auth.confirmPassword') }}</label>
             <p-password
               id="confirmPassword"
               formControlName="confirmPassword"
-              placeholder="Confirm your password"
+              [placeholder]="t('auth.confirmPasswordPlaceholder')"
               [feedback]="false"
               [toggleMask]="true"
               styleClass="w-full"
@@ -98,15 +99,15 @@ import { AuthService } from '../../../core/auth/auth.service';
 
           <p-button
             type="submit"
-            label="Sign Up"
+            [label]="t('auth.register')"
             styleClass="w-full"
             [loading]="isLoading()"
             [disabled]="registerForm.invalid"
           ></p-button>
 
           <div class="text-center">
-            <span class="text-gray-500">Already have an account?</span>
-            <a routerLink="/auth/login" class="text-primary ml-1">Sign in</a>
+            <span class="text-gray-500">{{ t('auth.hasAccount') }}</span>
+            <a routerLink="/auth/login" class="text-primary ml-1">{{ t('auth.login') }}</a>
           </div>
         </form>
       </p-card>
@@ -117,6 +118,8 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private translationService = inject(TranslationService);
+  t = this.translationService.translate.bind(this.translationService);
 
   registerForm: FormGroup;
   errorMessage: string | null = null;
@@ -142,11 +145,11 @@ export class RegisterComponent {
         if (response.success) {
           this.router.navigate(['/dashboard']);
         } else {
-          this.errorMessage = response.errors?.[0] || 'Registration failed';
+          this.errorMessage = response.errors?.[0] || this.t('auth.registerFailed');
         }
       },
       error: (error) => {
-        this.errorMessage = error.message || 'Registration failed';
+        this.errorMessage = error.message || this.t('auth.registerFailed');
       }
     });
   }

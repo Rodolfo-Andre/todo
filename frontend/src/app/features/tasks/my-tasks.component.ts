@@ -12,6 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { Task, TaskStatus, TaskPriority } from '../../core/models/task.model';
 import { TaskStore } from './task.store';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-my-tasks',
@@ -164,6 +165,9 @@ import { TaskStore } from './task.store';
 export class MyTasksComponent implements OnInit {
   taskStore = inject(TaskStore);
   private messageService = inject(MessageService);
+  private translationService = inject(TranslationService);
+
+  t = this.translationService.translate.bind(this.translationService);
 
   searchTerm = '';
   selectedStatus: number | null = null;

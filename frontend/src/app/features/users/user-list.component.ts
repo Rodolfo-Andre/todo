@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserService } from './user.service';
 import { User } from '../../core/models/user.model';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-user-list',
@@ -33,18 +34,18 @@ import { User } from '../../core/models/user.model';
 
     <div class="space-y-6">
       <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Users</h1>
+        <h1 class="text-2xl font-bold">{{ t('users.title') }}</h1>
       </div>
 
       <p-card>
         <p-table [value]="users" [tableStyle]="{ 'min-width': '60rem' }" [loading]="isLoading">
           <ng-template pTemplate="header">
             <tr>
-              <th>User</th>
-              <th>Email</th>
-              <th>Roles</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>{{ t('users.fullName') }}</th>
+              <th>{{ t('users.email') }}</th>
+              <th>{{ t('users.roles') }}</th>
+              <th>{{ t('users.status') }}</th>
+              <th>{{ t('common.actions') }}</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-user>
@@ -62,7 +63,7 @@ import { User } from '../../core/models/user.model';
                 }
               </td>
               <td>
-                <p-tag [value]="user.isActive ? 'Active' : 'Inactive'" [severity]="user.isActive ? 'success' : 'danger'"></p-tag>
+                <p-tag [value]="user.isActive ? t('users.active') : t('users.inactive')" [severity]="user.isActive ? 'success' : 'danger'"></p-tag>
               </td>
               <td>
                 <div class="flex gap-2">
@@ -75,7 +76,7 @@ import { User } from '../../core/models/user.model';
           <ng-template pTemplate="emptymessage">
             <tr>
               <td colspan="5" class="text-center py-4">
-                <p class="text-gray-500">No users found.</p>
+                <p class="text-gray-500">{{ t('users.noUsers') }}</p>
               </td>
             </tr>
           </ng-template>
@@ -88,6 +89,8 @@ export class UserListComponent implements OnInit {
   private userService = inject(UserService);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
+  private translationService = inject(TranslationService);
+  t = this.translationService.translate.bind(this.translationService);
 
   users: User[] = [];
   isLoading = false;
@@ -108,8 +111,8 @@ export class UserListComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load users'
+          summary: this.t('common.error'),
+          detail: this.t('users.loadFailed')
         });
         this.isLoading = false;
       }
@@ -137,8 +140,8 @@ export class UserListComponent implements OnInit {
 
   confirmDelete(user: User): void {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete ${user.fullName}?`,
-      header: 'Confirm Delete',
+      message: this.t('users.confirmDelete', { name: user.fullName }),
+      header: this.t('common.confirm'),
       icon: 'pi pi-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
@@ -153,23 +156,23 @@ export class UserListComponent implements OnInit {
         if (response.success) {
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'User deleted successfully'
+            summary: this.t('common.success'),
+            detail: this.t('users.userDeleted')
           });
           this.loadUsers();
         } else {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: response.errors?.[0] || 'Failed to delete user'
+            summary: this.t('common.error'),
+            detail: response.errors?.[0] || this.t('users.deleteFailed')
           });
         }
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to delete user'
+          summary: this.t('common.error'),
+          detail: this.t('users.deleteFailed')
         });
       }
     });

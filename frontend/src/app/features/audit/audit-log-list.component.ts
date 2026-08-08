@@ -8,9 +8,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuditService, AuditLog, AuditLogSummary } from './audit.service';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-audit-log-list',
@@ -25,6 +27,7 @@ import { AuditService, AuditLog, AuditLogSummary } from './audit.service';
     SelectModule,
     DatePickerModule,
     TagModule,
+    TooltipModule,
     ToastModule
   ],
   providers: [MessageService],
@@ -33,27 +36,27 @@ import { AuditService, AuditLog, AuditLogSummary } from './audit.service';
 
     <div class="space-y-6">
       <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Audit Logs</h1>
-        <p-button label="Refresh" icon="pi pi-refresh" (onClick)="loadData()" [loading]="isLoading"></p-button>
+        <h1 class="text-2xl font-bold">{{ t('audit.title') }}</h1>
+        <p-button [label]="t('common.refresh')" icon="pi pi-refresh" (onClick)="loadData()" [loading]="isLoading"></p-button>
       </div>
 
       <!-- Summary Cards -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <p-card styleClass="text-center">
           <div class="text-3xl font-bold text-blue-500">{{ summary?.totalLogs || 0 }}</div>
-          <div class="text-sm text-gray-500">Total Logs</div>
+          <div class="text-sm text-gray-500">{{ t('audit.totalLogs') }}</div>
         </p-card>
         <p-card styleClass="text-center">
           <div class="text-3xl font-bold text-green-500">{{ summary?.todayLogs || 0 }}</div>
-          <div class="text-sm text-gray-500">Today</div>
+          <div class="text-sm text-gray-500">{{ t('audit.todayLogs') }}</div>
         </p-card>
         <p-card styleClass="text-center">
           <div class="text-3xl font-bold text-purple-500">{{ getObjectKeys(summary?.logsByAction || {}).length }}</div>
-          <div class="text-sm text-gray-500">Action Types</div>
+          <div class="text-sm text-gray-500">{{ t('audit.actionTypes') }}</div>
         </p-card>
         <p-card styleClass="text-center">
           <div class="text-3xl font-bold text-orange-500">{{ getObjectKeys(summary?.logsByEntity || {}).length }}</div>
-          <div class="text-sm text-gray-500">Entity Types</div>
+          <div class="text-sm text-gray-500">{{ t('audit.entityTypes') }}</div>
         </p-card>
       </div>
 
@@ -61,50 +64,50 @@ import { AuditService, AuditLog, AuditLogSummary } from './audit.service';
       <p-card>
         <ng-template pTemplate="header">
           <div class="px-4 py-3 border-b">
-            <h2 class="text-lg font-semibold">Filters</h2>
+            <h2 class="text-lg font-semibold">{{ t('audit.filters') }}</h2>
           </div>
         </ng-template>
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div class="flex flex-col gap-2">
-            <label class="font-medium text-sm">Action</label>
+            <label class="font-medium text-sm">{{ t('audit.action') }}</label>
             <p-select
               [options]="actionOptions"
               [(ngModel)]="filters.action"
               optionLabel="label"
               optionValue="value"
-              placeholder="All Actions"
+              [placeholder]="t('audit.allActions')"
               styleClass="w-full"
               [showClear]="true"
             ></p-select>
           </div>
 
           <div class="flex flex-col gap-2">
-            <label class="font-medium text-sm">Entity</label>
+            <label class="font-medium text-sm">{{ t('audit.entity') }}</label>
             <p-select
               [options]="entityOptions"
               [(ngModel)]="filters.entityName"
               optionLabel="label"
               optionValue="value"
-              placeholder="All Entities"
+              [placeholder]="t('audit.allEntities')"
               styleClass="w-full"
               [showClear]="true"
             ></p-select>
           </div>
 
           <div class="flex flex-col gap-2">
-            <label class="font-medium text-sm">Start Date</label>
-            <p-datepicker [(ngModel)]="filters.startDate" [showIcon]="true" placeholder="Start Date" styleClass="w-full"></p-datepicker>
+            <label class="font-medium text-sm">{{ t('audit.startDate') }}</label>
+            <p-datepicker [(ngModel)]="filters.startDate" [showIcon]="true" [placeholder]="t('audit.startDate')" styleClass="w-full"></p-datepicker>
           </div>
 
           <div class="flex flex-col gap-2">
-            <label class="font-medium text-sm">End Date</label>
-            <p-datepicker [(ngModel)]="filters.endDate" [showIcon]="true" placeholder="End Date" styleClass="w-full"></p-datepicker>
+            <label class="font-medium text-sm">{{ t('audit.endDate') }}</label>
+            <p-datepicker [(ngModel)]="filters.endDate" [showIcon]="true" [placeholder]="t('audit.endDate')" styleClass="w-full"></p-datepicker>
           </div>
         </div>
 
         <div class="flex justify-end mt-4">
-          <p-button label="Apply Filters" icon="pi pi-filter" (onClick)="applyFilters()"></p-button>
+          <p-button [label]="t('audit.applyFilters')" icon="pi pi-filter" (onClick)="applyFilters()"></p-button>
         </div>
       </p-card>
 
@@ -116,23 +119,23 @@ import { AuditService, AuditLog, AuditLogSummary } from './audit.service';
           [paginator]="true"
           [rows]="20"
           [showCurrentPageReport]="true"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [currentPageReportTemplate]="t('audit.paginationInfo')"
           [rowsPerPageOptions]="[10, 20, 50]"
         >
           <ng-template pTemplate="header">
             <tr>
-              <th>Date</th>
-              <th>User</th>
-              <th>Action</th>
-              <th>Entity</th>
-              <th>Entity ID</th>
-              <th>Details</th>
+              <th>{{ t('audit.date') }}</th>
+              <th>{{ t('audit.user') }}</th>
+              <th>{{ t('audit.action') }}</th>
+              <th>{{ t('audit.entity') }}</th>
+              <th>{{ t('audit.entityId') }}</th>
+              <th>{{ t('common.details') }}</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-log>
             <tr>
               <td>{{ log.createdAt | date:'medium' }}</td>
-              <td>{{ log.userName || 'System' }}</td>
+              <td>{{ log.userName || t('audit.system') }}</td>
               <td>
                 <p-tag [value]="log.action" [severity]="getActionSeverity(log.action)"></p-tag>
               </td>
@@ -145,7 +148,7 @@ import { AuditService, AuditLog, AuditLogSummary } from './audit.service';
                   icon="pi pi-eye"
                   styleClass="p-button-text p-button-rounded p-button-sm"
                   (onClick)="showDetails(log)"
-                  pTooltip="View Details"
+                  [pTooltip]="t('audit.viewDetails')"
                 ></p-button>
               </td>
             </tr>
@@ -155,7 +158,7 @@ import { AuditService, AuditLog, AuditLogSummary } from './audit.service';
               <td colspan="6" class="text-center py-8">
                 <div class="flex flex-col items-center gap-4">
                   <i class="pi pi-history text-4xl text-gray-300"></i>
-                  <p class="text-gray-500">No audit logs found</p>
+                  <p class="text-gray-500">{{ t('audit.noLogs') }}</p>
                 </div>
               </td>
             </tr>
@@ -168,6 +171,9 @@ import { AuditService, AuditLog, AuditLogSummary } from './audit.service';
 export class AuditLogListComponent implements OnInit {
   private auditService = inject(AuditService);
   private messageService = inject(MessageService);
+  private translationService = inject(TranslationService);
+
+  t = this.translationService.translate.bind(this.translationService);
 
   logs: AuditLog[] = [];
   summary: AuditLogSummary | null = null;
@@ -218,8 +224,8 @@ export class AuditLogListComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load audit logs'
+          summary: this.t('common.error'),
+          detail: this.t('audit.loadFailed')
         });
         this.isLoading = false;
       }

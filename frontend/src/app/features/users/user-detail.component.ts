@@ -13,6 +13,7 @@ import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
 import { UserService } from './user.service';
 import { User } from '../../core/models/user.model';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -36,15 +37,15 @@ import { User } from '../../core/models/user.model';
 
     <div class="space-y-6">
       <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Edit User</h1>
-        <p-button label="Back to Users" icon="pi pi-arrow-left" styleClass="p-button-text" routerLink="/admin/users"></p-button>
+        <h1 class="text-2xl font-bold">{{ t('users.editUser') }}</h1>
+        <p-button [label]="t('users.backToUsers')" icon="pi pi-arrow-left" styleClass="p-button-text" routerLink="/admin/users"></p-button>
       </div>
 
       @if (isLoading) {
         <p-card>
           <div class="text-center py-8">
             <i class="pi pi-spin pi-spinner text-2xl"></i>
-            <p class="mt-2 text-gray-500">Loading user...</p>
+            <p class="mt-2 text-gray-500">{{ t('common.loading') }}</p>
           </div>
         </p-card>
       } @else if (user) {
@@ -53,36 +54,36 @@ import { User } from '../../core/models/user.model';
           <p-card styleClass="lg:col-span-2">
             <ng-template pTemplate="header">
               <div class="px-4 py-3 border-b">
-                <h2 class="text-lg font-semibold">User Information</h2>
+                <h2 class="text-lg font-semibold">{{ t('users.userInformation') }}</h2>
               </div>
             </ng-template>
 
             <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="flex flex-col gap-2">
-                  <label for="fullName" class="font-medium">Full Name</label>
+                  <label for="fullName" class="font-medium">{{ t('users.fullName') }}</label>
                   <input pInputText id="fullName" formControlName="fullName" class="w-full" />
                 </div>
 
                 <div class="flex flex-col gap-2">
-                  <label for="email" class="font-medium">Email</label>
+                  <label for="email" class="font-medium">{{ t('users.email') }}</label>
                   <input pInputText id="email" formControlName="email" type="email" class="w-full" />
                 </div>
               </div>
 
               <div class="flex flex-col gap-2">
-                <label for="avatarUrl" class="font-medium">Avatar URL</label>
+                <label for="avatarUrl" class="font-medium">{{ t('users.avatarUrl') }}</label>
                 <input pInputText id="avatarUrl" formControlName="avatarUrl" class="w-full" />
               </div>
 
               <div class="flex items-center gap-2">
                 <p-inputSwitch formControlName="isActive" inputId="isActive"></p-inputSwitch>
-                <label for="isActive" class="font-medium">Active</label>
+                <label for="isActive" class="font-medium">{{ t('users.active') }}</label>
               </div>
 
               <div class="flex justify-end gap-2">
-                <p-button label="Cancel" styleClass="p-button-text" routerLink="/admin/users"></p-button>
-                <p-button label="Save" type="submit" [loading]="isSaving" [disabled]="userForm.invalid"></p-button>
+                <p-button [label]="t('common.cancel')" styleClass="p-button-text" routerLink="/admin/users"></p-button>
+                <p-button [label]="t('common.save')" type="submit" [loading]="isSaving" [disabled]="userForm.invalid"></p-button>
               </div>
             </form>
           </p-card>
@@ -91,31 +92,31 @@ import { User } from '../../core/models/user.model';
           <p-card>
             <ng-template pTemplate="header">
               <div class="px-4 py-3 border-b">
-                <h2 class="text-lg font-semibold">Role</h2>
+                <h2 class="text-lg font-semibold">{{ t('users.role') }}</h2>
               </div>
             </ng-template>
 
             <div class="flex flex-col gap-4">
               <div class="flex flex-col gap-2">
-                <label class="font-medium">Current Role</label>
+                <label class="font-medium">{{ t('users.currentRole') }}</label>
                 <p-select
                   [options]="roles"
                   [(ngModel)]="selectedRole"
                   optionLabel="label"
                   optionValue="value"
-                  placeholder="Select a role"
+                  [placeholder]="t('common.select')"
                   styleClass="w-full"
                 ></p-select>
               </div>
 
-              <p-button label="Change Role" (onClick)="changeRole()" [loading]="isChangingRole" styleClass="w-full"></p-button>
+              <p-button [label]="t('users.changeRole')" (onClick)="changeRole()" [loading]="isChangingRole" styleClass="w-full"></p-button>
             </div>
           </p-card>
         </div>
       } @else {
         <p-card>
           <div class="text-center py-8">
-            <p class="text-gray-500">User not found.</p>
+            <p class="text-gray-500">{{ t('users.notFound') }}</p>
           </div>
         </p-card>
       }
@@ -128,6 +129,8 @@ export class UserDetailComponent implements OnInit {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
   private messageService = inject(MessageService);
+  private translationService = inject(TranslationService);
+  t = this.translationService.translate.bind(this.translationService);
 
   user: User | null = null;
   userForm: FormGroup;
@@ -178,8 +181,8 @@ export class UserDetailComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load user'
+          summary: this.t('common.error'),
+          detail: this.t('users.loadFailed')
         });
         this.isLoading = false;
       }
@@ -195,15 +198,15 @@ export class UserDetailComponent implements OnInit {
         if (response.success) {
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'User updated successfully'
+            summary: this.t('common.success'),
+            detail: this.t('users.userUpdated')
           });
           this.loadUser(this.user!.id);
         } else {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: response.errors?.[0] || 'Failed to update user'
+            summary: this.t('common.error'),
+            detail: response.errors?.[0] || this.t('users.updateFailed')
           });
         }
         this.isSaving = false;
@@ -211,8 +214,8 @@ export class UserDetailComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to update user'
+          summary: this.t('common.error'),
+          detail: this.t('users.updateFailed')
         });
         this.isSaving = false;
       }
@@ -228,15 +231,15 @@ export class UserDetailComponent implements OnInit {
         if (response.success) {
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'Role changed successfully'
+            summary: this.t('common.success'),
+            detail: this.t('users.roleChanged')
           });
           this.loadUser(this.user!.id);
         } else {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: response.errors?.[0] || 'Failed to change role'
+            summary: this.t('common.error'),
+            detail: response.errors?.[0] || this.t('users.roleChangeFailed')
           });
         }
         this.isChangingRole = false;
@@ -244,8 +247,8 @@ export class UserDetailComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to change role'
+          summary: this.t('common.error'),
+          detail: this.t('users.roleChangeFailed')
         });
         this.isChangingRole = false;
       }

@@ -9,6 +9,7 @@ import { TagModule } from 'primeng/tag';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { DashboardService } from './dashboard.service';
 import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/models/dashboard.model';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,14 +27,14 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
   template: `
     <div class="space-y-6">
       <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Dashboard</h1>
-        <p-button label="Refresh" icon="pi pi-refresh" styleClass="p-button-outlined" (onClick)="loadDashboard()"></p-button>
+        <h1 class="text-2xl font-bold">{{ t('dashboard.title') }}</h1>
+        <p-button [label]="t('common.refresh')" icon="pi pi-refresh" styleClass="p-button-outlined" (onClick)="loadDashboard()"></p-button>
       </div>
 
       @if (isLoading) {
         <div class="text-center py-8">
           <i class="pi pi-spin pi-spinner text-2xl"></i>
-          <p class="mt-2 text-gray-500">Loading dashboard...</p>
+          <p class="mt-2 text-gray-500">{{ t('common.loading') }}</p>
         </div>
       } @else if (dashboard) {
         <!-- Stats Cards -->
@@ -44,7 +45,7 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
                 <i class="pi pi-folder text-xl"></i>
               </div>
               <div class="text-3xl font-bold text-blue-600">{{ dashboard.stats.totalProjects }}</div>
-              <div class="text-gray-500">Total Projects</div>
+              <div class="text-gray-500">{{ t('dashboard.totalProjects') }}</div>
             </div>
           </p-card>
 
@@ -54,7 +55,7 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
                 <i class="pi pi-check-circle text-xl"></i>
               </div>
               <div class="text-3xl font-bold text-green-600">{{ dashboard.stats.completedTasks }}</div>
-              <div class="text-gray-500">Completed Tasks</div>
+              <div class="text-gray-500">{{ t('dashboard.completedTasks') }}</div>
             </div>
           </p-card>
 
@@ -64,7 +65,7 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
                 <i class="pi pi-spin pi-spinner text-xl"></i>
               </div>
               <div class="text-3xl font-bold text-orange-600">{{ dashboard.stats.inProgressTasks }}</div>
-              <div class="text-gray-500">In Progress</div>
+              <div class="text-gray-500">{{ t('dashboard.inProgress') }}</div>
             </div>
           </p-card>
 
@@ -74,7 +75,7 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
                 <i class="pi pi-exclamation-triangle text-xl"></i>
               </div>
               <div class="text-3xl font-bold text-red-600">{{ dashboard.stats.overdueTasks }}</div>
-              <div class="text-gray-500">Overdue</div>
+              <div class="text-gray-500">{{ t('dashboard.overdue') }}</div>
             </div>
           </p-card>
         </div>
@@ -83,21 +84,21 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
         <p-card>
           <ng-template pTemplate="header">
             <div class="px-4 py-3 border-b">
-              <h2 class="text-lg font-semibold">My Tasks</h2>
+              <h2 class="text-lg font-semibold">{{ t('dashboard.myTasks') }}</h2>
             </div>
           </ng-template>
           <div class="grid grid-cols-3 gap-4 text-center">
             <div>
               <div class="text-2xl font-bold text-blue-600">{{ dashboard.stats.myAssignedTasks }}</div>
-              <div class="text-sm text-gray-500">Assigned to me</div>
+              <div class="text-sm text-gray-500">{{ t('dashboard.assignedToMe') }}</div>
             </div>
             <div>
               <div class="text-2xl font-bold text-green-600">{{ getMyCompletedTasks() }}</div>
-              <div class="text-sm text-gray-500">Completed</div>
+              <div class="text-sm text-gray-500">{{ t('dashboard.completed') }}</div>
             </div>
             <div>
               <div class="text-2xl font-bold text-orange-600">{{ getMyPendingTasks() }}</div>
-              <div class="text-sm text-gray-500">Pending</div>
+              <div class="text-sm text-gray-500">{{ t('dashboard.pending') }}</div>
             </div>
           </div>
         </p-card>
@@ -108,7 +109,7 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
           <p-card>
             <ng-template pTemplate="header">
               <div class="px-4 py-3 border-b">
-                <h2 class="text-lg font-semibold">Tasks by Status</h2>
+                <h2 class="text-lg font-semibold">{{ t('dashboard.tasksByStatus') }}</h2>
               </div>
             </ng-template>
             <div class="h-64">
@@ -120,7 +121,7 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
           <p-card>
             <ng-template pTemplate="header">
               <div class="px-4 py-3 border-b">
-                <h2 class="text-lg font-semibold">Tasks by Priority</h2>
+                <h2 class="text-lg font-semibold">{{ t('dashboard.tasksByPriority') }}</h2>
               </div>
             </ng-template>
             <div class="h-64">
@@ -134,7 +135,7 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
           <p-card>
             <ng-template pTemplate="header">
               <div class="px-4 py-3 border-b">
-                <h2 class="text-lg font-semibold">Tasks by Member</h2>
+                <h2 class="text-lg font-semibold">{{ t('dashboard.tasksByMember') }}</h2>
               </div>
             </ng-template>
             <div class="h-64">
@@ -149,7 +150,7 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
           <p-card>
             <ng-template pTemplate="header">
               <div class="px-4 py-3 border-b">
-                <h2 class="text-lg font-semibold">Upcoming Deadlines</h2>
+                <h2 class="text-lg font-semibold">{{ t('dashboard.upcomingDeadlines') }}</h2>
               </div>
             </ng-template>
             @if (dashboard.upcomingDeadlines.length > 0) {
@@ -161,16 +162,16 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
                       <p class="text-sm text-gray-500">{{ deadline.projectName }}</p>
                     </div>
                     <div class="text-right">
-                      <p class="text-sm" [class]="getDeadlineClass(deadline.daysRemaining)">
-                        {{ deadline.daysRemaining === 0 ? 'Today' : deadline.daysRemaining + ' days' }}
-                      </p>
+<p class="text-sm" [class]="getDeadlineClass(deadline.daysRemaining)">
+                          {{ deadline.daysRemaining === 0 ? t('dashboard.today') : deadline.daysRemaining + ' ' + t('dashboard.days') }}
+                        </p>
                       <p-tag [value]="getPriorityLabel(deadline.priority)" [severity]="getPrioritySeverity(deadline.priority)"></p-tag>
                     </div>
                   </div>
                 }
               </div>
             } @else {
-              <p class="text-center text-gray-400 py-8">No upcoming deadlines</p>
+              <p class="text-center text-gray-400 py-8">{{ t('dashboard.noUpcomingDeadlines') }}</p>
             }
           </p-card>
 
@@ -178,7 +179,7 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
           <p-card>
             <ng-template pTemplate="header">
               <div class="px-4 py-3 border-b">
-                <h2 class="text-lg font-semibold">Recent Activity</h2>
+                <h2 class="text-lg font-semibold">{{ t('dashboard.recentActivity') }}</h2>
               </div>
             </ng-template>
             @if (dashboard.recentActivity.length > 0) {
@@ -200,15 +201,15 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
                 }
               </div>
             } @else {
-              <p class="text-center text-gray-400 py-8">No recent activity</p>
+              <p class="text-center text-gray-400 py-8">{{ t('dashboard.noRecentActivity') }}</p>
             }
           </p-card>
         </div>
       } @else {
         <p-card>
           <div class="text-center py-8">
-            <p class="text-gray-500">Failed to load dashboard data.</p>
-            <p-button label="Retry" styleClass="p-button-link" (onClick)="loadDashboard()"></p-button>
+            <p class="text-gray-500">{{ t('dashboard.failedToLoad') }}</p>
+            <p-button [label]="t('common.retry')" styleClass="p-button-link" (onClick)="loadDashboard()"></p-button>
           </div>
         </p-card>
       }
@@ -217,6 +218,8 @@ import { DashboardData, RecentActivity, UpcomingDeadline } from '../../core/mode
 })
 export class DashboardComponent implements OnInit {
   private dashboardService = inject(DashboardService);
+  private translationService = inject(TranslationService);
+  t = this.translationService.translate.bind(this.translationService);
 
   dashboard: DashboardData | null = null;
   isLoading = true;
@@ -337,8 +340,8 @@ export class DashboardComponent implements OnInit {
   }
 
   getPriorityLabel(priority: number): string {
-    const labels = ['Low', 'Medium', 'High', 'Critical'];
-    return labels[priority] || 'Unknown';
+    const labels = [this.t('tasks.low'), this.t('tasks.medium'), this.t('tasks.high'), this.t('tasks.critical')];
+    return labels[priority] || this.t('common.unknown');
   }
 
   getPrioritySeverity(priority: number): string {

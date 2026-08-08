@@ -6,7 +6,7 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "create": "Crear",
-    "search": "Buscar",
+    "search": "Buscar...",
     "filter": "Filtrar",
     "refresh": "Actualizar",
     "back": "Volver",
@@ -27,7 +27,15 @@
     "all": "Todos",
     "none": "Ninguno",
     "required": "Requerido",
-    "optional": "Opcional"
+    "optional": "Opcional",
+    "pending": "Pendiente",
+    "retry": "Reintentar",
+    "total": "Total",
+    "overdue": "Vencida",
+    "noDescription": "Sin descripción",
+    "createdAt": "Creado",
+    "appName": "Gestión de Tareas",
+    "completed": "Completado"
   },
   "nav": {
     "dashboard": "Panel",
@@ -56,7 +64,16 @@
     "loginSuccess": "Sesión iniciada exitosamente",
     "loginFailed": "Credenciales inválidas",
     "registerSuccess": "Registro exitoso",
-    "registerFailed": "Error en el registro"
+    "registerFailed": "Error en el registro",
+    "signInSubtitle": "Inicia sesión en tu cuenta",
+    "registerSubtitle": "Crea tu cuenta",
+    "emailPlaceholder": "Ingresa tu correo",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "userName": "Nombre de Usuario",
+    "fullNamePlaceholder": "Ingresa tu nombre completo",
+    "userNamePlaceholder": "Elige un nombre de usuario",
+    "passwordCreatePlaceholder": "Crea una contraseña",
+    "confirmPasswordPlaceholder": "Confirma tu contraseña"
   },
   "dashboard": {
     "title": "Panel de Control",
@@ -70,7 +87,12 @@
     "tasksByMember": "Tareas por Miembro",
     "upcomingDeadlines": "Próximas Fechas Límite",
     "recentActivity": "Actividad Reciente",
-    "noActivity": "No hay actividad reciente"
+    "noActivity": "No hay actividad reciente",
+    "assignedToMe": "Asignadas a mí",
+    "today": "Hoy",
+    "daysRemaining": "{{count}} días",
+    "noUpcomingDeadlines": "No hay fechas próximas",
+    "loadFailed": "Error al cargar datos del panel"
   },
   "projects": {
     "title": "Proyectos",
@@ -98,7 +120,21 @@
     "projectDeleted": "Proyecto eliminado exitosamente",
     "confirmDelete": "¿Estás seguro de eliminar este proyecto?",
     "memberAdded": "Miembro agregado exitosamente",
-    "memberRemoved": "Miembro removido exitosamente"
+    "memberRemoved": "Miembro removido exitosamente",
+    "projectInformation": "Información del Proyecto",
+    "totalTasks": "Total de Tareas",
+    "teamMembers": "Miembros del Equipo",
+    "noMembers": "Aún no hay miembros",
+    "notFound": "Proyecto no encontrado.",
+    "keyHelpText": "Identificador único (solo letras mayúsculas y números)",
+    "loadFailed": "Error al cargar proyectos",
+    "updateFailed": "Error al actualizar proyecto",
+    "createFailed": "Error al crear proyecto",
+    "deleteFailed": "Error al eliminar proyecto",
+    "role": "Rol",
+    "confirmRemoveMember": "¿Estás seguro de remover a {{name}} de este proyecto?",
+    "memberAddFailed": "Error al agregar miembro",
+    "memberRemoveFailed": "Error al remover miembro"
   },
   "tasks": {
     "title": "Tareas",
@@ -134,7 +170,39 @@
     "statusChanged": "Estado cambiado exitosamente",
     "commentAdded": "Comentario agregado exitosamente",
     "attachmentUploaded": "Archivo subido exitosamente",
-    "attachmentDeleted": "Archivo eliminado exitosamente"
+    "attachmentDeleted": "Archivo eliminado exitosamente",
+    "board": "Tablero de Tareas",
+    "list": "Lista de Tareas",
+    "taskInformation": "Información de la Tarea",
+    "noDueDate": "Sin fecha límite",
+    "noTags": "Sin etiquetas",
+    "createdBy": "Creado Por",
+    "createdAt": "Creado El",
+    "assignment": "Asignación",
+    "assignTo": "Asignar A",
+    "noComments": "Aún no hay comentarios",
+    "noAttachments": "Sin archivos adjuntos",
+    "noHistory": "Sin historial",
+    "notFound": "Tarea no encontrada.",
+    "unassigned": "Sin asignar",
+    "createFirst": "Crea tu primera tarea",
+    "dropHere": "Soltar aquí",
+    "allStatus": "Todos los Estados",
+    "allPriorities": "Todas las Prioridades",
+    "noAssignedTasks": "No hay tareas asignadas",
+    "assignedTasksWillAppear": "Las tareas asignadas aparecerán aquí",
+    "titleRequired": "El título de la tarea es requerido",
+    "createFailed": "Error al crear tarea",
+    "updateFailed": "Error al actualizar tarea",
+    "deleteFailed": "Error al eliminar tarea",
+    "statusChangedTo": "Tarea movida a {{status}}",
+    "statusUpdateFailed": "Error al cambiar estado",
+    "assignFailed": "Error al asignar tarea",
+    "commentFailed": "Error al agregar comentario",
+    "uploadFailed": "Error al subir archivo",
+    "deleteAttachmentFailed": "Error al eliminar archivo",
+    "confirmDelete": "¿Estás seguro de eliminar \"{{name}}\"?",
+    "confirmDeleteAttachment": "¿Estás seguro de eliminar \"{{name}}\"?"
   },
   "users": {
     "title": "Usuarios",
@@ -154,7 +222,20 @@
     "noUsers": "No hay usuarios",
     "userCreated": "Usuario creado exitosamente",
     "userUpdated": "Usuario actualizado exitosamente",
-    "userDeleted": "Usuario eliminado exitosamente"
+    "userDeleted": "Usuario eliminado exitosamente",
+    "userInformation": "Información del Usuario",
+    "backToUsers": "Volver a Usuarios",
+    "avatarUrl": "URL del Avatar",
+    "role": "Rol",
+    "currentRole": "Rol Actual",
+    "changeRole": "Cambiar Rol",
+    "notFound": "Usuario no encontrado.",
+    "loadFailed": "Error al cargar usuarios",
+    "updateFailed": "Error al actualizar usuario",
+    "deleteFailed": "Error al eliminar usuario",
+    "confirmDelete": "¿Estás seguro de eliminar a {{name}}?",
+    "roleChanged": "Rol cambiado exitosamente",
+    "roleChangeFailed": "Error al cambiar rol"
   },
   "profile": {
     "title": "Mi Perfil",
@@ -173,7 +254,10 @@
     "userId": "ID de Usuario",
     "profileUpdated": "Perfil actualizado exitosamente",
     "passwordChanged": "Contraseña cambiada exitosamente",
-    "passwordsDoNotMatch": "Las contraseñas no coinciden"
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "saveChanges": "Guardar Cambios",
+    "updateFailed": "Error al actualizar perfil",
+    "passwordChangeFailed": "Error al cambiar contraseña"
   },
   "notifications": {
     "title": "Notificaciones",
@@ -183,7 +267,10 @@
     "read": "Leídas",
     "markedAsRead": "Marcada como leída",
     "allMarkedAsRead": "Todas marcadas como leídas",
-    "deleted": "Notificación eliminada"
+    "deleted": "Notificación eliminada",
+    "new": "Nuevas",
+    "earlier": "Anteriores",
+    "confirmDelete": "¿Estás seguro de eliminar esta notificación?"
   },
   "audit": {
     "title": "Registros de Auditoría",
@@ -205,7 +292,13 @@
     "update": "Actualizar",
     "delete": "Eliminar",
     "login": "Iniciar Sesión",
-    "logout": "Cerrar Sesión"
+    "logout": "Cerrar Sesión",
+    "allActions": "Todas las Acciones",
+    "allEntities": "Todas las Entidades",
+    "entityId": "ID de Entidad",
+    "system": "Sistema",
+    "paginationInfo": "Mostrando {first} a {last} de {totalRecords} registros",
+    "loadFailed": "Error al cargar registros de auditoría"
   },
   "members": {
     "admin": "Administrador",

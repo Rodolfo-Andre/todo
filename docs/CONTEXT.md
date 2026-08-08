@@ -1,6 +1,6 @@
 # CONTEXT.md — Contexto del Proyecto TaskManagement
 
-> **Última actualización:** 2026-08-01
+> **Última actualización:** 2026-08-08
 > **Archivo de referencia:** `.opencode/plans/1784932145450-silent-river.md`
 
 ---
@@ -64,6 +64,7 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Infrastructure | ✅ | AppDbContext, JwtTokenService, CurrentUserService, UnitOfWork, FileStorageService, AuditService, Seeds (Roles, Admin) |
 | API Controllers | ✅ | AuthController, UsersController, ProjectsController, TasksController, DashboardController, NotificationsController, ProfileController, AuditController |
 | Middleware | ✅ | ExceptionHandlingMiddleware |
+| Swagger | ✅ | CustomSchemaIds (FullName) para evitar conflictos de schemaId |
 
 ### 4.2 Backend — Pendiente
 
@@ -103,13 +104,18 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 
 | Módulo | Estado | Notas |
 |--------|--------|-------|
-| Shared Components | ✅ | LanguageSwitcher (parcial) |
+| Shared Components | ✅ | LanguageSwitcher, Todos los componentes traducidos |
 
 ---
 
 ## 5. Git History
 
 ```
+feat: restructure repo folders + fix Swagger schemaId conflict
+feat: i18n - traducir todos los componentes frontend
+bd9e6d1 feat: fix compilation errors (Audit handlers, Localizer, angular.json)
+5a27386 feat: implement i18n (backend + frontend)
+bb3383f feat: implement Audit Log feature (backend + frontend)
 5b54c1f feat: implement Profile feature (backend + frontend)
 e6ce1af feat: implement Notifications feature (backend + frontend)
 6f834ff feat: implement Dashboard feature (backend + frontend)
@@ -121,7 +127,7 @@ dcf7258 feat: implement Users Management and improve UI
 ```
 
 **Rama actual:** `master`
-**Último commit:** Profile feature
+**Último commit:** reestructura del repositorio + fix Swagger
 
 ---
 
@@ -177,9 +183,31 @@ dcf7258 feat: implement Users Management and improve UI
 
 ---
 
-## 10. Archivos Clave de Referencia
+## 10. Estructura del Repositorio
+
+```
+C:\Cursos\MimoCode\
+├── backend/                 ← Backend (.NET) + solución
+│   ├── TaskManagement.slnx
+│   ├── TaskManagement.Api
+│   ├── TaskManagement.Application
+│   ├── TaskManagement.Domain
+│   ├── TaskManagement.Infrastructure
+│   └── TaskManagement.Shared
+├── frontend/                ← Frontend (Angular)
+├── docs/                    ← Documentación
+│   ├── CHANGELOG_TASKS.md
+│   └── CONTEXT.md
+└── .opencode/               ← Configuración OpenCode
+```
+
+---
+
+## 11. Archivos Clave de Referencia
 
 - Plan maestro: `.opencode/plans/1784932145450-silent-river.md`
 - Config OpenCode: `.opencode/opencode.json`
-- API Config: `src/TaskManagement.Api/appsettings.json`
+- Solución: `backend/TaskManagement.slnx`
+- API Config: `backend/TaskManagement.Api/appsettings.json`
 - Frontend Config: `frontend/package.json`, `frontend/angular.json`
+- Documentación: `docs/CHANGELOG_TASKS.md`, `docs/CONTEXT.md`

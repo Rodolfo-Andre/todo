@@ -13,6 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ProjectService, Project } from './project.service';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-project-list',
@@ -38,20 +39,20 @@ import { ProjectService, Project } from './project.service';
 
     <div class="space-y-6">
       <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Projects</h1>
-        <p-button label="New Project" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
+        <h1 class="text-2xl font-bold">{{ t('projects.title') }}</h1>
+        <p-button [label]="t('projects.createProject')" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
       </div>
 
       <p-card>
         <p-table [value]="projects" [loading]="isLoading">
           <ng-template pTemplate="header">
             <tr>
-              <th>Project</th>
-              <th>Key</th>
-              <th>Tasks</th>
-              <th>Members</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>{{ t('projects.title') }}</th>
+              <th>{{ t('projects.projectKey') }}</th>
+              <th>{{ t('projects.tasks') }}</th>
+              <th>{{ t('projects.members') }}</th>
+              <th>{{ t('projects.status') }}</th>
+              <th>{{ t('common.actions') }}</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-project>
@@ -85,8 +86,8 @@ import { ProjectService, Project } from './project.service';
               <td colspan="6" class="text-center py-8">
                 <div class="flex flex-col items-center gap-4">
                   <i class="pi pi-folder-open text-4xl text-gray-300"></i>
-                  <p class="text-gray-500">No projects found</p>
-                  <p-button label="Create your first project" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
+                  <p class="text-gray-500">{{ t('projects.noProjects') }}</p>
+                  <p-button [label]="t('projects.createFirst')" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
                 </div>
               </td>
             </tr>
@@ -98,7 +99,7 @@ import { ProjectService, Project } from './project.service';
     <!-- Create/Edit Dialog -->
     <p-dialog
       [(visible)]="dialogVisible"
-      [header]="isEditMode ? 'Edit Project' : 'Create Project'"
+      [header]="isEditMode ? t('projects.editProject') : t('projects.createProject')"
       [modal]="true"
       [style]="{ width: '500px' }"
       [draggable]="false"
@@ -106,27 +107,27 @@ import { ProjectService, Project } from './project.service';
     >
       <form [formGroup]="projectForm" class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-          <label for="name" class="font-medium">Project Name *</label>
-          <input pInputText id="name" formControlName="name" class="w-full" placeholder="My Project" />
+          <label for="name" class="font-medium">{{ t('projects.projectName') }} *</label>
+          <input pInputText id="name" formControlName="name" class="w-full" />
         </div>
 
         @if (!isEditMode) {
           <div class="flex flex-col gap-2">
-            <label for="key" class="font-medium">Project Key *</label>
-            <input pInputText id="key" formControlName="key" class="w-full" placeholder="PROJ" maxlength="10" style="text-transform: uppercase;" />
-            <small class="text-gray-500">Unique identifier (uppercase letters and numbers only)</small>
+            <label for="key" class="font-medium">{{ t('projects.projectKey') }} *</label>
+            <input pInputText id="key" formControlName="key" class="w-full" maxlength="10" style="text-transform: uppercase;" />
+            <small class="text-gray-500">{{ t('projects.keyHelpText') }}</small>
           </div>
         }
 
         <div class="flex flex-col gap-2">
-          <label for="description" class="font-medium">Description</label>
-          <textarea pInputTextarea id="description" formControlName="description" class="w-full" rows="3" placeholder="Project description..."></textarea>
+          <label for="description" class="font-medium">{{ t('projects.description') }}</label>
+          <textarea pInputTextarea id="description" formControlName="description" class="w-full" rows="3"></textarea>
         </div>
       </form>
 
       <ng-template pTemplate="footer">
-        <p-button label="Cancel" styleClass="p-button-text" (onClick)="hideDialog()"></p-button>
-        <p-button [label]="isEditMode ? 'Save' : 'Create'" (onClick)="saveProject()" [loading]="isSaving"></p-button>
+        <p-button [label]="t('common.cancel')" styleClass="p-button-text" (onClick)="hideDialog()"></p-button>
+        <p-button [label]="isEditMode ? t('common.save') : t('common.create')" (onClick)="saveProject()" [loading]="isSaving"></p-button>
       </ng-template>
     </p-dialog>
   `
@@ -136,6 +137,8 @@ export class ProjectListComponent implements OnInit {
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
   private fb = inject(FormBuilder);
+  private translationService = inject(TranslationService);
+  t = this.translationService.translate.bind(this.translationService);
 
   projects: Project[] = [];
   isLoading = false;
@@ -171,8 +174,8 @@ export class ProjectListComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load projects'
+          summary: this.t('common.error'),
+          detail: this.t('projects.loadFailed')
         });
         this.isLoading = false;
       }
@@ -181,9 +184,9 @@ export class ProjectListComponent implements OnInit {
 
   getStatusLabel(status: number): string {
     switch (status) {
-      case 0: return 'Active';
-      case 1: return 'Archived';
-      default: return 'Unknown';
+      case 0: return this.t('projects.active');
+      case 1: return this.t('projects.archived');
+      default: return this.t('common.pending');
     }
   }
 
@@ -229,15 +232,15 @@ export class ProjectListComponent implements OnInit {
           if (response.success) {
             this.messageService.add({
               severity: 'success',
-              summary: 'Success',
-              detail: 'Project updated successfully'
+              summary: this.t('common.success'),
+              detail: this.t('projects.projectUpdated')
             });
             this.loadProjects();
           } else {
             this.messageService.add({
               severity: 'error',
-              summary: 'Error',
-              detail: response.errors?.[0] || 'Failed to update project'
+              summary: this.t('common.error'),
+              detail: response.errors?.[0] || this.t('projects.updateFailed')
             });
           }
           this.isSaving = false;
@@ -246,8 +249,8 @@ export class ProjectListComponent implements OnInit {
         error: () => {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to update project'
+            summary: this.t('common.error'),
+            detail: this.t('projects.updateFailed')
           });
           this.isSaving = false;
         }
@@ -258,15 +261,15 @@ export class ProjectListComponent implements OnInit {
           if (response.success) {
             this.messageService.add({
               severity: 'success',
-              summary: 'Success',
-              detail: 'Project created successfully'
+              summary: this.t('common.success'),
+              detail: this.t('projects.projectCreated')
             });
             this.loadProjects();
           } else {
             this.messageService.add({
               severity: 'error',
-              summary: 'Error',
-              detail: response.errors?.[0] || 'Failed to create project'
+              summary: this.t('common.error'),
+              detail: response.errors?.[0] || this.t('projects.createFailed')
             });
           }
           this.isSaving = false;
@@ -275,8 +278,8 @@ export class ProjectListComponent implements OnInit {
         error: () => {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to create project'
+            summary: this.t('common.error'),
+            detail: this.t('projects.createFailed')
           });
           this.isSaving = false;
         }
@@ -286,8 +289,8 @@ export class ProjectListComponent implements OnInit {
 
   confirmDelete(project: Project): void {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete "${project.name}"?`,
-      header: 'Confirm Delete',
+      message: this.t('projects.confirmDelete'),
+      header: this.t('common.confirm'),
       icon: 'pi pi-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
@@ -302,23 +305,23 @@ export class ProjectListComponent implements OnInit {
         if (response.success) {
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'Project deleted successfully'
+            summary: this.t('common.success'),
+            detail: this.t('projects.projectDeleted')
           });
           this.loadProjects();
         } else {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: response.errors?.[0] || 'Failed to delete project'
+            summary: this.t('common.error'),
+            detail: response.errors?.[0] || this.t('projects.deleteFailed')
           });
         }
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to delete project'
+          summary: this.t('common.error'),
+          detail: this.t('projects.deleteFailed')
         });
       }
     });

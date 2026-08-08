@@ -10,6 +10,7 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ProfileService } from './profile.service';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-profile',
@@ -30,7 +31,7 @@ import { ProfileService } from './profile.service';
     <p-toast></p-toast>
 
     <div class="space-y-6">
-      <h1 class="text-2xl font-bold">My Profile</h1>
+      <h1 class="text-2xl font-bold">{{ t('profile.title') }}</h1>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Profile Card -->
@@ -56,7 +57,7 @@ import { ProfileService } from './profile.service';
             </div>
 
             <div class="mt-4 text-center">
-              <p class="text-sm text-gray-500">Member since</p>
+              <p class="text-sm text-gray-500">{{ t('profile.memberSince') }}</p>
               <p class="font-medium">{{ profile()?.createdAt | date:'mediumDate' }}</p>
             </div>
           </div>
@@ -66,30 +67,30 @@ import { ProfileService } from './profile.service';
         <p-card styleClass="lg:col-span-2">
           <ng-template pTemplate="header">
             <div class="px-4 py-3 border-b">
-              <h2 class="text-lg font-semibold">Profile Information</h2>
+              <h2 class="text-lg font-semibold">{{ t('profile.profileInformation') }}</h2>
             </div>
           </ng-template>
 
           <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()" class="flex flex-col gap-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="flex flex-col gap-2">
-                <label for="fullName" class="font-medium text-sm">Full Name</label>
+                <label for="fullName" class="font-medium text-sm">{{ t('profile.fullName') }}</label>
                 <input pInputText id="fullName" formControlName="fullName" class="w-full" />
               </div>
 
               <div class="flex flex-col gap-2">
-                <label for="email" class="font-medium text-sm">Email</label>
+                <label for="email" class="font-medium text-sm">{{ t('profile.email') }}</label>
                 <input pInputText id="email" formControlName="email" type="email" class="w-full" />
               </div>
             </div>
 
             <div class="flex flex-col gap-2">
-              <label for="avatarUrl" class="font-medium text-sm">Avatar URL</label>
+              <label for="avatarUrl" class="font-medium text-sm">{{ t('profile.avatarUrl') }}</label>
               <input pInputText id="avatarUrl" formControlName="avatarUrl" class="w-full" placeholder="https://example.com/avatar.jpg" />
             </div>
 
             <div class="flex justify-end">
-              <p-button label="Save Changes" type="submit" [loading]="isSaving" [disabled]="profileForm.invalid"></p-button>
+              <p-button [label]="t('profile.saveChanges')" type="submit" [loading]="isSaving" [disabled]="profileForm.invalid"></p-button>
             </div>
           </form>
         </p-card>
@@ -99,28 +100,28 @@ import { ProfileService } from './profile.service';
       <p-card>
         <ng-template pTemplate="header">
           <div class="px-4 py-3 border-b">
-            <h2 class="text-lg font-semibold">Change Password</h2>
+            <h2 class="text-lg font-semibold">{{ t('profile.changePassword') }}</h2>
           </div>
         </ng-template>
 
         <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="flex flex-col gap-4 max-w-md">
           <div class="flex flex-col gap-2">
-            <label for="currentPassword" class="font-medium text-sm">Current Password</label>
+            <label for="currentPassword" class="font-medium text-sm">{{ t('profile.currentPassword') }}</label>
             <input pInputText id="currentPassword" formControlName="currentPassword" type="password" class="w-full" />
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="newPassword" class="font-medium text-sm">New Password</label>
+            <label for="newPassword" class="font-medium text-sm">{{ t('profile.newPassword') }}</label>
             <input pInputText id="newPassword" formControlName="newPassword" type="password" class="w-full" />
           </div>
 
           <div class="flex flex-col gap-2">
-            <label for="confirmPassword" class="font-medium text-sm">Confirm New Password</label>
+            <label for="confirmPassword" class="font-medium text-sm">{{ t('profile.confirmPassword') }}</label>
             <input pInputText id="confirmPassword" formControlName="confirmPassword" type="password" class="w-full" />
           </div>
 
           <div class="flex justify-end">
-            <p-button label="Change Password" type="submit" [loading]="isChangingPassword" [disabled]="passwordForm.invalid" severity="warn"></p-button>
+            <p-button [label]="t('profile.changePassword')" type="submit" [loading]="isChangingPassword" [disabled]="passwordForm.invalid" severity="warn"></p-button>
           </div>
         </form>
       </p-card>
@@ -129,21 +130,21 @@ import { ProfileService } from './profile.service';
       <p-card>
         <ng-template pTemplate="header">
           <div class="px-4 py-3 border-b">
-            <h2 class="text-lg font-semibold">Account Information</h2>
+            <h2 class="text-lg font-semibold">{{ t('profile.accountInformation') }}</h2>
           </div>
         </ng-template>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <p class="text-sm text-gray-500 mb-1">Username</p>
+            <p class="text-sm text-gray-500 mb-1">{{ t('profile.username') }}</p>
             <p class="font-medium">{{ profile()?.userName }}</p>
           </div>
           <div>
-            <p class="text-sm text-gray-500 mb-1">Account Status</p>
-            <p-tag [value]="profile()?.isActive ? 'Active' : 'Inactive'" [severity]="profile()?.isActive ? 'success' : 'danger'"></p-tag>
+            <p class="text-sm text-gray-500 mb-1">{{ t('profile.accountStatus') }}</p>
+            <p-tag [value]="profile()?.isActive ? t('users.active') : t('users.inactive')" [severity]="profile()?.isActive ? 'success' : 'danger'"></p-tag>
           </div>
           <div>
-            <p class="text-sm text-gray-500 mb-1">User ID</p>
+            <p class="text-sm text-gray-500 mb-1">{{ t('profile.userId') }}</p>
             <p class="font-medium text-sm text-gray-600">{{ profile()?.id }}</p>
           </div>
         </div>
@@ -155,6 +156,9 @@ export class ProfileComponent implements OnInit {
   private profileService = inject(ProfileService);
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
+  private translationService = inject(TranslationService);
+
+  t = this.translationService.translate.bind(this.translationService);
 
   profileForm: FormGroup;
   passwordForm: FormGroup;
@@ -223,15 +227,15 @@ export class ProfileComponent implements OnInit {
         if (response.success) {
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'Profile updated successfully'
+            summary: this.t('common.success'),
+            detail: this.t('profile.profileUpdated')
           });
           this.loadProfile();
         } else {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: response.errors?.[0] || 'Failed to update profile'
+            summary: this.t('common.error'),
+            detail: response.errors?.[0] || this.t('profile.updateFailed')
           });
         }
         this.isSaving = false;
@@ -239,8 +243,8 @@ export class ProfileComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to update profile'
+          summary: this.t('common.error'),
+          detail: this.t('profile.updateFailed')
         });
         this.isSaving = false;
       }
@@ -254,8 +258,8 @@ export class ProfileComponent implements OnInit {
     if (newPassword !== confirmPassword) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Passwords do not match'
+        summary: this.t('common.error'),
+        detail: this.t('profile.passwordsDoNotMatch')
       });
       return;
     }
@@ -266,15 +270,15 @@ export class ProfileComponent implements OnInit {
         if (response.success) {
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'Password changed successfully'
+            summary: this.t('common.success'),
+            detail: this.t('profile.passwordChanged')
           });
           this.passwordForm.reset();
         } else {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: response.errors?.[0] || 'Failed to change password'
+            summary: this.t('common.error'),
+            detail: response.errors?.[0] || this.t('profile.passwordChangeFailed')
           });
         }
         this.isChangingPassword = false;
@@ -282,8 +286,8 @@ export class ProfileComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to change password'
+          summary: this.t('common.error'),
+          detail: this.t('profile.passwordChangeFailed')
         });
         this.isChangingPassword = false;
       }

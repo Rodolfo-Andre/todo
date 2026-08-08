@@ -17,6 +17,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { ProjectService, Project, ProjectMember } from './project.service';
 import { UserService } from '../users/user.service';
 import { User } from '../../core/models/user.model';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -46,15 +47,15 @@ import { User } from '../../core/models/user.model';
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-4">
           <p-button icon="pi pi-arrow-left" styleClass="p-button-text" routerLink="/projects"></p-button>
-          <h1 class="text-2xl font-bold">{{ project?.name || 'Loading...' }}</h1>
+          <h1 class="text-2xl font-bold">{{ project?.name || t('common.loading') }}</h1>
           @if (project) {
             <span class="px-2 py-1 bg-gray-100 rounded text-sm font-mono">{{ project.key }}</span>
           }
         </div>
         <div class="flex gap-2">
-          <p-button label="Board" icon="pi pi-columns" styleClass="p-button-outlined" [routerLink]="['/projects', project?.id, 'board']"></p-button>
-          <p-button label="List" icon="pi pi-list" styleClass="p-button-outlined" [routerLink]="['/projects', project?.id, 'list']"></p-button>
-          <p-button label="Edit" icon="pi pi-pencil" (onClick)="showEditDialog()"></p-button>
+          <p-button [label]="t('projects.board')" icon="pi pi-columns" styleClass="p-button-outlined" [routerLink]="['/projects', project?.id, 'board']"></p-button>
+          <p-button [label]="t('projects.list')" icon="pi pi-list" styleClass="p-button-outlined" [routerLink]="['/projects', project?.id, 'list']"></p-button>
+          <p-button [label]="t('common.edit')" icon="pi pi-pencil" (onClick)="showEditDialog()"></p-button>
         </div>
       </div>
 
@@ -62,7 +63,7 @@ import { User } from '../../core/models/user.model';
         <p-card>
           <div class="text-center py-8">
             <i class="pi pi-spin pi-spinner text-2xl"></i>
-            <p class="mt-2 text-gray-500">Loading project...</p>
+            <p class="mt-2 text-gray-500">{{ t('common.loading') }}</p>
           </div>
         </p-card>
       } @else if (project) {
@@ -71,32 +72,32 @@ import { User } from '../../core/models/user.model';
           <p-card styleClass="lg:col-span-2">
             <ng-template pTemplate="header">
               <div class="px-4 py-3 border-b">
-                <h2 class="text-lg font-semibold">Project Information</h2>
+                <h2 class="text-lg font-semibold">{{ t('projects.projectInformation') }}</h2>
               </div>
             </ng-template>
 
             <div class="flex flex-col gap-4">
               <div>
-                <p class="text-sm text-gray-500 mb-1">Description</p>
-                <p>{{ project.description || 'No description provided' }}</p>
+                <p class="text-sm text-gray-500 mb-1">{{ t('projects.description') }}</p>
+                <p>{{ project.description || t('common.noDescription') }}</p>
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Status</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('projects.status') }}</p>
                   <p-tag [value]="getStatusLabel(project.status)" [severity]="getStatusSeverity(project.status)"></p-tag>
                 </div>
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Created</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('common.createdAt') }}</p>
                   <p>{{ project.createdAt | date:'mediumDate' }}</p>
                 </div>
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Total Tasks</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('projects.totalTasks') }}</p>
                   <p class="text-2xl font-bold">{{ project.taskCount }}</p>
                 </div>
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Team Members</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('projects.teamMembers') }}</p>
                   <p class="text-2xl font-bold">{{ project.memberCount }}</p>
                 </div>
               </div>
@@ -107,7 +108,7 @@ import { User } from '../../core/models/user.model';
           <p-card>
             <ng-template pTemplate="header">
               <div class="px-4 py-3 border-b flex justify-between items-center">
-                <h2 class="text-lg font-semibold">Members</h2>
+                <h2 class="text-lg font-semibold">{{ t('projects.members') }}</h2>
                 <p-button icon="pi pi-plus" styleClass="p-button-text p-button-rounded p-button-sm" (onClick)="showAddMemberDialog()"></p-button>
               </div>
             </ng-template>
@@ -127,7 +128,7 @@ import { User } from '../../core/models/user.model';
                   <button pButton icon="pi pi-times" class="p-button-text p-button-rounded p-button-sm p-button-danger" (click)="confirmRemoveMember(member)"></button>
                 </div>
               } @empty {
-                <p class="text-center text-gray-500 py-4">No members yet</p>
+                <p class="text-center text-gray-500 py-4">{{ t('projects.noMembers') }}</p>
               }
             </div>
           </p-card>
@@ -135,7 +136,7 @@ import { User } from '../../core/models/user.model';
       } @else {
         <p-card>
           <div class="text-center py-8">
-            <p class="text-gray-500">Project not found.</p>
+            <p class="text-gray-500">{{ t('projects.notFound') }}</p>
           </div>
         </p-card>
       }
@@ -144,7 +145,7 @@ import { User } from '../../core/models/user.model';
     <!-- Edit Project Dialog -->
     <p-dialog
       [(visible)]="editDialogVisible"
-      header="Edit Project"
+      [header]="t('projects.editProject')"
       [modal]="true"
       [style]="{ width: '500px' }"
       [draggable]="false"
@@ -152,24 +153,24 @@ import { User } from '../../core/models/user.model';
     >
       <form [formGroup]="editForm" class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-          <label for="name" class="font-medium">Project Name *</label>
+          <label for="name" class="font-medium">{{ t('projects.projectName') }} *</label>
           <input pInputText id="name" formControlName="name" class="w-full" />
         </div>
         <div class="flex flex-col gap-2">
-          <label for="description" class="font-medium">Description</label>
+          <label for="description" class="font-medium">{{ t('projects.description') }}</label>
           <textarea pInputTextarea id="description" formControlName="description" class="w-full" rows="3"></textarea>
         </div>
       </form>
       <ng-template pTemplate="footer">
-        <p-button label="Cancel" styleClass="p-button-text" (onClick)="editDialogVisible = false"></p-button>
-        <p-button label="Save" (onClick)="saveProject()" [loading]="isSaving"></p-button>
+        <p-button [label]="t('common.cancel')" styleClass="p-button-text" (onClick)="editDialogVisible = false"></p-button>
+        <p-button [label]="t('common.save')" (onClick)="saveProject()" [loading]="isSaving"></p-button>
       </ng-template>
     </p-dialog>
 
     <!-- Add Member Dialog -->
     <p-dialog
       [(visible)]="addMemberDialogVisible"
-      header="Add Member"
+      [header]="t('projects.addMember')"
       [modal]="true"
       [style]="{ width: '400px' }"
       [draggable]="false"
@@ -177,20 +178,19 @@ import { User } from '../../core/models/user.model';
     >
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Select User</label>
+          <label class="font-medium">{{ t('projects.selectUser') }}</label>
           <p-select
             [options]="availableUsers"
             [(ngModel)]="selectedUserId"
             optionLabel="fullName"
             optionValue="id"
-            placeholder="Select a user"
             styleClass="w-full"
             filter
             filterBy="fullName,email"
           ></p-select>
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Role</label>
+          <label class="font-medium">{{ t('projects.role') }}</label>
           <p-select
             [options]="roleOptions"
             [(ngModel)]="selectedRole"
@@ -201,8 +201,8 @@ import { User } from '../../core/models/user.model';
         </div>
       </div>
       <ng-template pTemplate="footer">
-        <p-button label="Cancel" styleClass="p-button-text" (onClick)="addMemberDialogVisible = false"></p-button>
-        <p-button label="Add" (onClick)="addMember()" [loading]="isAddingMember" [disabled]="!selectedUserId"></p-button>
+        <p-button [label]="t('common.cancel')" styleClass="p-button-text" (onClick)="addMemberDialogVisible = false"></p-button>
+        <p-button [label]="t('common.add')" (onClick)="addMember()" [loading]="isAddingMember" [disabled]="!selectedUserId"></p-button>
       </ng-template>
     </p-dialog>
   `
@@ -215,6 +215,8 @@ export class ProjectDetailComponent implements OnInit {
   private userService = inject(UserService);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+  private translationService = inject(TranslationService);
+  t = this.translationService.translate.bind(this.translationService);
 
   project: Project | null = null;
   members: ProjectMember[] = [];
@@ -264,8 +266,8 @@ export class ProjectDetailComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load project'
+          summary: this.t('common.error'),
+          detail: this.t('projects.loadFailed')
         });
         this.isLoading = false;
       }
@@ -294,9 +296,9 @@ export class ProjectDetailComponent implements OnInit {
 
   getStatusLabel(status: number): string {
     switch (status) {
-      case 0: return 'Active';
-      case 1: return 'Archived';
-      default: return 'Unknown';
+      case 0: return this.t('projects.active');
+      case 1: return this.t('projects.archived');
+      default: return this.t('common.pending');
     }
   }
 
@@ -310,10 +312,10 @@ export class ProjectDetailComponent implements OnInit {
 
   getRoleLabel(role: number): string {
     switch (role) {
-      case 0: return 'Admin';
-      case 1: return 'Member';
-      case 2: return 'Viewer';
-      default: return 'Unknown';
+      case 0: return this.t('members.admin');
+      case 1: return this.t('members.member');
+      case 2: return this.t('members.viewer');
+      default: return this.t('common.pending');
     }
   }
 
@@ -351,15 +353,15 @@ export class ProjectDetailComponent implements OnInit {
         if (response.success) {
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'Project updated successfully'
+            summary: this.t('common.success'),
+            detail: this.t('projects.projectUpdated')
           });
           this.loadProject(this.project!.id);
         } else {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: response.errors?.[0] || 'Failed to update project'
+            summary: this.t('common.error'),
+            detail: response.errors?.[0] || this.t('projects.updateFailed')
           });
         }
         this.isSaving = false;
@@ -368,8 +370,8 @@ export class ProjectDetailComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to update project'
+          summary: this.t('common.error'),
+          detail: this.t('projects.updateFailed')
         });
         this.isSaving = false;
       }
@@ -388,16 +390,16 @@ export class ProjectDetailComponent implements OnInit {
         if (response.success) {
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'Member added successfully'
+            summary: this.t('common.success'),
+            detail: this.t('projects.memberAdded')
           });
           this.loadMembers(this.project!.id);
           this.loadProject(this.project!.id);
         } else {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: response.errors?.[0] || 'Failed to add member'
+            summary: this.t('common.error'),
+            detail: response.errors?.[0] || this.t('projects.memberAddFailed')
           });
         }
         this.isAddingMember = false;
@@ -406,8 +408,8 @@ export class ProjectDetailComponent implements OnInit {
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to add member'
+          summary: this.t('common.error'),
+          detail: this.t('projects.memberAddFailed')
         });
         this.isAddingMember = false;
       }
@@ -416,8 +418,8 @@ export class ProjectDetailComponent implements OnInit {
 
   confirmRemoveMember(member: ProjectMember): void {
     this.confirmationService.confirm({
-      message: `Are you sure you want to remove ${member.fullName} from this project?`,
-      header: 'Confirm Remove',
+      message: this.t('projects.confirmRemoveMember', { name: member.fullName }),
+      header: this.t('common.confirm'),
       icon: 'pi pi-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
@@ -434,24 +436,24 @@ export class ProjectDetailComponent implements OnInit {
         if (response.success) {
           this.messageService.add({
             severity: 'success',
-            summary: 'Success',
-            detail: 'Member removed successfully'
+            summary: this.t('common.success'),
+            detail: this.t('projects.memberRemoved')
           });
           this.loadMembers(this.project!.id);
           this.loadProject(this.project!.id);
         } else {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: response.errors?.[0] || 'Failed to remove member'
+            summary: this.t('common.error'),
+            detail: response.errors?.[0] || this.t('projects.memberRemoveFailed')
           });
         }
       },
       error: () => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to remove member'
+          summary: this.t('common.error'),
+          detail: this.t('projects.memberRemoveFailed')
         });
       }
     });

@@ -123,7 +123,7 @@ Implementación completa del sistema de gestión de tareas incluyendo backend (.
 
 ### Backend
 ```
-src/TaskManagement.Shared/DTOs/
+backend/TaskManagement.Shared/DTOs/
 ├── Tasks/
 │   ├── TaskDto.cs
 │   ├── CreateTaskRequest.cs
@@ -137,10 +137,10 @@ src/TaskManagement.Shared/DTOs/
 └── Notifications/
     └── NotificationDto.cs (nuevo)
 
-src/TaskManagement.Application/Common/Interfaces/
+backend/TaskManagement.Application/Common/Interfaces/
 └── IFileStorageService.cs
 
-src/TaskManagement.Application/Features/
+backend/TaskManagement.Application/Features/
 ├── Tasks/
 │   ├── Commands/
 │   │   ├── CreateTask/
@@ -169,10 +169,10 @@ src/TaskManagement.Application/Features/
         ├── GetNotificationsByUser/
         └── GetUnreadCount/
 
-src/TaskManagement.Infrastructure/Services/
+backend/TaskManagement.Infrastructure/Services/
 └── FileStorageService.cs
 
-src/TaskManagement.Api/Controllers/
+backend/TaskManagement.Api/Controllers/
 ├── TasksController.cs
 ├── DashboardController.cs
 └── NotificationsController.cs (nuevo)
@@ -210,10 +210,10 @@ frontend/src/app/
 ## Archivos Modificados
 
 ### Backend
-- `src/TaskManagement.Application/Common/Interfaces/IUnitOfWork.cs` - Ya incluía repositorios de Tasks
-- `src/TaskManagement.Application/TaskManagement.Application.csproj` - Agregado FrameworkReference Microsoft.AspNetCore.App
-- `src/TaskManagement.Infrastructure/DependencyInjection.cs` - Registrado IFileStorageService
-- `src/TaskManagement.Api/Controllers/TasksController.cs` - Agregados endpoints de attachments
+- `backend/TaskManagement.Application/Common/Interfaces/IUnitOfWork.cs` - Ya incluía repositorios de Tasks
+- `backend/TaskManagement.Application/TaskManagement.Application.csproj` - Agregado FrameworkReference Microsoft.AspNetCore.App
+- `backend/TaskManagement.Infrastructure/DependencyInjection.cs` - Registrado IFileStorageService
+- `backend/TaskManagement.Api/Controllers/TasksController.cs` - Agregados endpoints de attachments
 
 ### Frontend
 - `frontend/src/app/core/models/task.model.ts` - Agregadas propiedades faltantes
@@ -372,9 +372,18 @@ frontend/src/app/
   - Interpolación de parámetros
 - **TranslatePipe**: Pipe para usar traducciones en templates
 - **LanguageSwitcherComponent**: Componente para cambiar idioma
-- **es.json**: Archivo de traducciones en español
-- **en.json**: Archivo de traducciones en inglés
+- **es.json**: Archivo de traducciones en español (todos los módulos)
+- **en.json**: Archivo de traducciones en inglés (todos los módulos)
 - **MainLayout**: Actualizado con traducciones y language switcher
+- **Componentes traducidos**: Todos los componentes actualizados con `{{ t('key') }}`:
+  - DashboardComponent
+  - ProjectList, ProjectDetail
+  - TaskBoard, TaskList, TaskDetail, MyTasks
+  - UserList, UserDetail
+  - NotificationList
+  - AuditLogList
+  - ProfileComponent
+  - LoginComponent, RegisterComponent
 
 #### Archivos de Traducción
 ```
@@ -382,7 +391,7 @@ frontend/src/assets/i18n/
 ├── es.json (Español - por defecto)
 └── en.json (Inglés)
 
-src/TaskManagement.Api/Resources/
+backend/TaskManagement.Api/Resources/
 ├── Messages.es.resx (Español - por defecto)
 ├── Messages.en.resx (Inglés)
 └── Localizer.cs (Servicio de localización)
@@ -392,6 +401,39 @@ src/TaskManagement.Api/Resources/
 - **Backend**: Localización basada en header `Accept-Language`, por defecto español
 - **Frontend**: Localización almacenada en `localStorage`, por defecto español
 - **Idiomas soportados**: Español (es), Inglés (en)
+
+---
+
+### Fase 12: Reestructura de Carpetas y Fix Swagger
+
+#### Reestructura del Repositorio
+- `src/` → `backend/`: La carpeta `src` (que contenía los 5 proyectos .NET) se renombró a `backend` para dejar claro el lado del servidor
+- **TaskManagement.slnx**: Movido de la raíz a `backend/TaskManagement.slnx`, con rutas de proyectos relativas actualizadas
+- **docs/**: `CHANGELOG_TASKS.md` y `CONTEXT.md` movidos a la nueva carpeta `docs/`
+- Eliminadas carpetas vacías residuales (`src/src`, `TaskManagement.Api/src`)
+
+#### Estructura final del repositorio
+```
+C:\Cursos\MimoCode\
+├── backend/                 ← Backend (.NET) + solución
+│   ├── TaskManagement.slnx
+│   ├── TaskManagement.Api
+│   ├── TaskManagement.Application
+│   ├── TaskManagement.Domain
+│   ├── TaskManagement.Infrastructure
+│   └── TaskManagement.Shared
+├── frontend/                ← Frontend (Angular)
+├── docs/                    ← Documentación
+│   ├── CHANGELOG_TASKS.md
+│   └── CONTEXT.md
+└── .opencode/               ← Configuración OpenCode
+```
+
+#### Fix: Swagger schemaId conflict
+- **Problema**: `GET /swagger/index.html` fallaba con `SwaggerGeneratorException` al generar la operación `UsersController.GetUsers`
+- **Causa**: Existían dos clases `UserDto` en namespaces distintos (`DTOs.Auth.UserDto` y `DTOs.Users.UserDto`) y Swashbuckle usaba el nombre corto de clase como `schemaId`, generando un conflicto
+- **Solución**: En `Program.cs` se configuró `c.CustomSchemaIds(...)` para usar el `FullName` del tipo (namespace + clase) como identificador único de schema
+- **Archivos modificados**: `backend/TaskManagement.Api/Program.cs`
 
 ---
 
@@ -412,6 +454,8 @@ src/TaskManagement.Api/Resources/
 
 ✅ Backend compilado exitosamente  
 ✅ Frontend compilado exitosamente  
+✅ Swagger funcionando (`/swagger/index.html`)  
 ✅ Integración completa con arquitectura existente  
 ✅ Patrones y convenciones mantenidos  
 ✅ Soporte i18n (es/en) implementado  
+✅ Repositorio reestructurado (backend/, frontend/, docs/)

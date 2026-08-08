@@ -20,6 +20,7 @@ import { TaskStore } from './task.store';
 import { ProjectService, ProjectMember } from '../projects/project.service';
 import { UserService } from '../users/user.service';
 import { User } from '../../core/models/user.model';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-task-detail',
@@ -372,6 +373,9 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+  private translationService = inject(TranslationService);
+
+  t = this.translationService.translate.bind(this.translationService);
 
   taskStore = inject(TaskStore);
   projectService = inject(ProjectService);

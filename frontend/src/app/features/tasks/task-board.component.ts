@@ -15,6 +15,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { Task, TaskStatus, TaskPriority } from '../../core/models/task.model';
 import { TaskStore } from './task.store';
 import { ProjectService, Project, ProjectMember } from '../projects/project.service';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-task-board',
@@ -441,6 +442,9 @@ export class TaskBoardComponent implements OnInit {
   private router = inject(Router);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+  private translationService = inject(TranslationService);
+
+  t = this.translationService.translate.bind(this.translationService);
 
   taskStore = inject(TaskStore);
   projectService = inject(ProjectService);
