@@ -42,3 +42,41 @@ html, body {
   border-color: #3b82f6;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
+
+/* Responsive helpers */
+.page-header {
+  @apply flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center;
+}
+
+.page-actions {
+  @apply flex flex-wrap items-center gap-2;
+}
+
+/* Tables: graceful horizontal scroll on small screens */
+.p-datatable-wrapper {
+  -webkit-overflow-scrolling: touch;
+}
+
+.p-datatable-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.p-datatable-wrapper::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+
+.p-datatable-wrapper::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Dialogs: never overflow the viewport */
+.p-dialog,
+.p-confirmdialog {
+  max-width: 95vw;
+}
+
+/* Better card spacing inside tables' empty states */
+.p-datatable-emptymessage td {
+  padding: 2rem 1rem;
+}

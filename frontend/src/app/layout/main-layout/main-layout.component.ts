@@ -1,6 +1,6 @@
 import { Component, inject, signal, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
@@ -28,7 +28,7 @@ import { LanguageSwitcherComponent } from '../../shared/components/language-swit
     <!-- Mobile Overlay -->
     @if (sidebarOpen()) {
       <div
-        class="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        class="fixed inset-0 bg-black/50 z-40 md:hidden"
         (click)="closeSidebar()"
       ></div>
     }
@@ -48,13 +48,32 @@ import { LanguageSwitcherComponent } from '../../shared/components/language-swit
         [class.-translate-x-full]="isMobile() && !sidebarOpen()"
       >
         <!-- Logo -->
-        <div class="h-16 flex items-center px-4 border-b border-slate-700">
+        <div class="h-16 flex items-center justify-between px-4 border-b border-slate-700">
           <a routerLink="/dashboard" class="flex items-center gap-3 overflow-hidden">
             <i class="pi pi-check-square text-blue-400 text-xl flex-shrink-0"></i>
             @if (sidebarExpanded()) {
               <span class="text-xl font-bold whitespace-nowrap">{{ t('common.appName') }}</span>
             }
           </a>
+          <!-- Collapse toggle (desktop) -->
+          <button
+            pButton
+            icon="pi pi-chevron-left"
+            class="p-button-rounded p-button-text p-button-plain flex-shrink-0"
+            [class.rotate-180]="!sidebarExpanded()"
+            [style]="{ display: isMobile() ? 'none' : 'inline-flex' }"
+            [pTooltip]="sidebarExpanded() ? t('nav.collapse') : t('nav.expand')"
+            tooltipPosition="right"
+            (click)="toggleSidebar()"
+          ></button>
+          <!-- Close button (mobile drawer) -->
+          <button
+            pButton
+            icon="pi pi-times"
+            class="p-button-rounded p-button-text p-button-plain flex-shrink-0"
+            [style]="{ display: isMobile() ? 'inline-flex' : 'none' }"
+            (click)="closeSidebar()"
+          ></button>
         </div>
 
         <!-- Navigation -->
@@ -159,30 +178,36 @@ import { LanguageSwitcherComponent } from '../../shared/components/language-swit
 
         <!-- User Info & Logout -->
         <div class="border-t border-slate-700 p-3">
-          <div class="flex items-center gap-3">
-            <p-avatar
-              [label]="getInitials(authService.user()?.fullName || '')"
-              styleClass="bg-blue-500 flex-shrink-0"
-              shape="circle"
-              [style]="{ width: '36px', height: '36px' }"
-            ></p-avatar>
+          <div class="flex items-center justify-between gap-2">
             @if (sidebarExpanded()) {
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-white truncate">
-                  {{ authService.user()?.fullName }}
-                </p>
-                <p class="text-xs text-slate-400 truncate">
-                  {{ authService.user()?.email }}
-                </p>
+              <div class="flex items-center gap-3 min-w-0">
+                <p-avatar
+                  [label]="getInitials(authService.user()?.fullName || '')"
+                  styleClass="bg-blue-500 flex-shrink-0"
+                  shape="circle"
+                  [style]="{ width: '36px', height: '36px' }"
+                ></p-avatar>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-white truncate">
+                    {{ authService.user()?.fullName }}
+                  </p>
+                  <p class="text-xs text-slate-400 truncate">
+                    {{ authService.user()?.email }}
+                  </p>
+                </div>
               </div>
+            } @else {
+              <p-avatar
+                [label]="getInitials(authService.user()?.fullName || '')"
+                styleClass="bg-blue-500 flex-shrink-0"
+                shape="circle"
+                [style]="{ width: '36px', height: '36px' }"
+              ></p-avatar>
             }
             <button
               pButton
               icon="pi pi-sign-out"
-              class="p-button-text p-button-rounded p-button-contrast flex-shrink-0"
-              [class]="sidebarExpanded()
-                ? 'p-button-text p-button-rounded p-button-danger'
-                : 'p-button-text p-button-rounded p-button-danger p-button-sm'"
+              class="p-button-rounded p-button-danger flex-shrink-0"
               [pTooltip]="!sidebarExpanded() ? t('nav.logout') : ''"
               tooltipPosition="top"
               (click)="logout()"
@@ -194,23 +219,28 @@ import { LanguageSwitcherComponent } from '../../shared/components/language-swit
       <!-- Main Content -->
       <div class="flex-1 flex flex-col overflow-hidden">
         <!-- Top Bar -->
-        <header class="h-16 bg-white border-b flex items-center justify-between px-4 lg:px-6">
-          <div class="flex items-center gap-4">
-            <!-- Mobile menu button -->
+        <header class="h-16 bg-white border-b flex items-center justify-between gap-2 px-3 sm:px-6">
+          <div class="flex items-center gap-2">
+            <!-- Menu toggle (visible on all screen sizes) -->
             <button
               pButton
               icon="pi pi-bars"
-              class="p-button-text p-button-rounded lg:hidden"
+              class="p-button-text p-button-rounded flex-shrink-0"
               (click)="toggleSidebar()"
             ></button>
+            @if (!isMobile() && !sidebarExpanded()) {
+              <span class="text-sm font-semibold text-gray-700 hidden sm:block">
+                {{ currentRouteTitle() }}
+              </span>
+            }
           </div>
 
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-1 sm:gap-3">
             <app-language-switcher></app-language-switcher>
 
             <a routerLink="/notifications"
                class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="pi pi-bell text-xl"></i>
+              <i class="pi pi-bell text-lg sm:text-xl"></i>
               @if (notificationStore.unreadCount() > 0) {
                 <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs flex items-center justify-center rounded-full">
                   {{ notificationStore.unreadCount() > 9 ? '9+' : notificationStore.unreadCount() }}
@@ -218,21 +248,21 @@ import { LanguageSwitcherComponent } from '../../shared/components/language-swit
               }
             </a>
 
-            <div class="h-8 w-px bg-gray-200"></div>
+            <div class="hidden sm:block h-8 w-px bg-gray-200"></div>
 
             <a routerLink="/profile"
-               class="flex items-center gap-3 hover:bg-gray-100 rounded-lg px-3 py-2 transition-colors">
+               class="flex items-center gap-3 hover:bg-gray-100 rounded-lg px-2 py-2 sm:px-3 transition-colors">
               <p-avatar
                 [label]="getInitials(authService.user()?.fullName || '')"
                 styleClass="bg-blue-500"
                 shape="circle"
                 [style]="{ width: '32px', height: '32px' }"
               ></p-avatar>
-              <div class="hidden sm:block text-left">
+              <div class="hidden md:block text-left">
                 <p class="text-sm font-medium text-gray-900">{{ authService.user()?.fullName }}</p>
                 <p class="text-xs text-gray-500">{{ authService.user()?.email }}</p>
               </div>
-              <i class="pi pi-chevron-down text-gray-400 text-xs hidden sm:block"></i>
+              <i class="pi pi-chevron-down text-gray-400 text-xs hidden md:block"></i>
             </a>
           </div>
         </header>
@@ -273,12 +303,31 @@ export class MainLayoutComponent implements OnInit {
   authService = inject(AuthService);
   notificationStore = inject(NotificationStore);
   translationService = inject(TranslationService);
+  private router = inject(Router);
 
   t = this.translationService.translate.bind(this.translationService);
 
   sidebarExpanded = signal(true);
   sidebarOpen = signal(false);
   isMobile = signal(false);
+
+  private routeTitles: Record<string, string> = {
+    '/dashboard': 'nav.dashboard',
+    '/projects': 'nav.projects',
+    '/my-tasks': 'nav.myTasks',
+    '/notifications': 'nav.notifications',
+    '/admin/users': 'nav.users',
+    '/admin/audit': 'nav.auditLogs',
+    '/admin/settings': 'nav.settings',
+    '/profile': 'nav.profile'
+  };
+
+  currentRouteTitle(): string {
+    const key = this.routeTitles[this.router.url.split('/').slice(0, 3).join('/')]
+      ?? this.routeTitles['/' + (this.router.url.split('/')[1] || '')]
+      ?? '';
+    return key ? this.t(key) : '';
+  }
 
   constructor() {
     this.checkScreenSize();
@@ -294,7 +343,7 @@ export class MainLayoutComponent implements OnInit {
   }
 
   private checkScreenSize(): void {
-    const mobile = window.innerWidth < 1024;
+    const mobile = window.innerWidth < 768;
     this.isMobile.set(mobile);
     if (!mobile) {
       this.sidebarOpen.set(false);

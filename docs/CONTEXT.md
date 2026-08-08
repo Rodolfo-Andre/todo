@@ -100,6 +100,7 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Layout | ✅ | MainLayout, AuthLayout |
 | State | ✅ | AuthStore, TaskStore, NotificationStore (Signals) |
 | i18n | ✅ | TranslationService, TranslatePipe, LanguageSwitcher, todos los componentes traducidos |
+| UI Responsive | ✅ | Sidebar colapsable con toggle visible, drawer móvil, tablas con scroll, diálogos `min(90vw,…)`, breakpoint móvil 768px |
 
 ### 4.5 Frontend — Pendiente
 
@@ -111,6 +112,7 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 ## 5. Git History
 
 ```
+feat: UI responsive (mobile/tablet/desktop) + fix sidebar toggle
 fix: language switcher persistence + complete frontend i18n (remove hardcoded strings)
 feat: localize backend responses + cleanup unused files (i18n)
 feat: restructure repo folders + fix Swagger schemaId conflict
@@ -129,7 +131,7 @@ dcf7258 feat: implement Users Management and improve UI
 ```
 
 **Rama actual:** `master`
-**Último commit:** fix language switcher + frontend i18n completo (sin texto hardcodeado)
+**Último commit:** UI responsive (móvil/tablet/desktop) + fix sidebar
 
 ---
 

@@ -38,7 +38,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
       </div>
 
       <p-card>
-        <p-table [value]="users" [tableStyle]="{ 'min-width': '60rem' }" [loading]="isLoading">
+        <p-table [value]="users" [tableStyle]="{ 'min-width': '45rem' }" [loading]="isLoading">
           <ng-template pTemplate="header">
             <tr>
               <th>{{ t('users.fullName') }}</th>

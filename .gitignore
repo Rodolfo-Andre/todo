@@ -63,3 +63,6 @@ appsettings.Development.json
 *.mdf
 *.ldf
 *.ndf
+
+## Playwright
+.playwright-mcp/

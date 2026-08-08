@@ -492,6 +492,31 @@ C:\Cursos\MimoCode\
 
 ---
 
+### Fase 15: UI Responsive + Fix Sidebar
+
+#### Sidebar / Layout (`main-layout.component.ts`)
+- **Botón de menú visible en todas las resoluciones**: antes era `lg:hidden`, así que en desktop no existía forma visible de colapsar/expandir la sidebar; ahora el botón hamburguesa está siempre en el header (toggle) y, al colapsar en desktop, muestra el título de la ruta actual al lado
+- **Botón chevron en el sidebar** (desktop, ≥768px) para colapsar/expandir (w-64 ↔ w-20 con tooltips); botón X de cierre para el drawer móvil
+- **Drawer móvil mejorado**: botón X propio, overlay, transiciones; el botón de logout ahora es `p-button-danger` sólido (se ve en ambos modos colapsado/expandido)
+- **Breakpoint móvil reducido de 1024px a 768px**: tablets (768-1023px) ahora usan sidebar fijo en vez de drawer
+
+#### Responsividad de páginas (móvil 390px, sin overflow horizontal de página)
+- **Headers con filtros/botones**: patrón `page-header` + `page-actions` (flex-col en móvil, wrap) en my-tasks, task-board, task-list, task-detail, project-detail, notification-list; inputs `w-64`→`w-full sm:w-64`, selects `w-48`→`w-full sm:w-48`, botones `w-full sm:w-auto`
+- **Tablas con scroll horizontal interno**: `[tableStyle]` min-width en my-tasks (45rem), task-list (48rem), project-list (42rem), user-list (60rem→45rem), audit (48rem); PrimeNG las envuelve en `.p-datatable-table-container` con `overflow-x: auto`
+- **Diálogos**: `[style]` width fijo 500px/400px → `min(90vw, 500px)`/`min(90vw, 400px)` en task-board, task-list, task-detail, project-list, project-detail; regla global `.p-dialog { max-width: 95vw }`
+- **Grids sin fallback móvil**: `grid-cols-2` → `grid-cols-1 sm:grid-cols-2` en task-detail (incluye botones de estado con `flex-wrap`), task-list, project-detail
+- **Login/Register**: `p-4` en el contenedor para que el card no toque los bordes en móvil
+- **styles.css**: `.page-header`/`.page-actions` como clases utilitarias; scrollbar sutil para tablas; `-webkit-overflow-scrolling: touch`
+
+#### Verificación
+- Playwright en 390px: dashboard, my-tasks, projects, users, audit, task-board, task-detail, notifications, login — `scrollWidth == viewport` (sin overflow de página; tablas scrollean dentro de su contenedor)
+- Playwright en 900px (tablet): sidebar fijo (nuevo breakpoint 768) sin overflow
+- Playwright en 1280px: colapso/expansión de sidebar con chevron y botón hamburguesa + título de ruta
+- Drawer móvil: abre con hamburguesa, cierra con X; botones toggle de sidebar visibles solo donde corresponde (fix: pButton de PrimeNG sobrescribía `hidden` de Tailwind → `[style]` display condicional)
+- `npm run build` OK (solo warnings preexistentes: NG8107, bundle budget)
+
+---
+
 ## Pendientes / Mejoras Futuras
 
 1. **Filtros avanzados**: Agregar filtros por fecha, etiquetas y miembros

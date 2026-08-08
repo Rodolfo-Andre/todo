@@ -44,15 +44,15 @@ import { TranslationService } from '../../core/i18n/translation.service';
     <p-confirmDialog></p-confirmDialog>
 
     <div class="space-y-6">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-4">
+      <div class="page-header">
+        <div class="flex items-center gap-3 min-w-0">
           <p-button icon="pi pi-arrow-left" styleClass="p-button-text" routerLink="/projects"></p-button>
-          <h1 class="text-2xl font-bold">{{ project?.name || t('common.loading') }}</h1>
+          <h1 class="text-xl sm:text-2xl font-bold truncate">{{ project?.name || t('common.loading') }}</h1>
           @if (project) {
-            <span class="px-2 py-1 bg-gray-100 rounded text-sm font-mono">{{ project.key }}</span>
+            <span class="px-2 py-1 bg-gray-100 rounded text-sm font-mono flex-shrink-0">{{ project.key }}</span>
           }
         </div>
-        <div class="flex gap-2">
+        <div class="page-actions">
           <p-button [label]="t('projects.board')" icon="pi pi-columns" styleClass="p-button-outlined" [routerLink]="['/projects', project?.id, 'board']"></p-button>
           <p-button [label]="t('projects.list')" icon="pi pi-list" styleClass="p-button-outlined" [routerLink]="['/projects', project?.id, 'list']"></p-button>
           <p-button [label]="t('common.edit')" icon="pi pi-pencil" (onClick)="showEditDialog()"></p-button>
@@ -81,7 +81,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 <p class="text-sm text-gray-500 mb-1">{{ t('projects.description') }}</p>
                 <p>{{ project.description || t('common.noDescription') }}</p>
               </div>
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <p class="text-sm text-gray-500 mb-1">{{ t('projects.status') }}</p>
                   <p-tag [value]="getStatusLabel(project.status)" [severity]="getStatusSeverity(project.status)"></p-tag>
@@ -91,7 +91,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                   <p>{{ project.createdAt | date:'mediumDate' }}</p>
                 </div>
               </div>
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <p class="text-sm text-gray-500 mb-1">{{ t('projects.totalTasks') }}</p>
                   <p class="text-2xl font-bold">{{ project.taskCount }}</p>
@@ -147,7 +147,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
       [(visible)]="editDialogVisible"
       [header]="t('projects.editProject')"
       [modal]="true"
-      [style]="{ width: '500px' }"
+      [style]="{ width: 'min(90vw, 500px)' }"
       [draggable]="false"
       [resizable]="false"
     >
@@ -172,7 +172,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
       [(visible)]="addMemberDialogVisible"
       [header]="t('projects.addMember')"
       [modal]="true"
-      [style]="{ width: '400px' }"
+      [style]="{ width: 'min(90vw, 400px)' }"
       [draggable]="false"
       [resizable]="false"
     >

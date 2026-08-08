@@ -24,7 +24,7 @@ import { TranslationService } from '../../../core/i18n/translation.service';
     MessageModule
   ],
   template: `
-    <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <p-card styleClass="w-full max-w-md">
         <ng-template pTemplate="header">
           <div class="text-center py-4">

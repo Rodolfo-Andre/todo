@@ -34,15 +34,15 @@ import { TranslationService } from '../../core/i18n/translation.service';
     <p-toast></p-toast>
 
     <div class="space-y-6">
-      <div class="flex justify-between items-center">
+      <div class="page-header">
         <h1 class="text-2xl font-bold">{{ t('nav.myTasks') }}</h1>
-        <div class="flex gap-2">
+        <div class="page-actions">
           <input
             pInputText
             [(ngModel)]="searchTerm"
             (input)="onSearch()"
             placeholder="{{ t('common.search') }}"
-            class="w-64"
+            class="w-full sm:w-64"
           />
           <p-select
             [options]="statusOptions"
@@ -50,7 +50,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             optionLabel="label"
             optionValue="value"
             placeholder="{{ t('tasks.allStatus') }}"
-            styleClass="w-48"
+            styleClass="w-full sm:w-48"
             [showClear]="true"
             (onChange)="onFilterChange()"
           ></p-select>
@@ -60,7 +60,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             optionLabel="label"
             optionValue="value"
             placeholder="{{ t('tasks.allPriorities') }}"
-            styleClass="w-48"
+            styleClass="w-full sm:w-48"
             [showClear]="true"
             (onChange)="onFilterChange()"
           ></p-select>
@@ -93,7 +93,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
 
       <!-- Tasks Table -->
       <p-card>
-        <p-table [value]="taskStore.tasks()" [loading]="taskStore.isLoading()" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25, 50]">
+        <p-table [value]="taskStore.tasks()" [loading]="taskStore.isLoading()" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25, 50]" [tableStyle]="{ 'min-width': '45rem' }">
           <ng-template pTemplate="header">
             <tr>
               <th pSortableColumn="title">{{ t('tasks.taskTitle') }} <p-sortIcon field="title"></p-sortIcon></th>

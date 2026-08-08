@@ -48,6 +48,8 @@
     "auditLogs": "Registros de Auditoría",
     "settings": "Configuración",
     "profile": "Mi Perfil",
+    "collapse": "Contraer menú",
+    "expand": "Expandir menú",
     "logout": "Cerrar Sesión"
   },
   "auth": {

@@ -121,6 +121,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
           [showCurrentPageReport]="true"
           [currentPageReportTemplate]="t('audit.paginationInfo')"
           [rowsPerPageOptions]="[10, 20, 50]"
+          [tableStyle]="{ 'min-width': '48rem' }"
         >
           <ng-template pTemplate="header">
             <tr>

@@ -48,12 +48,12 @@ import { TranslationService } from '../../core/i18n/translation.service';
     <p-confirmDialog></p-confirmDialog>
 
     <div class="space-y-6">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-4">
+      <div class="page-header">
+        <div class="flex items-center gap-4 min-w-0">
           <p-button icon="pi pi-arrow-left" styleClass="p-button-text" (onClick)="goBack()"></p-button>
-          <h1 class="text-2xl font-bold">{{ task?.title || t('common.loading') }}</h1>
+          <h1 class="text-xl sm:text-2xl font-bold truncate">{{ task?.title || t('common.loading') }}</h1>
         </div>
-        <div class="flex gap-2">
+        <div class="page-actions">
           <p-button [label]="t('common.edit')" icon="pi pi-pencil" (onClick)="showEditDialog()"></p-button>
           <p-button [label]="t('common.delete')" icon="pi pi-trash" styleClass="p-button-danger" (onClick)="confirmDelete()"></p-button>
         </div>
@@ -82,10 +82,10 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 <p class="whitespace-pre-wrap">{{ task.description || t('common.noDescription') }}</p>
               </div>
 
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <p class="text-sm text-gray-500 mb-1">{{ t('tasks.status') }}</p>
-                  <div class="flex gap-2">
+                  <div class="flex flex-wrap gap-2">
                     @for (status of statusOptions; track status.value) {
                       <button
                         pButton
@@ -103,7 +103,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 </div>
               </div>
 
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <p class="text-sm text-gray-500 mb-1">{{ t('tasks.storyPoints') }}</p>
                   <p>{{ task.storyPoints || '-' }}</p>
@@ -129,7 +129,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 }
               </div>
 
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <p class="text-sm text-gray-500 mb-1">{{ t('tasks.createdBy') }}</p>
                   <p>{{ task.createdByName }}</p>
@@ -327,7 +327,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
       [(visible)]="editDialogVisible"
       header="{{ t('tasks.editTask') }}"
       [modal]="true"
-      [style]="{ width: '500px' }"
+      [style]="{ width: 'min(90vw, 500px)' }"
       [draggable]="false"
       [resizable]="false"
     >
@@ -340,7 +340,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
           <label class="font-medium">{{ t('tasks.description') }}</label>
           <textarea pInputTextarea [(ngModel)]="editForm.description" class="w-full" rows="3"></textarea>
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="flex flex-col gap-2">
             <label class="font-medium">{{ t('tasks.priority') }}</label>
             <p-select

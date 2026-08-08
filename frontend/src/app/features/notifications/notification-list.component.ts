@@ -27,14 +27,14 @@ import { TranslationService } from '../../core/i18n/translation.service';
     <p-confirmDialog></p-confirmDialog>
 
     <div class="space-y-6">
-      <div class="flex justify-between items-center">
+      <div class="page-header">
         <div>
           <h1 class="text-2xl font-bold">{{ t('notifications.title') }}</h1>
           @if (notificationStore.unreadCount() > 0) {
             <p class="text-sm text-gray-500">{{ notificationStore.unreadCount() }} {{ t('notifications.unread') }}</p>
           }
         </div>
-        <div class="flex gap-2">
+        <div class="page-actions">
           <p-button
             [label]="t('notifications.markAllRead')"
             icon="pi pi-check"

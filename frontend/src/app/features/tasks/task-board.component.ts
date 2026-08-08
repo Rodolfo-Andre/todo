@@ -40,20 +40,20 @@ import { TranslationService } from '../../core/i18n/translation.service';
     <p-confirmDialog></p-confirmDialog>
 
     <div class="space-y-6">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-4">
+      <div class="page-header">
+        <div class="flex items-center gap-4 min-w-0">
           <p-button icon="pi pi-arrow-left" styleClass="p-button-text" routerLink="/projects/{{ projectId }}"></p-button>
-          <h1 class="text-2xl font-bold">{{ t('tasks.board') }}</h1>
+          <h1 class="text-xl sm:text-2xl font-bold truncate">{{ t('tasks.board') }}</h1>
         </div>
-        <div class="flex gap-2">
+        <div class="page-actions">
           <input
             pInputText
             [(ngModel)]="searchTerm"
             (input)="onSearch()"
             placeholder="{{ t('common.search') }}"
-            class="w-64"
+            class="w-full sm:w-64"
           />
-          <p-button [label]="t('tasks.createTask')" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
+          <p-button [label]="t('tasks.createTask')" icon="pi pi-plus" styleClass="w-full sm:w-auto" (onClick)="showCreateDialog()"></p-button>
         </div>
       </div>
 
@@ -384,7 +384,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
       [(visible)]="createDialogVisible"
       [header]="t('tasks.createTask')"
       [modal]="true"
-      [style]="{ width: '500px' }"
+      [style]="{ width: 'min(90vw, 500px)' }"
       [draggable]="false"
       [resizable]="false"
     >
@@ -397,7 +397,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
           <label class="font-medium">{{ t('tasks.description') }}</label>
           <textarea pInputTextarea [(ngModel)]="newTask.description" class="w-full" rows="3" placeholder="{{ t('tasks.description') }}"></textarea>
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="flex flex-col gap-2">
             <label class="font-medium">{{ t('tasks.priority') }}</label>
             <p-select

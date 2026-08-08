@@ -38,13 +38,13 @@ import { TranslationService } from '../../core/i18n/translation.service';
     <p-confirmDialog></p-confirmDialog>
 
     <div class="space-y-6">
-      <div class="flex justify-between items-center">
+      <div class="page-header">
         <h1 class="text-2xl font-bold">{{ t('projects.title') }}</h1>
-        <p-button [label]="t('projects.createProject')" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
+        <p-button [label]="t('projects.createProject')" icon="pi pi-plus" styleClass="w-full sm:w-auto" (onClick)="showCreateDialog()"></p-button>
       </div>
 
       <p-card>
-        <p-table [value]="projects" [loading]="isLoading">
+        <p-table [value]="projects" [loading]="isLoading" [tableStyle]="{ 'min-width': '42rem' }">
           <ng-template pTemplate="header">
             <tr>
               <th>{{ t('projects.title') }}</th>
@@ -101,7 +101,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
       [(visible)]="dialogVisible"
       [header]="isEditMode ? t('projects.editProject') : t('projects.createProject')"
       [modal]="true"
-      [style]="{ width: '500px' }"
+      [style]="{ width: 'min(90vw, 500px)' }"
       [draggable]="false"
       [resizable]="false"
     >
