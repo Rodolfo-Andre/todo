@@ -65,7 +65,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 <i class="pi pi-spin pi-spinner text-xl"></i>
               </div>
               <div class="text-3xl font-bold text-orange-600">{{ dashboard.stats.inProgressTasks }}</div>
-              <div class="text-gray-500">{{ t('dashboard.inProgress') }}</div>
+              <div class="text-gray-500">{{ t('dashboard.inProgressTasks') }}</div>
             </div>
           </p-card>
 
@@ -75,7 +75,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 <i class="pi pi-exclamation-triangle text-xl"></i>
               </div>
               <div class="text-3xl font-bold text-red-600">{{ dashboard.stats.overdueTasks }}</div>
-              <div class="text-gray-500">{{ t('dashboard.overdue') }}</div>
+              <div class="text-gray-500">{{ t('common.overdue') }}</div>
             </div>
           </p-card>
         </div>
@@ -94,11 +94,11 @@ import { TranslationService } from '../../core/i18n/translation.service';
             </div>
             <div>
               <div class="text-2xl font-bold text-green-600">{{ getMyCompletedTasks() }}</div>
-              <div class="text-sm text-gray-500">{{ t('dashboard.completed') }}</div>
+              <div class="text-sm text-gray-500">{{ t('common.completed') }}</div>
             </div>
             <div>
               <div class="text-2xl font-bold text-orange-600">{{ getMyPendingTasks() }}</div>
-              <div class="text-sm text-gray-500">{{ t('dashboard.pending') }}</div>
+              <div class="text-sm text-gray-500">{{ t('common.pending') }}</div>
             </div>
           </div>
         </p-card>
@@ -163,7 +163,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                     </div>
                     <div class="text-right">
 <p class="text-sm" [class]="getDeadlineClass(deadline.daysRemaining)">
-                          {{ deadline.daysRemaining === 0 ? t('dashboard.today') : deadline.daysRemaining + ' ' + t('dashboard.days') }}
+                          {{ deadline.daysRemaining === 0 ? t('dashboard.today') : t('dashboard.daysRemaining', { count: deadline.daysRemaining }) }}
                         </p>
                       <p-tag [value]="getPriorityLabel(deadline.priority)" [severity]="getPrioritySeverity(deadline.priority)"></p-tag>
                     </div>
@@ -201,14 +201,14 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 }
               </div>
             } @else {
-              <p class="text-center text-gray-400 py-8">{{ t('dashboard.noRecentActivity') }}</p>
+              <p class="text-center text-gray-400 py-8">{{ t('dashboard.noActivity') }}</p>
             }
           </p-card>
         </div>
       } @else {
         <p-card>
           <div class="text-center py-8">
-            <p class="text-gray-500">{{ t('dashboard.failedToLoad') }}</p>
+            <p class="text-gray-500">{{ t('dashboard.loadFailed') }}</p>
             <p-button [label]="t('common.retry')" styleClass="p-button-link" (onClick)="loadDashboard()"></p-button>
           </div>
         </p-card>
@@ -295,7 +295,7 @@ export class DashboardComponent implements OnInit {
     // Status chart (doughnut)
     const statusColors = ['#6B7280', '#3B82F6', '#F59E0B', '#10B981', '#EF4444'];
     this.statusChartData = {
-      labels: this.dashboard.tasksByStatus.map(s => s.status),
+      labels: this.dashboard.tasksByStatus.map(s => this.getStatusLabel(s.status)),
       datasets: [{
         data: this.dashboard.tasksByStatus.map(s => s.count),
         backgroundColor: statusColors
@@ -305,7 +305,7 @@ export class DashboardComponent implements OnInit {
     // Priority chart (bar)
     const priorityColors = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444'];
     this.priorityChartData = {
-      labels: this.dashboard.tasksByPriority.map(p => p.priority),
+      labels: this.dashboard.tasksByPriority.map(p => this.getPriorityLabelFromString(p.priority)),
       datasets: [{
         data: this.dashboard.tasksByPriority.map(p => p.count),
         backgroundColor: priorityColors
@@ -340,8 +340,30 @@ export class DashboardComponent implements OnInit {
   }
 
   getPriorityLabel(priority: number): string {
-    const labels = [this.t('tasks.low'), this.t('tasks.medium'), this.t('tasks.high'), this.t('tasks.critical')];
+    const labels = [this.t('tasks.low'), this.t('tasks.medium'), this.t('tasks.high'), this.t('tasks.urgent')];
     return labels[priority] || this.t('common.unknown');
+  }
+
+  getPriorityLabelFromString(priority: string): string {
+    const map: Record<string, string> = {
+      'Low': this.t('tasks.low'),
+      'Medium': this.t('tasks.medium'),
+      'High': this.t('tasks.high'),
+      'Critical': this.t('tasks.urgent'),
+      'Urgent': this.t('tasks.urgent')
+    };
+    return map[priority] || this.t('common.unknown');
+  }
+
+  getStatusLabel(status: string): string {
+    const map: Record<string, string> = {
+      'Todo': this.t('tasks.todo'),
+      'In Progress': this.t('tasks.inProgress'),
+      'In Review': this.t('tasks.inReview'),
+      'Done': this.t('tasks.done'),
+      'Cancelled': this.t('tasks.cancelled')
+    };
+    return map[status] || status;
   }
 
   getPrioritySeverity(priority: number): string {

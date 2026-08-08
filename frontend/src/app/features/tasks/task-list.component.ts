@@ -45,17 +45,17 @@ import { TranslationService } from '../../core/i18n/translation.service';
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-4">
           <p-button icon="pi pi-arrow-left" styleClass="p-button-text" routerLink="/projects/{{ projectId }}"></p-button>
-          <h1 class="text-2xl font-bold">Task List</h1>
+          <h1 class="text-2xl font-bold">{{ t('tasks.list') }}</h1>
         </div>
         <div class="flex gap-2">
           <input
             pInputText
             [(ngModel)]="searchTerm"
             (input)="onSearch()"
-            placeholder="Search tasks..."
+            placeholder="{{ t('common.search') }}"
             class="w-64"
           />
-          <p-button label="New Task" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
+          <p-button [label]="t('tasks.createTask')" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
         </div>
       </div>
 
@@ -63,13 +63,13 @@ import { TranslationService } from '../../core/i18n/translation.service';
         <p-table [value]="taskStore.tasks()" [loading]="taskStore.isLoading()" [paginator]="true" [rows]="10">
           <ng-template pTemplate="header">
             <tr>
-              <th>Title</th>
-              <th>Status</th>
-              <th>Priority</th>
-              <th>Assigned To</th>
-              <th>Story Points</th>
-              <th>Due Date</th>
-              <th>Actions</th>
+              <th>{{ t('tasks.taskTitle') }}</th>
+              <th>{{ t('tasks.status') }}</th>
+              <th>{{ t('tasks.priority') }}</th>
+              <th>{{ t('tasks.assignee') }}</th>
+              <th>{{ t('tasks.storyPoints') }}</th>
+              <th>{{ t('tasks.dueDate') }}</th>
+              <th>{{ t('common.actions') }}</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-task>
@@ -97,7 +97,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                     <span>{{ task.assignedToName }}</span>
                   </div>
                 } @else {
-                  <span class="text-gray-400">Unassigned</span>
+                  <span class="text-gray-400">{{ t('tasks.unassigned') }}</span>
                 }
               </td>
               <td>
@@ -127,8 +127,8 @@ import { TranslationService } from '../../core/i18n/translation.service';
               <td colspan="7" class="text-center py-8">
                 <div class="flex flex-col items-center gap-4">
                   <i class="pi pi-check-square text-4xl text-gray-300"></i>
-                  <p class="text-gray-500">No tasks found</p>
-                  <p-button label="Create your first task" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
+                  <p class="text-gray-500">{{ t('tasks.noTasks') }}</p>
+                  <p-button [label]="t('tasks.createFirst')" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
                 </div>
               </td>
             </tr>
@@ -140,7 +140,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
     <!-- Create/Edit Task Dialog -->
     <p-dialog
       [(visible)]="dialogVisible"
-      [header]="isEditMode ? 'Edit Task' : 'Create Task'"
+      [header]="isEditMode ? t('tasks.editTask') : t('tasks.createTask')"
       [modal]="true"
       [style]="{ width: '500px' }"
       [draggable]="false"
@@ -148,16 +148,16 @@ import { TranslationService } from '../../core/i18n/translation.service';
     >
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Title *</label>
-          <input pInputText [(ngModel)]="taskForm.title" class="w-full" placeholder="Task title" />
+          <label class="font-medium">{{ t('tasks.taskTitle') }} *</label>
+          <input pInputText [(ngModel)]="taskForm.title" class="w-full" placeholder="{{ t('tasks.taskTitle') }}" />
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Description</label>
-          <textarea pInputTextarea [(ngModel)]="taskForm.description" class="w-full" rows="3" placeholder="Task description..."></textarea>
+          <label class="font-medium">{{ t('tasks.description') }}</label>
+          <textarea pInputTextarea [(ngModel)]="taskForm.description" class="w-full" rows="3" placeholder="{{ t('tasks.description') }}"></textarea>
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-2">
-            <label class="font-medium">Priority</label>
+            <label class="font-medium">{{ t('tasks.priority') }}</label>
             <p-select
               [options]="priorityOptions"
               [(ngModel)]="taskForm.priority"
@@ -167,30 +167,30 @@ import { TranslationService } from '../../core/i18n/translation.service';
             ></p-select>
           </div>
           <div class="flex flex-col gap-2">
-            <label class="font-medium">Story Points</label>
+            <label class="font-medium">{{ t('tasks.storyPoints') }}</label>
             <input pInputText [(ngModel)]="taskForm.storyPoints" type="number" class="w-full" placeholder="0" />
           </div>
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Due Date</label>
+          <label class="font-medium">{{ t('tasks.dueDate') }}</label>
           <input pInputText [(ngModel)]="taskForm.dueDate" type="date" class="w-full" />
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Assign To</label>
+          <label class="font-medium">{{ t('tasks.assignTo') }}</label>
           <p-select
             [options]="members"
             [(ngModel)]="taskForm.assignedToId"
             optionLabel="fullName"
             optionValue="userId"
-            placeholder="Select member"
+            placeholder="{{ t('tasks.selectMember') }}"
             styleClass="w-full"
             [showClear]="true"
           ></p-select>
         </div>
       </div>
       <ng-template pTemplate="footer">
-        <p-button label="Cancel" styleClass="p-button-text" (onClick)="hideDialog()"></p-button>
-        <p-button [label]="isEditMode ? 'Save' : 'Create'" (onClick)="saveTask()" [loading]="isSaving"></p-button>
+        <p-button [label]="t('common.cancel')" styleClass="p-button-text" (onClick)="hideDialog()"></p-button>
+        <p-button [label]="isEditMode ? t('common.save') : t('common.create')" (onClick)="saveTask()" [loading]="isSaving"></p-button>
       </ng-template>
     </p-dialog>
   `
@@ -224,12 +224,14 @@ export class TaskListComponent implements OnInit {
     assignedToId: undefined as string | undefined
   };
 
-  priorityOptions = [
-    { label: 'Low', value: 0 },
-    { label: 'Medium', value: 1 },
-    { label: 'High', value: 2 },
-    { label: 'Critical', value: 3 }
-  ];
+  get priorityOptions(): { label: string; value: number }[] {
+    return [
+      { label: this.t('tasks.low'), value: 0 },
+      { label: this.t('tasks.medium'), value: 1 },
+      { label: this.t('tasks.high'), value: 2 },
+      { label: this.t('tasks.urgent'), value: 3 }
+    ];
+  }
 
   ngOnInit(): void {
     this.projectId = this.route.snapshot.paramMap.get('id') || '';
@@ -258,8 +260,8 @@ export class TaskListComponent implements OnInit {
   }
 
   getStatusLabel(status: number): string {
-    const labels = ['Todo', 'In Progress', 'In Review', 'Done', 'Cancelled'];
-    return labels[status] || 'Unknown';
+    const keys = ['todo', 'inProgress', 'inReview', 'done', 'cancelled'];
+    return keys[status] ? this.t('tasks.' + keys[status]) : this.t('common.unknown');
   }
 
   getStatusSeverity(status: number): string {
@@ -268,8 +270,8 @@ export class TaskListComponent implements OnInit {
   }
 
   getPriorityLabel(priority: number): string {
-    const labels = ['Low', 'Medium', 'High', 'Critical'];
-    return labels[priority] || 'Unknown';
+    const keys = ['low', 'medium', 'high', 'urgent'];
+    return keys[priority] ? this.t('tasks.' + keys[priority]) : this.t('common.unknown');
   }
 
   getPrioritySeverity(priority: number): string {
@@ -334,8 +336,8 @@ export class TaskListComponent implements OnInit {
     if (!this.taskForm.title.trim()) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Task title is required'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.titleRequired')
       });
       return;
     }
@@ -363,23 +365,23 @@ export class TaskListComponent implements OnInit {
     if (success) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: this.isEditMode ? 'Task updated successfully' : 'Task created successfully'
+        summary: this.t('common.success'),
+        detail: this.isEditMode ? this.t('tasks.taskUpdated') : this.t('tasks.taskCreated')
       });
       this.hideDialog();
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: this.isEditMode ? 'Failed to update task' : 'Failed to create task'
+        summary: this.t('common.error'),
+        detail: this.isEditMode ? this.t('tasks.updateFailed') : this.t('tasks.createFailed')
       });
     }
   }
 
   confirmDelete(task: Task): void {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete "${task.title}"?`,
-      header: 'Confirm Delete',
+      message: this.t('tasks.confirmDelete', { name: task.title }),
+      header: this.t('common.confirm'),
       icon: 'pi pi-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
@@ -393,14 +395,14 @@ export class TaskListComponent implements OnInit {
     if (success) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Task deleted successfully'
+        summary: this.t('common.success'),
+        detail: this.t('tasks.taskDeleted')
       });
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to delete task'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.deleteFailed')
       });
     }
   }

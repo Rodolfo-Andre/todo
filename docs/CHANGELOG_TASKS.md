@@ -460,6 +460,38 @@ C:\Cursos\MimoCode\
 
 ---
 
+### Fase 14: Fix Language Switcher + Frontend i18n Completo
+
+#### Fix del Language Switcher
+- `language-switcher.component.ts`: `selectedLanguage` copiaba el signal una sola vez (no reactivo); ahora usa `[ngModel]="language()"` + `(ngModelChange)="onLanguageChange($event)"` con `language = this.translationService.language`
+- Verificado con Playwright: muestra el idioma persistido en `localStorage['language']` tras recargar (F5), cambia en ambas direcciones y persiste
+
+#### Fix NG0200 (dependencia circular)
+- `TranslationService` usaba `HttpClient` y `errorInterceptor` ahora inyecta `TranslationService` → ciclo `TranslationService → HttpClient → errorInterceptor → TranslationService`
+- Solución: `TranslationService` usa `fetch()` nativo (método privado `fetchTranslations`) en vez de HttpClient
+
+#### Eliminación de texto hardcodeado (traducción completa del frontend)
+- **Dashboard**: Usaba 9 claves inexistentes; reemplazadas por claves existentes (`dashboard.inProgressTasks`, `common.overdue/completed/pending`, `dashboard.daysRemaining` con `{count}`, `dashboard.noActivity`, `dashboard.loadFailed`). Agregados `getStatusLabel()` y `getPriorityLabelFromString()` que mapean los strings crudos del backend (Todo/In Progress/In Review/Done/Cancelled/Low/Medium/High/Critical) a claves de traducción; los labels de los charts ahora pasan por esos mappers
+- **Settings**: Todo el componente traducido (`settings.title`, `settings.comingSoon`)
+- **error.interceptor**: Inyecta `TranslationService` y usa claves `errors.*` (validation/unexpected/sessionExpired/forbidden/notFound/serverError); los errores 400 del backend se muestran tal cual (ya localizados)
+- **main-layout**: Logo "TaskManager" → `t('common.appName')`
+- **TaskBoard/TaskList**: `priorityOptions`/`stateOptions` como getters con `this.t(...)`; toasts, diálogos de confirmación y labels traducidos
+- **TaskDetail/MyTasks**: `statusOptions`/`priorityOptions` como getters reactivos; `statusChangedTo` con placeholder; headers de comentarios/adjuntos; `chooseLabel` del uploader
+- **AuditLogList**: `actionOptions`/`entityOptions` y columna de detalles traducidos; los datos crudos del backend (`log.action`, `entityName`, `userName`) se muestran tal cual
+- **TaskStore/NotificationStore**: Errores mostrados via `TranslationService`
+
+#### Claves nuevas en `es.json` / `en.json` (~25)
+- `common.unknown`, `tasks.selectMember`, `tasks.downloadNotAvailable`, `tasks.loadFailed`, `tasks.reorderFailed`, `settings.title`, `settings.comingSoon`, `errors.*` (6), `audit.entityProject/entityTask/entityUser/entityComment/entityAttachment/oldValues/newValues/system`, `notifications.loadFailed/markFailed/markAllFailed/deleteFailed`
+- Paridad ES/EN verificada con script de node (ninguna clave única en un solo idioma)
+
+#### Verificación
+- Script node: ninguna clave real faltante en `t('...')` (falsos positivos de lazy imports filtrados)
+- `npm run build` OK (solo warnings preexistentes: NG8107, bundle budget)
+- Runtime con Playwright: login/dashboard/my-tasks/task-board/task-detail/settings/audit/notifications/projects verificados en `es` y `en`; cambio de idioma reactivo en vivo (los getters se actualizan sin recargar); cero errores de consola
+- Nota: errores transitorios `504 Outdated Optimize Dep` de Vite al reoptimizar deps tras borrar `.angular/cache`; se resuelven reiniciando el dev server
+
+---
+
 ## Pendientes / Mejoras Futuras
 
 1. **Filtros avanzados**: Agregar filtros por fecha, etiquetas y miembros

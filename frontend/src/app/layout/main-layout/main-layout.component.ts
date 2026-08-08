@@ -52,7 +52,7 @@ import { LanguageSwitcherComponent } from '../../shared/components/language-swit
           <a routerLink="/dashboard" class="flex items-center gap-3 overflow-hidden">
             <i class="pi pi-check-square text-blue-400 text-xl flex-shrink-0"></i>
             @if (sidebarExpanded()) {
-              <span class="text-xl font-bold whitespace-nowrap">TaskManager</span>
+              <span class="text-xl font-bold whitespace-nowrap">{{ t('common.appName') }}</span>
             }
           </a>
         </div>

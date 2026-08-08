@@ -35,7 +35,8 @@
     "noDescription": "Sin descripción",
     "createdAt": "Creado",
     "appName": "Gestión de Tareas",
-    "completed": "Completado"
+    "completed": "Completado",
+    "unknown": "Desconocido"
   },
   "nav": {
     "dashboard": "Panel",
@@ -192,17 +193,21 @@
     "noAssignedTasks": "No hay tareas asignadas",
     "assignedTasksWillAppear": "Las tareas asignadas aparecerán aquí",
     "titleRequired": "El título de la tarea es requerido",
+    "loadFailed": "Error al cargar tareas",
     "createFailed": "Error al crear tarea",
     "updateFailed": "Error al actualizar tarea",
     "deleteFailed": "Error al eliminar tarea",
     "statusChangedTo": "Tarea movida a {{status}}",
     "statusUpdateFailed": "Error al cambiar estado",
+    "reorderFailed": "Error al reordenar tarea",
     "assignFailed": "Error al asignar tarea",
     "commentFailed": "Error al agregar comentario",
     "uploadFailed": "Error al subir archivo",
     "deleteAttachmentFailed": "Error al eliminar archivo",
     "confirmDelete": "¿Estás seguro de eliminar \"{{name}}\"?",
-    "confirmDeleteAttachment": "¿Estás seguro de eliminar \"{{name}}\"?"
+    "confirmDeleteAttachment": "¿Estás seguro de eliminar \"{{name}}\"?",
+    "selectMember": "Seleccionar Miembro",
+    "downloadNotAvailable": "La descarga estará disponible cuando se configure el file serving"
   },
   "users": {
     "title": "Usuarios",
@@ -270,7 +275,11 @@
     "deleted": "Notificación eliminada",
     "new": "Nuevas",
     "earlier": "Anteriores",
-    "confirmDelete": "¿Estás seguro de eliminar esta notificación?"
+    "confirmDelete": "¿Estás seguro de eliminar esta notificación?",
+    "loadFailed": "Error al cargar notificaciones",
+    "markFailed": "Error al marcar como leída",
+    "markAllFailed": "Error al marcar todas como leídas",
+    "deleteFailed": "Error al eliminar notificación"
   },
   "audit": {
     "title": "Registros de Auditoría",
@@ -297,6 +306,13 @@
     "allEntities": "Todas las Entidades",
     "entityId": "ID de Entidad",
     "system": "Sistema",
+    "entityProject": "Proyecto",
+    "entityTask": "Tarea",
+    "entityUser": "Usuario",
+    "entityComment": "Comentario",
+    "entityAttachment": "Archivo Adjunto",
+    "oldValues": "Valores Anteriores",
+    "newValues": "Nuevos Valores",
     "paginationInfo": "Mostrando {first} a {last} de {totalRecords} registros",
     "loadFailed": "Error al cargar registros de auditoría"
   },
@@ -304,6 +320,18 @@
     "admin": "Administrador",
     "member": "Miembro",
     "viewer": "Observador"
+  },
+  "settings": {
+    "title": "Configuración",
+    "comingSoon": "La configuración de la aplicación se mostrará aquí."
+  },
+  "errors": {
+    "validation": "Error de validación",
+    "unexpected": "Ocurrió un error inesperado",
+    "sessionExpired": "La sesión expiró. Por favor inicia sesión nuevamente.",
+    "forbidden": "No tienes permiso para realizar esta acción",
+    "notFound": "Recurso no encontrado",
+    "serverError": "Error del servidor. Inténtalo nuevamente más tarde."
   },
   "validation": {
     "required": "Este campo es requerido",

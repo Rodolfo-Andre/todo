@@ -1,12 +1,14 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { Task, TaskStatus } from '../../core/models/task.model';
 import { TaskService, TaskFilters } from './task.service';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskStore {
   private taskService: TaskService;
+  private translationService = inject(TranslationService);
 
   // State
   private _tasks = signal<Task[]>([]);
@@ -44,12 +46,12 @@ export class TaskStore {
         if (response.success && response.data) {
           this._tasks.set(response.data);
         } else {
-          this._error.set(response.errors?.[0] || 'Failed to load tasks');
+          this._error.set(response.errors?.[0] || this.translationService.translate('tasks.loadFailed'));
         }
         this._isLoading.set(false);
       },
       error: (error) => {
-        this._error.set('Failed to load tasks');
+        this._error.set(this.translationService.translate('tasks.loadFailed'));
         this._isLoading.set(false);
       }
     });
@@ -64,12 +66,12 @@ export class TaskStore {
         if (response.success && response.data) {
           this._tasks.set(response.data);
         } else {
-          this._error.set(response.errors?.[0] || 'Failed to load tasks');
+          this._error.set(response.errors?.[0] || this.translationService.translate('tasks.loadFailed'));
         }
         this._isLoading.set(false);
       },
       error: (error) => {
-        this._error.set('Failed to load tasks');
+        this._error.set(this.translationService.translate('tasks.loadFailed'));
         this._isLoading.set(false);
       }
     });
@@ -84,12 +86,12 @@ export class TaskStore {
         if (response.success && response.data) {
           this._selectedTask.set(response.data as Task);
         } else {
-          this._error.set(response.errors?.[0] || 'Failed to load task');
+          this._error.set(response.errors?.[0] || this.translationService.translate('tasks.loadFailed'));
         }
         this._isLoading.set(false);
       },
       error: (error) => {
-        this._error.set('Failed to load task');
+        this._error.set(this.translationService.translate('tasks.loadFailed'));
         this._isLoading.set(false);
       }
     });
@@ -103,12 +105,12 @@ export class TaskStore {
             this.loadTasksByProject(projectId);
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to create task');
+            this._error.set(response.errors?.[0] || this.translationService.translate('tasks.createFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to create task');
+          this._error.set(this.translationService.translate('tasks.createFailed'));
           resolve(false);
         }
       });
@@ -124,12 +126,12 @@ export class TaskStore {
             this.loadTask(id);
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to update task');
+            this._error.set(response.errors?.[0] || this.translationService.translate('tasks.updateFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to update task');
+          this._error.set(this.translationService.translate('tasks.updateFailed'));
           resolve(false);
         }
       });
@@ -144,12 +146,12 @@ export class TaskStore {
             this.loadTasksByProject(projectId);
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to delete task');
+            this._error.set(response.errors?.[0] || this.translationService.translate('tasks.deleteFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to delete task');
+          this._error.set(this.translationService.translate('tasks.deleteFailed'));
           resolve(false);
         }
       });
@@ -164,12 +166,12 @@ export class TaskStore {
             this.loadTasksByProject(projectId);
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to change status');
+            this._error.set(response.errors?.[0] || this.translationService.translate('tasks.statusUpdateFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to change status');
+          this._error.set(this.translationService.translate('tasks.statusUpdateFailed'));
           resolve(false);
         }
       });
@@ -185,12 +187,12 @@ export class TaskStore {
             this.loadTask(id);
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to assign task');
+            this._error.set(response.errors?.[0] || this.translationService.translate('tasks.assignFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to assign task');
+          this._error.set(this.translationService.translate('tasks.assignFailed'));
           resolve(false);
         }
       });
@@ -205,12 +207,12 @@ export class TaskStore {
             this.loadTasksByProject(projectId);
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to reorder task');
+            this._error.set(response.errors?.[0] || this.translationService.translate('tasks.reorderFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to reorder task');
+          this._error.set(this.translationService.translate('tasks.reorderFailed'));
           resolve(false);
         }
       });
@@ -225,12 +227,12 @@ export class TaskStore {
             this.loadTask(taskId);
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to add comment');
+            this._error.set(response.errors?.[0] || this.translationService.translate('tasks.commentFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to add comment');
+          this._error.set(this.translationService.translate('tasks.commentFailed'));
           resolve(false);
         }
       });
@@ -245,12 +247,12 @@ export class TaskStore {
             this.loadTask(taskId);
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to upload attachment');
+            this._error.set(response.errors?.[0] || this.translationService.translate('tasks.uploadFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to upload attachment');
+          this._error.set(this.translationService.translate('tasks.uploadFailed'));
           resolve(false);
         }
       });
@@ -265,12 +267,12 @@ export class TaskStore {
             this.loadTask(taskId);
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to delete attachment');
+            this._error.set(response.errors?.[0] || this.translationService.translate('tasks.deleteAttachmentFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to delete attachment');
+          this._error.set(this.translationService.translate('tasks.deleteAttachmentFailed'));
           resolve(false);
         }
       });

@@ -35,7 +35,8 @@
     "noDescription": "No description provided",
     "createdAt": "Created",
     "appName": "Task Management",
-    "completed": "Completed"
+    "completed": "Completed",
+    "unknown": "Unknown"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -192,17 +193,21 @@
     "noAssignedTasks": "No tasks assigned to you",
     "assignedTasksWillAppear": "Tasks assigned to you will appear here",
     "titleRequired": "Task title is required",
+    "loadFailed": "Failed to load tasks",
     "createFailed": "Failed to create task",
     "updateFailed": "Failed to update task",
     "deleteFailed": "Failed to delete task",
     "statusChangedTo": "Task moved to {{status}}",
     "statusUpdateFailed": "Failed to update task status",
+    "reorderFailed": "Failed to reorder task",
     "assignFailed": "Failed to assign task",
     "commentFailed": "Failed to add comment",
     "uploadFailed": "Failed to upload file",
     "deleteAttachmentFailed": "Failed to delete attachment",
     "confirmDelete": "Are you sure you want to delete \"{{name}}\"?",
-    "confirmDeleteAttachment": "Are you sure you want to delete \"{{name}}\"?"
+    "confirmDeleteAttachment": "Are you sure you want to delete \"{{name}}\"?",
+    "selectMember": "Select Member",
+    "downloadNotAvailable": "Download functionality will be available when file serving is configured"
   },
   "users": {
     "title": "Users",
@@ -270,7 +275,11 @@
     "deleted": "Notification deleted",
     "new": "New",
     "earlier": "Earlier",
-    "confirmDelete": "Are you sure you want to delete this notification?"
+    "confirmDelete": "Are you sure you want to delete this notification?",
+    "loadFailed": "Failed to load notifications",
+    "markFailed": "Failed to mark as read",
+    "markAllFailed": "Failed to mark all as read",
+    "deleteFailed": "Failed to delete notification"
   },
   "audit": {
     "title": "Audit Logs",
@@ -297,6 +306,13 @@
     "allEntities": "All Entities",
     "entityId": "Entity ID",
     "system": "System",
+    "entityProject": "Project",
+    "entityTask": "Task",
+    "entityUser": "User",
+    "entityComment": "Comment",
+    "entityAttachment": "Attachment",
+    "oldValues": "Old Values",
+    "newValues": "New Values",
     "paginationInfo": "Showing {first} to {last} of {totalRecords} entries",
     "loadFailed": "Failed to load audit logs"
   },
@@ -304,6 +320,18 @@
     "admin": "Admin",
     "member": "Member",
     "viewer": "Viewer"
+  },
+  "settings": {
+    "title": "Settings",
+    "comingSoon": "Application settings will be displayed here."
+  },
+  "errors": {
+    "validation": "Validation error",
+    "unexpected": "An unexpected error occurred",
+    "sessionExpired": "Session expired. Please login again.",
+    "forbidden": "You do not have permission to perform this action",
+    "notFound": "Resource not found",
+    "serverError": "Server error. Please try again later."
   },
   "validation": {
     "required": "This field is required",

@@ -1,12 +1,14 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { Notification } from '../../core/models/notification.model';
 import { NotificationService } from './notification.service';
+import { TranslationService } from '../../core/i18n/translation.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationStore {
   private notificationService: NotificationService;
+  private translationService = inject(TranslationService);
 
   // State
   private _notifications = signal<Notification[]>([]);
@@ -41,12 +43,12 @@ export class NotificationStore {
         if (response.success && response.data) {
           this._notifications.set(response.data);
         } else {
-          this._error.set(response.errors?.[0] || 'Failed to load notifications');
+          this._error.set(response.errors?.[0] || this.translationService.translate('notifications.loadFailed'));
         }
         this._isLoading.set(false);
       },
       error: (error) => {
-        this._error.set('Failed to load notifications');
+        this._error.set(this.translationService.translate('notifications.loadFailed'));
         this._isLoading.set(false);
       }
     });
@@ -78,12 +80,12 @@ export class NotificationStore {
             this._unreadCount.update(count => Math.max(0, count - 1));
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to mark as read');
+            this._error.set(response.errors?.[0] || this.translationService.translate('notifications.markFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to mark as read');
+          this._error.set(this.translationService.translate('notifications.markFailed'));
           resolve(false);
         }
       });
@@ -101,12 +103,12 @@ export class NotificationStore {
             this._unreadCount.set(0);
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to mark all as read');
+            this._error.set(response.errors?.[0] || this.translationService.translate('notifications.markAllFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to mark all as read');
+          this._error.set(this.translationService.translate('notifications.markAllFailed'));
           resolve(false);
         }
       });
@@ -127,12 +129,12 @@ export class NotificationStore {
             }
             resolve(true);
           } else {
-            this._error.set(response.errors?.[0] || 'Failed to delete notification');
+            this._error.set(response.errors?.[0] || this.translationService.translate('notifications.deleteFailed'));
             resolve(false);
           }
         },
         error: (error) => {
-          this._error.set('Failed to delete notification');
+          this._error.set(this.translationService.translate('notifications.deleteFailed'));
           resolve(false);
         }
       });

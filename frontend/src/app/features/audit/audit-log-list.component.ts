@@ -186,21 +186,25 @@ export class AuditLogListComponent implements OnInit {
     endDate: null as Date | null
   };
 
-  actionOptions = [
-    { label: 'Create', value: 'Create' },
-    { label: 'Update', value: 'Update' },
-    { label: 'Delete', value: 'Delete' },
-    { label: 'Login', value: 'Login' },
-    { label: 'Logout', value: 'Logout' }
-  ];
+  get actionOptions(): { label: string; value: string }[] {
+    return [
+      { label: this.t('audit.create'), value: 'Create' },
+      { label: this.t('audit.update'), value: 'Update' },
+      { label: this.t('audit.delete'), value: 'Delete' },
+      { label: this.t('audit.login'), value: 'Login' },
+      { label: this.t('audit.logout'), value: 'Logout' }
+    ];
+  }
 
-  entityOptions = [
-    { label: 'Project', value: 'Project' },
-    { label: 'Task', value: 'Task' },
-    { label: 'User', value: 'User' },
-    { label: 'Comment', value: 'Comment' },
-    { label: 'Attachment', value: 'Attachment' }
-  ];
+  get entityOptions(): { label: string; value: string }[] {
+    return [
+      { label: this.t('audit.entityProject'), value: 'Project' },
+      { label: this.t('audit.entityTask'), value: 'Task' },
+      { label: this.t('audit.entityUser'), value: 'User' },
+      { label: this.t('audit.entityComment'), value: 'Comment' },
+      { label: this.t('audit.entityAttachment'), value: 'Attachment' }
+    ];
+  }
 
   ngOnInit(): void {
     this.loadData();
@@ -259,13 +263,13 @@ export class AuditLogListComponent implements OnInit {
   }
 
   showDetails(log: AuditLog): void {
-    let details = `Action: ${log.action}\nEntity: ${log.entityName}\nEntity ID: ${log.entityId}\nDate: ${log.createdAt}`;
+    let details = `${this.t('audit.action')}: ${log.action}\n${this.t('audit.entity')}: ${log.entityName}\n${this.t('audit.entityId')}: ${log.entityId}\n${this.t('audit.date')}: ${log.createdAt}`;
 
     if (log.oldValues) {
-      details += `\n\nOld Values:\n${log.oldValues}`;
+      details += `\n\n${this.t('audit.oldValues')}:\n${log.oldValues}`;
     }
     if (log.newValues) {
-      details += `\n\nNew Values:\n${log.newValues}`;
+      details += `\n\n${this.t('audit.newValues')}:\n${log.newValues}`;
     }
 
     alert(details);

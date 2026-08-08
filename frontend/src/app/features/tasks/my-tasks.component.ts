@@ -35,13 +35,13 @@ import { TranslationService } from '../../core/i18n/translation.service';
 
     <div class="space-y-6">
       <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold">My Tasks</h1>
+        <h1 class="text-2xl font-bold">{{ t('nav.myTasks') }}</h1>
         <div class="flex gap-2">
           <input
             pInputText
             [(ngModel)]="searchTerm"
             (input)="onSearch()"
-            placeholder="Search tasks..."
+            placeholder="{{ t('common.search') }}"
             class="w-64"
           />
           <p-select
@@ -49,7 +49,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             [(ngModel)]="selectedStatus"
             optionLabel="label"
             optionValue="value"
-            placeholder="All Status"
+            placeholder="{{ t('tasks.allStatus') }}"
             styleClass="w-48"
             [showClear]="true"
             (onChange)="onFilterChange()"
@@ -59,7 +59,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             [(ngModel)]="selectedPriority"
             optionLabel="label"
             optionValue="value"
-            placeholder="All Priorities"
+            placeholder="{{ t('tasks.allPriorities') }}"
             styleClass="w-48"
             [showClear]="true"
             (onChange)="onFilterChange()"
@@ -71,23 +71,23 @@ import { TranslationService } from '../../core/i18n/translation.service';
       <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
         <p-card styleClass="text-center">
           <div class="text-2xl font-bold text-gray-800">{{ taskStore.taskCount() }}</div>
-          <div class="text-sm text-gray-500">Total</div>
+          <div class="text-sm text-gray-500">{{ t('common.total') }}</div>
         </p-card>
         <p-card styleClass="text-center">
           <div class="text-2xl font-bold text-gray-600">{{ getTodoCount() }}</div>
-          <div class="text-sm text-gray-500">Todo</div>
+          <div class="text-sm text-gray-500">{{ t('tasks.todo') }}</div>
         </p-card>
         <p-card styleClass="text-center">
           <div class="text-2xl font-bold text-blue-600">{{ getInProgressCount() }}</div>
-          <div class="text-sm text-gray-500">In Progress</div>
+          <div class="text-sm text-gray-500">{{ t('tasks.inProgress') }}</div>
         </p-card>
         <p-card styleClass="text-center">
           <div class="text-2xl font-bold text-yellow-600">{{ getInReviewCount() }}</div>
-          <div class="text-sm text-gray-500">In Review</div>
+          <div class="text-sm text-gray-500">{{ t('tasks.inReview') }}</div>
         </p-card>
         <p-card styleClass="text-center">
           <div class="text-2xl font-bold text-green-600">{{ taskStore.completedCount() }}</div>
-          <div class="text-sm text-gray-500">Done</div>
+          <div class="text-sm text-gray-500">{{ t('tasks.done') }}</div>
         </p-card>
       </div>
 
@@ -96,12 +96,12 @@ import { TranslationService } from '../../core/i18n/translation.service';
         <p-table [value]="taskStore.tasks()" [loading]="taskStore.isLoading()" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25, 50]">
           <ng-template pTemplate="header">
             <tr>
-              <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
-              <th pSortableColumn="projectName">Project <p-sortIcon field="projectName"></p-sortIcon></th>
-              <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
-              <th pSortableColumn="priority">Priority <p-sortIcon field="priority"></p-sortIcon></th>
-              <th pSortableColumn="storyPoints">Story Points <p-sortIcon field="storyPoints"></p-sortIcon></th>
-              <th pSortableColumn="dueDate">Due Date <p-sortIcon field="dueDate"></p-sortIcon></th>
+              <th pSortableColumn="title">{{ t('tasks.taskTitle') }} <p-sortIcon field="title"></p-sortIcon></th>
+              <th pSortableColumn="projectName">{{ t('projects.title') }} <p-sortIcon field="projectName"></p-sortIcon></th>
+              <th pSortableColumn="status">{{ t('tasks.status') }} <p-sortIcon field="status"></p-sortIcon></th>
+              <th pSortableColumn="priority">{{ t('tasks.priority') }} <p-sortIcon field="priority"></p-sortIcon></th>
+              <th pSortableColumn="storyPoints">{{ t('tasks.storyPoints') }} <p-sortIcon field="storyPoints"></p-sortIcon></th>
+              <th pSortableColumn="dueDate">{{ t('tasks.dueDate') }} <p-sortIcon field="dueDate"></p-sortIcon></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-task>
@@ -116,7 +116,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
               </td>
               <td>
                 <a [routerLink]="['/projects', task.projectId]" class="text-blue-600 hover:underline">
-                  {{ task.projectName || 'Unknown' }}
+                  {{ task.projectName || t('common.unknown') }}
                 </a>
               </td>
               <td>
@@ -137,11 +137,11 @@ import { TranslationService } from '../../core/i18n/translation.service';
                   <span [class]="isOverdue(task.dueDate) ? 'text-red-500 font-medium' : ''">
                     {{ task.dueDate | date:'shortDate' }}
                     @if (isOverdue(task.dueDate)) {
-                      <span class="text-xs ml-1">(Overdue)</span>
+                      <span class="text-xs ml-1">({{ t('common.overdue') }})</span>
                     }
                   </span>
                 } @else {
-                  <span class="text-gray-400">No due date</span>
+                  <span class="text-gray-400">{{ t('tasks.noDueDate') }}</span>
                 }
               </td>
             </tr>
@@ -151,8 +151,8 @@ import { TranslationService } from '../../core/i18n/translation.service';
               <td colspan="6" class="text-center py-12">
                 <div class="flex flex-col items-center gap-4">
                   <i class="pi pi-check-square text-5xl text-gray-300"></i>
-                  <p class="text-gray-500 text-lg">No tasks assigned to you</p>
-                  <p class="text-gray-400">Tasks assigned to you will appear here</p>
+                  <p class="text-gray-500 text-lg">{{ t('tasks.noAssignedTasks') }}</p>
+                  <p class="text-gray-400">{{ t('tasks.assignedTasksWillAppear') }}</p>
                 </div>
               </td>
             </tr>
@@ -173,20 +173,24 @@ export class MyTasksComponent implements OnInit {
   selectedStatus: number | null = null;
   selectedPriority: number | null = null;
 
-  statusOptions = [
-    { label: 'Todo', value: 0 },
-    { label: 'In Progress', value: 1 },
-    { label: 'In Review', value: 2 },
-    { label: 'Done', value: 3 },
-    { label: 'Cancelled', value: 4 }
-  ];
+  get statusOptions(): { label: string; value: number }[] {
+    return [
+      { label: this.t('tasks.todo'), value: 0 },
+      { label: this.t('tasks.inProgress'), value: 1 },
+      { label: this.t('tasks.inReview'), value: 2 },
+      { label: this.t('tasks.done'), value: 3 },
+      { label: this.t('tasks.cancelled'), value: 4 }
+    ];
+  }
 
-  priorityOptions = [
-    { label: 'Low', value: 0 },
-    { label: 'Medium', value: 1 },
-    { label: 'High', value: 2 },
-    { label: 'Critical', value: 3 }
-  ];
+  get priorityOptions(): { label: string; value: number }[] {
+    return [
+      { label: this.t('tasks.low'), value: 0 },
+      { label: this.t('tasks.medium'), value: 1 },
+      { label: this.t('tasks.high'), value: 2 },
+      { label: this.t('tasks.urgent'), value: 3 }
+    ];
+  }
 
   ngOnInit(): void {
     this.loadTasks();
@@ -222,8 +226,8 @@ export class MyTasksComponent implements OnInit {
   }
 
   getStatusLabel(status: number): string {
-    const labels = ['Todo', 'In Progress', 'In Review', 'Done', 'Cancelled'];
-    return labels[status] || 'Unknown';
+    const labels = ['tasks.todo', 'tasks.inProgress', 'tasks.inReview', 'tasks.done', 'tasks.cancelled'];
+    return this.t(labels[status] || 'common.unknown');
   }
 
   getStatusSeverity(status: number): string {
@@ -232,8 +236,8 @@ export class MyTasksComponent implements OnInit {
   }
 
   getPriorityLabel(priority: number): string {
-    const labels = ['Low', 'Medium', 'High', 'Critical'];
-    return labels[priority] || 'Unknown';
+    const labels = ['tasks.low', 'tasks.medium', 'tasks.high', 'tasks.urgent'];
+    return this.t(labels[priority] || 'common.unknown');
   }
 
   getPrioritySeverity(priority: number): string {

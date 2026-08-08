@@ -43,24 +43,24 @@ import { TranslationService } from '../../core/i18n/translation.service';
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-4">
           <p-button icon="pi pi-arrow-left" styleClass="p-button-text" routerLink="/projects/{{ projectId }}"></p-button>
-          <h1 class="text-2xl font-bold">Task Board</h1>
+          <h1 class="text-2xl font-bold">{{ t('tasks.board') }}</h1>
         </div>
         <div class="flex gap-2">
           <input
             pInputText
             [(ngModel)]="searchTerm"
             (input)="onSearch()"
-            placeholder="Search tasks..."
+            placeholder="{{ t('common.search') }}"
             class="w-64"
           />
-          <p-button label="New Task" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
+          <p-button [label]="t('tasks.createTask')" icon="pi pi-plus" (onClick)="showCreateDialog()"></p-button>
         </div>
       </div>
 
       @if (taskStore.isLoading()) {
         <div class="text-center py-8">
           <i class="pi pi-spin pi-spinner text-2xl"></i>
-          <p class="mt-2 text-gray-500">Loading tasks...</p>
+          <p class="mt-2 text-gray-500">{{ t('common.loading') }}</p>
         </div>
       } @else {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 min-h-[600px]">
@@ -75,7 +75,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             (drop)="onDropOnColumn($event, 0)"
           >
             <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold text-gray-700">Todo</h3>
+              <h3 class="font-semibold text-gray-700">{{ t('tasks.todo') }}</h3>
               <span class="px-2 py-1 bg-gray-200 rounded-full text-sm">{{ taskStore.todoTasks().length }}</span>
             </div>
             <div class="space-y-3 min-h-[100px]">
@@ -92,7 +92,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                   <div class="flex items-start justify-between">
                     <h4 class="font-medium text-gray-800">{{ task.title }}</h4>
                     @if (task.priority === 3) {
-                      <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">Critical</span>
+                      <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">{{ t('tasks.urgent') }}</span>
                     }
                   </div>
                   @if (task.description) {
@@ -133,9 +133,9 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 >
                   @if (dragOverStatus === 0) {
                     <i class="pi pi-plus-circle text-2xl mb-2"></i>
-                    <p>Drop here</p>
+                    <p>{{ t('tasks.dropHere') }}</p>
                   } @else {
-                    <p>No tasks</p>
+                    <p>{{ t('tasks.noTasks') }}</p>
                   }
                 </div>
               }
@@ -153,7 +153,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             (drop)="onDropOnColumn($event, 1)"
           >
             <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold text-blue-700">In Progress</h3>
+              <h3 class="font-semibold text-blue-700">{{ t('tasks.inProgress') }}</h3>
               <span class="px-2 py-1 bg-blue-200 rounded-full text-sm">{{ taskStore.inProgressTasks().length }}</span>
             </div>
             <div class="space-y-3 min-h-[100px]">
@@ -170,7 +170,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                   <div class="flex items-start justify-between">
                     <h4 class="font-medium text-gray-800">{{ task.title }}</h4>
                     @if (task.priority === 3) {
-                      <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">Critical</span>
+                      <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">{{ t('tasks.urgent') }}</span>
                     }
                   </div>
                   @if (task.description) {
@@ -211,9 +211,9 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 >
                   @if (dragOverStatus === 1) {
                     <i class="pi pi-plus-circle text-2xl mb-2"></i>
-                    <p>Drop here</p>
+                    <p>{{ t('tasks.dropHere') }}</p>
                   } @else {
-                    <p>No tasks</p>
+                    <p>{{ t('tasks.noTasks') }}</p>
                   }
                 </div>
               }
@@ -231,7 +231,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             (drop)="onDropOnColumn($event, 2)"
           >
             <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold text-yellow-700">In Review</h3>
+              <h3 class="font-semibold text-yellow-700">{{ t('tasks.inReview') }}</h3>
               <span class="px-2 py-1 bg-yellow-200 rounded-full text-sm">{{ taskStore.inReviewTasks().length }}</span>
             </div>
             <div class="space-y-3 min-h-[100px]">
@@ -248,7 +248,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                   <div class="flex items-start justify-between">
                     <h4 class="font-medium text-gray-800">{{ task.title }}</h4>
                     @if (task.priority === 3) {
-                      <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">Critical</span>
+                      <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">{{ t('tasks.urgent') }}</span>
                     }
                   </div>
                   @if (task.description) {
@@ -289,9 +289,9 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 >
                   @if (dragOverStatus === 2) {
                     <i class="pi pi-plus-circle text-2xl mb-2"></i>
-                    <p>Drop here</p>
+                    <p>{{ t('tasks.dropHere') }}</p>
                   } @else {
-                    <p>No tasks</p>
+                    <p>{{ t('tasks.noTasks') }}</p>
                   }
                 </div>
               }
@@ -309,7 +309,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             (drop)="onDropOnColumn($event, 3)"
           >
             <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold text-green-700">Done</h3>
+              <h3 class="font-semibold text-green-700">{{ t('tasks.done') }}</h3>
               <span class="px-2 py-1 bg-green-200 rounded-full text-sm">{{ taskStore.doneTasks().length }}</span>
             </div>
             <div class="space-y-3 min-h-[100px]">
@@ -326,7 +326,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                   <div class="flex items-start justify-between">
                     <h4 class="font-medium text-gray-800">{{ task.title }}</h4>
                     @if (task.priority === 3) {
-                      <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">Critical</span>
+                      <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">{{ t('tasks.urgent') }}</span>
                     }
                   </div>
                   @if (task.description) {
@@ -367,9 +367,9 @@ import { TranslationService } from '../../core/i18n/translation.service';
                 >
                   @if (dragOverStatus === 3) {
                     <i class="pi pi-plus-circle text-2xl mb-2"></i>
-                    <p>Drop here</p>
+                    <p>{{ t('tasks.dropHere') }}</p>
                   } @else {
-                    <p>No tasks</p>
+                    <p>{{ t('tasks.noTasks') }}</p>
                   }
                 </div>
               }
@@ -382,7 +382,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
     <!-- Create Task Dialog -->
     <p-dialog
       [(visible)]="createDialogVisible"
-      header="Create Task"
+      [header]="t('tasks.createTask')"
       [modal]="true"
       [style]="{ width: '500px' }"
       [draggable]="false"
@@ -390,16 +390,16 @@ import { TranslationService } from '../../core/i18n/translation.service';
     >
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Title *</label>
-          <input pInputText [(ngModel)]="newTask.title" class="w-full" placeholder="Task title" />
+          <label class="font-medium">{{ t('tasks.taskTitle') }} *</label>
+          <input pInputText [(ngModel)]="newTask.title" class="w-full" placeholder="{{ t('tasks.taskTitle') }}" />
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Description</label>
-          <textarea pInputTextarea [(ngModel)]="newTask.description" class="w-full" rows="3" placeholder="Task description..."></textarea>
+          <label class="font-medium">{{ t('tasks.description') }}</label>
+          <textarea pInputTextarea [(ngModel)]="newTask.description" class="w-full" rows="3" placeholder="{{ t('tasks.description') }}"></textarea>
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-2">
-            <label class="font-medium">Priority</label>
+            <label class="font-medium">{{ t('tasks.priority') }}</label>
             <p-select
               [options]="priorityOptions"
               [(ngModel)]="newTask.priority"
@@ -409,30 +409,30 @@ import { TranslationService } from '../../core/i18n/translation.service';
             ></p-select>
           </div>
           <div class="flex flex-col gap-2">
-            <label class="font-medium">Story Points</label>
+            <label class="font-medium">{{ t('tasks.storyPoints') }}</label>
             <input pInputText [(ngModel)]="newTask.storyPoints" type="number" class="w-full" placeholder="0" />
           </div>
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Due Date</label>
+          <label class="font-medium">{{ t('tasks.dueDate') }}</label>
           <input pInputText [(ngModel)]="newTask.dueDate" type="date" class="w-full" />
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Assign To</label>
+          <label class="font-medium">{{ t('tasks.assignTo') }}</label>
           <p-select
             [options]="members"
             [(ngModel)]="newTask.assignedToId"
             optionLabel="fullName"
             optionValue="userId"
-            placeholder="Select member"
+            placeholder="{{ t('tasks.selectMember') }}"
             styleClass="w-full"
             [showClear]="true"
           ></p-select>
         </div>
       </div>
       <ng-template pTemplate="footer">
-        <p-button label="Cancel" styleClass="p-button-text" (onClick)="createDialogVisible = false"></p-button>
-        <p-button label="Create" (onClick)="createTask()" [loading]="isSaving"></p-button>
+        <p-button [label]="t('common.cancel')" styleClass="p-button-text" (onClick)="createDialogVisible = false"></p-button>
+        <p-button [label]="t('common.create')" (onClick)="createTask()" [loading]="isSaving"></p-button>
       </ng-template>
     </p-dialog>
   `
@@ -468,12 +468,14 @@ export class TaskBoardComponent implements OnInit {
     assignedToId: undefined as string | undefined
   };
 
-  priorityOptions = [
-    { label: 'Low', value: 0 },
-    { label: 'Medium', value: 1 },
-    { label: 'High', value: 2 },
-    { label: 'Critical', value: 3 }
-  ];
+  get priorityOptions(): { label: string; value: number }[] {
+    return [
+      { label: this.t('tasks.low'), value: 0 },
+      { label: this.t('tasks.medium'), value: 1 },
+      { label: this.t('tasks.high'), value: 2 },
+      { label: this.t('tasks.urgent'), value: 3 }
+    ];
+  }
 
   ngOnInit(): void {
     this.projectId = this.route.snapshot.paramMap.get('id') || '';
@@ -532,8 +534,8 @@ export class TaskBoardComponent implements OnInit {
     if (!this.newTask.title.trim()) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Task title is required'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.titleRequired')
       });
       return;
     }
@@ -548,15 +550,15 @@ export class TaskBoardComponent implements OnInit {
     if (success) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Task created successfully'
+        summary: this.t('common.success'),
+        detail: this.t('tasks.taskCreated')
       });
       this.createDialogVisible = false;
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to create task'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.createFailed')
       });
     }
   }
@@ -596,17 +598,17 @@ export class TaskBoardComponent implements OnInit {
     if (this.draggedTask && this.draggedTask.status !== newStatus) {
       const success = await this.taskStore.changeStatus(this.draggedTask.id, newStatus, this.projectId);
       if (success) {
-        const statusNames = ['Todo', 'In Progress', 'In Review', 'Done', 'Cancelled'];
+        const statusKeys = ['todo', 'inProgress', 'inReview', 'done', 'cancelled'];
         this.messageService.add({
           severity: 'success',
-          summary: 'Success',
-          detail: `Task moved to ${statusNames[newStatus]}`
+          summary: this.t('common.success'),
+          detail: this.t('tasks.statusChangedTo', { status: this.t('tasks.' + statusKeys[newStatus]) })
         });
       } else {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to update task status'
+          summary: this.t('common.error'),
+          detail: this.t('tasks.statusUpdateFailed')
         });
       }
     }

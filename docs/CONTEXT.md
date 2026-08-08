@@ -99,19 +99,19 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Core | ✅ | AuthService, Guards, Interceptors, Models |
 | Layout | ✅ | MainLayout, AuthLayout |
 | State | ✅ | AuthStore, TaskStore, NotificationStore (Signals) |
-| i18n | ✅ | TranslationService, TranslatePipe, LanguageSwitcher |
+| i18n | ✅ | TranslationService, TranslatePipe, LanguageSwitcher, todos los componentes traducidos |
 
 ### 4.5 Frontend — Pendiente
 
 | Módulo | Estado | Notas |
 |--------|--------|-------|
 | Shared Components | ✅ | LanguageSwitcher, Todos los componentes traducidos |
-
 ---
 
 ## 5. Git History
 
 ```
+fix: language switcher persistence + complete frontend i18n (remove hardcoded strings)
 feat: localize backend responses + cleanup unused files (i18n)
 feat: restructure repo folders + fix Swagger schemaId conflict
 feat: i18n - traducir todos los componentes frontend
@@ -129,7 +129,7 @@ dcf7258 feat: implement Users Management and improve UI
 ```
 
 **Rama actual:** `master`
-**Último commit:** localización de respuestas backend + limpieza de archivos
+**Último commit:** fix language switcher + frontend i18n completo (sin texto hardcodeado)
 
 ---
 

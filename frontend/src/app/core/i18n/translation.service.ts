@@ -1,6 +1,4 @@
 import { Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
 
 export type Language = 'es' | 'en';
 
@@ -19,7 +17,7 @@ export class TranslationService {
   language = this.currentLanguage.asReadonly();
   isLoaded = this.loaded.asReadonly();
 
-  constructor(private http: HttpClient) {
+  constructor() {
     const savedLang = localStorage.getItem('language') as Language;
     const lang = savedLang && (savedLang === 'es' || savedLang === 'en') ? savedLang : 'es';
     this.loadLanguage(lang);
@@ -27,9 +25,7 @@ export class TranslationService {
 
   async loadLanguage(lang: Language): Promise<void> {
     try {
-      const response = await firstValueFrom(
-        this.http.get<TranslationData>(`/assets/i18n/${lang}.json`)
-      );
+      const response = await this.fetchTranslations(lang);
       if (response) {
         this.translations.set(response);
         this.currentLanguage.set(lang);
@@ -41,9 +37,7 @@ export class TranslationService {
       // Try to load Spanish as fallback
       if (lang !== 'es') {
         try {
-          const response = await firstValueFrom(
-            this.http.get<TranslationData>('/assets/i18n/es.json')
-          );
+          const response = await this.fetchTranslations('es');
           if (response) {
             this.translations.set(response);
             this.currentLanguage.set('es');
@@ -55,6 +49,14 @@ export class TranslationService {
         }
       }
     }
+  }
+
+  private async fetchTranslations(lang: Language): Promise<TranslationData | null> {
+    const response = await fetch(`/assets/i18n/${lang}.json`);
+    if (!response.ok) {
+      throw new Error(`Failed to load translations: ${response.status}`);
+    }
+    return response.json();
   }
 
   setLanguage(lang: Language): void {

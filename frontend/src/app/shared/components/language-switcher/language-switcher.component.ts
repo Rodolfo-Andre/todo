@@ -13,10 +13,10 @@ import { TranslationService, Language } from '../../../core/i18n/translation.ser
     <div class="flex items-center gap-2">
       <p-dropdown
         [options]="languages"
-        [(ngModel)]="selectedLanguage"
+        [ngModel]="language()"
+        (ngModelChange)="onLanguageChange($event)"
         optionLabel="name"
         optionValue="code"
-        (onChange)="onLanguageChange($event.value)"
         styleClass="w-full"
       ></p-dropdown>
     </div>
@@ -25,8 +25,8 @@ import { TranslationService, Language } from '../../../core/i18n/translation.ser
 export class LanguageSwitcherComponent {
   private translationService = inject(TranslationService);
 
+  language = this.translationService.language;
   languages = this.translationService.getAvailableLanguages();
-  selectedLanguage: Language = this.translationService.language();
 
   onLanguageChange(lang: Language): void {
     this.translationService.setLanguage(lang);

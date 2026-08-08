@@ -51,11 +51,11 @@ import { TranslationService } from '../../core/i18n/translation.service';
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-4">
           <p-button icon="pi pi-arrow-left" styleClass="p-button-text" (onClick)="goBack()"></p-button>
-          <h1 class="text-2xl font-bold">{{ task?.title || 'Loading...' }}</h1>
+          <h1 class="text-2xl font-bold">{{ task?.title || t('common.loading') }}</h1>
         </div>
         <div class="flex gap-2">
-          <p-button label="Edit" icon="pi pi-pencil" (onClick)="showEditDialog()"></p-button>
-          <p-button label="Delete" icon="pi pi-trash" styleClass="p-button-danger" (onClick)="confirmDelete()"></p-button>
+          <p-button [label]="t('common.edit')" icon="pi pi-pencil" (onClick)="showEditDialog()"></p-button>
+          <p-button [label]="t('common.delete')" icon="pi pi-trash" styleClass="p-button-danger" (onClick)="confirmDelete()"></p-button>
         </div>
       </div>
 
@@ -63,7 +63,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
         <p-card>
           <div class="text-center py-8">
             <i class="pi pi-spin pi-spinner text-2xl"></i>
-            <p class="mt-2 text-gray-500">Loading task...</p>
+            <p class="mt-2 text-gray-500">{{ t('common.loading') }}</p>
           </div>
         </p-card>
       } @else if (task) {
@@ -72,19 +72,19 @@ import { TranslationService } from '../../core/i18n/translation.service';
           <p-card styleClass="lg:col-span-2">
             <ng-template pTemplate="header">
               <div class="px-4 py-3 border-b">
-                <h2 class="text-lg font-semibold">Task Information</h2>
+                <h2 class="text-lg font-semibold">{{ t('tasks.taskInformation') }}</h2>
               </div>
             </ng-template>
 
             <div class="flex flex-col gap-4">
               <div>
-                <p class="text-sm text-gray-500 mb-1">Description</p>
-                <p class="whitespace-pre-wrap">{{ task.description || 'No description provided' }}</p>
+                <p class="text-sm text-gray-500 mb-1">{{ t('tasks.description') }}</p>
+                <p class="whitespace-pre-wrap">{{ task.description || t('common.noDescription') }}</p>
               </div>
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Status</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('tasks.status') }}</p>
                   <div class="flex gap-2">
                     @for (status of statusOptions; track status.value) {
                       <button
@@ -98,26 +98,26 @@ import { TranslationService } from '../../core/i18n/translation.service';
                   </div>
                 </div>
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Priority</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('tasks.priority') }}</p>
                   <p-tag [value]="getPriorityLabel(task.priority)" [severity]="getPrioritySeverity(task.priority)"></p-tag>
                 </div>
               </div>
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Story Points</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('tasks.storyPoints') }}</p>
                   <p>{{ task.storyPoints || '-' }}</p>
                 </div>
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Due Date</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('tasks.dueDate') }}</p>
                   <p [class]="isOverdue(task.dueDate) ? 'text-red-500' : ''">
-                    {{ task.dueDate ? (task.dueDate | date:'mediumDate') : 'No due date' }}
+                    {{ task.dueDate ? (task.dueDate | date:'mediumDate') : t('tasks.noDueDate') }}
                   </p>
                 </div>
               </div>
 
               <div>
-                <p class="text-sm text-gray-500 mb-1">Tags</p>
+                <p class="text-sm text-gray-500 mb-1">{{ t('tasks.tags') }}</p>
                 @if (task.tags) {
                   <div class="flex flex-wrap gap-2">
                     @for (tag of task.tags.split(','); track tag) {
@@ -125,17 +125,17 @@ import { TranslationService } from '../../core/i18n/translation.service';
                     }
                   </div>
                 } @else {
-                  <p class="text-gray-400">No tags</p>
+                  <p class="text-gray-400">{{ t('tasks.noTags') }}</p>
                 }
               </div>
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Created By</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('tasks.createdBy') }}</p>
                   <p>{{ task.createdByName }}</p>
                 </div>
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Created At</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('tasks.createdAt') }}</p>
                   <p>{{ task.createdAt | date:'medium' }}</p>
                 </div>
               </div>
@@ -148,19 +148,19 @@ import { TranslationService } from '../../core/i18n/translation.service';
             <p-card>
               <ng-template pTemplate="header">
                 <div class="px-4 py-3 border-b">
-                  <h2 class="text-lg font-semibold">Assignment</h2>
+                  <h2 class="text-lg font-semibold">{{ t('tasks.assignment') }}</h2>
                 </div>
               </ng-template>
 
               <div class="flex flex-col gap-4">
                 <div class="flex flex-col gap-2">
-                  <label class="font-medium">Assign To</label>
+                  <label class="font-medium">{{ t('tasks.assignTo') }}</label>
                   <p-select
                     [options]="users"
                     [(ngModel)]="selectedUserId"
                     optionLabel="fullName"
                     optionValue="id"
-                    placeholder="Select user"
+                    placeholder="{{ t('projects.selectUser') }}"
                     styleClass="w-full"
                     [showClear]="true"
                     (onChange)="assignTask()"
@@ -183,7 +183,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             <p-card>
               <ng-template pTemplate="header">
                 <div class="px-4 py-3 border-b">
-                  <h2 class="text-lg font-semibold">Comments ({{ task.comments?.length || 0 }})</h2>
+                  <h2 class="text-lg font-semibold">{{ t('tasks.comments') }} ({{ task.comments?.length || 0 }})</h2>
                 </div>
               </ng-template>
 
@@ -194,7 +194,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                     [(ngModel)]="newComment"
                     class="flex-1"
                     rows="2"
-                    placeholder="Add a comment..."
+                    placeholder="{{ t('tasks.addComment') }}"
                   ></textarea>
                   <p-button icon="pi pi-send" (onClick)="addComment()" [disabled]="!newComment.trim()"></p-button>
                 </div>
@@ -217,7 +217,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                     }
                   </div>
                 } @else {
-                  <p class="text-center text-gray-400 py-4">No comments yet</p>
+                  <p class="text-center text-gray-400 py-4">{{ t('tasks.noComments') }}</p>
                 }
               </div>
             </p-card>
@@ -226,7 +226,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             <p-card>
               <ng-template pTemplate="header">
                 <div class="px-4 py-3 border-b">
-                  <h2 class="text-lg font-semibold">Attachments ({{ task.attachments?.length || 0 }})</h2>
+                  <h2 class="text-lg font-semibold">{{ t('tasks.attachments') }} ({{ task.attachments?.length || 0 }})</h2>
                 </div>
               </ng-template>
 
@@ -239,7 +239,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                     [auto]="true"
                     [customUpload]="true"
                     (uploadHandler)="onFileUpload($event)"
-                    chooseLabel="Upload File"
+                    chooseLabel="{{ t('tasks.uploadFile') }}"
                     chooseIcon="pi pi-upload"
                     styleClass="w-full"
                   ></p-fileUpload>
@@ -273,7 +273,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                     }
                   </div>
                 } @else {
-                  <p class="text-center text-gray-400 py-4">No attachments</p>
+                  <p class="text-center text-gray-400 py-4">{{ t('tasks.noAttachments') }}</p>
                 }
               </div>
             </p-card>
@@ -282,7 +282,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
             <p-card>
               <ng-template pTemplate="header">
                 <div class="px-4 py-3 border-b">
-                  <h2 class="text-lg font-semibold">History</h2>
+                  <h2 class="text-lg font-semibold">{{ t('tasks.history') }}</h2>
                 </div>
               </ng-template>
 
@@ -308,7 +308,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
                   }
                 </div>
               } @else {
-                <p class="text-center text-gray-400 py-4">No history</p>
+                <p class="text-center text-gray-400 py-4">{{ t('tasks.noHistory') }}</p>
               }
             </p-card>
           </div>
@@ -316,7 +316,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
       } @else {
         <p-card>
           <div class="text-center py-8">
-            <p class="text-gray-500">Task not found.</p>
+            <p class="text-gray-500">{{ t('tasks.notFound') }}</p>
           </div>
         </p-card>
       }
@@ -325,7 +325,7 @@ import { TranslationService } from '../../core/i18n/translation.service';
     <!-- Edit Task Dialog -->
     <p-dialog
       [(visible)]="editDialogVisible"
-      header="Edit Task"
+      header="{{ t('tasks.editTask') }}"
       [modal]="true"
       [style]="{ width: '500px' }"
       [draggable]="false"
@@ -333,16 +333,16 @@ import { TranslationService } from '../../core/i18n/translation.service';
     >
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Title *</label>
+          <label class="font-medium">{{ t('tasks.taskTitle') }} *</label>
           <input pInputText [(ngModel)]="editForm.title" class="w-full" />
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Description</label>
+          <label class="font-medium">{{ t('tasks.description') }}</label>
           <textarea pInputTextarea [(ngModel)]="editForm.description" class="w-full" rows="3"></textarea>
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-2">
-            <label class="font-medium">Priority</label>
+            <label class="font-medium">{{ t('tasks.priority') }}</label>
             <p-select
               [options]="priorityOptions"
               [(ngModel)]="editForm.priority"
@@ -352,18 +352,18 @@ import { TranslationService } from '../../core/i18n/translation.service';
             ></p-select>
           </div>
           <div class="flex flex-col gap-2">
-            <label class="font-medium">Story Points</label>
+            <label class="font-medium">{{ t('tasks.storyPoints') }}</label>
             <input pInputText [(ngModel)]="editForm.storyPoints" type="number" class="w-full" />
           </div>
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-medium">Due Date</label>
+          <label class="font-medium">{{ t('tasks.dueDate') }}</label>
           <input pInputText [(ngModel)]="editForm.dueDate" type="date" class="w-full" />
         </div>
       </div>
       <ng-template pTemplate="footer">
-        <p-button label="Cancel" styleClass="p-button-text" (onClick)="editDialogVisible = false"></p-button>
-        <p-button label="Save" (onClick)="saveTask()" [loading]="isSaving"></p-button>
+        <p-button [label]="t('common.cancel')" styleClass="p-button-text" (onClick)="editDialogVisible = false"></p-button>
+        <p-button [label]="t('common.save')" (onClick)="saveTask()" [loading]="isSaving"></p-button>
       </ng-template>
     </p-dialog>
   `
@@ -397,20 +397,24 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     dueDate: undefined as string | undefined
   };
 
-  statusOptions = [
-    { label: 'Todo', value: 0, severity: 'secondary' },
-    { label: 'In Progress', value: 1, severity: 'info' },
-    { label: 'In Review', value: 2, severity: 'warn' },
-    { label: 'Done', value: 3, severity: 'success' },
-    { label: 'Cancelled', value: 4, severity: 'danger' }
-  ];
+  get statusOptions(): { label: string; value: number; severity: string }[] {
+    return [
+      { label: this.t('tasks.todo'), value: 0, severity: 'secondary' },
+      { label: this.t('tasks.inProgress'), value: 1, severity: 'info' },
+      { label: this.t('tasks.inReview'), value: 2, severity: 'warn' },
+      { label: this.t('tasks.done'), value: 3, severity: 'success' },
+      { label: this.t('tasks.cancelled'), value: 4, severity: 'danger' }
+    ];
+  }
 
-  priorityOptions = [
-    { label: 'Low', value: 0 },
-    { label: 'Medium', value: 1 },
-    { label: 'High', value: 2 },
-    { label: 'Critical', value: 3 }
-  ];
+  get priorityOptions(): { label: string; value: number }[] {
+    return [
+      { label: this.t('tasks.low'), value: 0 },
+      { label: this.t('tasks.medium'), value: 1 },
+      { label: this.t('tasks.high'), value: 2 },
+      { label: this.t('tasks.urgent'), value: 3 }
+    ];
+  }
 
   constructor() {
     effect(() => {
@@ -453,8 +457,8 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   }
 
   getStatusLabel(status: number): string {
-    const labels = ['Todo', 'In Progress', 'In Review', 'Done', 'Cancelled'];
-    return labels[status] || 'Unknown';
+    const labels = ['tasks.todo', 'tasks.inProgress', 'tasks.inReview', 'tasks.done', 'tasks.cancelled'];
+    return this.t(labels[status] || 'common.unknown');
   }
 
   getStatusSeverity(status: number): string {
@@ -463,8 +467,8 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   }
 
   getPriorityLabel(priority: number): string {
-    const labels = ['Low', 'Medium', 'High', 'Critical'];
-    return labels[priority] || 'Unknown';
+    const labels = ['tasks.low', 'tasks.medium', 'tasks.high', 'tasks.urgent'];
+    return this.t(labels[priority] || 'common.unknown');
   }
 
   getPrioritySeverity(priority: number): string {
@@ -491,16 +495,17 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
 
     const success = await this.taskStore.changeStatus(this.task.id, status, this.task.projectId);
     if (success) {
+      const statusKeys = ['todo', 'inProgress', 'inReview', 'done', 'cancelled'];
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Status updated successfully'
+        summary: this.t('common.success'),
+        detail: this.t('tasks.statusChangedTo', { status: this.t('tasks.' + statusKeys[status]) })
       });
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to update status'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.statusUpdateFailed')
       });
     }
   }
@@ -512,14 +517,14 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     if (success) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Task assigned successfully'
+        summary: this.t('common.success'),
+        detail: this.t('tasks.taskAssigned')
       });
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to assign task'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.assignFailed')
       });
     }
   }
@@ -531,15 +536,15 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     if (success) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Comment added successfully'
+        summary: this.t('common.success'),
+        detail: this.t('tasks.commentAdded')
       });
       this.newComment = '';
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to add comment'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.commentFailed')
       });
     }
   }
@@ -553,14 +558,14 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     if (success) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'File uploaded successfully'
+        summary: this.t('common.success'),
+        detail: this.t('tasks.attachmentUploaded')
       });
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to upload file'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.uploadFailed')
       });
     }
   }
@@ -569,15 +574,15 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     // TODO: Implement download when backend file serving is ready
     this.messageService.add({
       severity: 'info',
-      summary: 'Info',
-      detail: 'Download functionality will be available when file serving is configured'
+      summary: this.t('common.info'),
+      detail: this.t('tasks.downloadNotAvailable')
     });
   }
 
   confirmDeleteAttachment(attachment: TaskAttachment): void {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete "${attachment.fileName}"?`,
-      header: 'Confirm Delete',
+      message: this.t('tasks.confirmDeleteAttachment', { name: attachment.fileName }),
+      header: this.t('common.confirm'),
       icon: 'pi pi-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
@@ -593,14 +598,14 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     if (success) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Attachment deleted successfully'
+        summary: this.t('common.success'),
+        detail: this.t('tasks.attachmentDeleted')
       });
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to delete attachment'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.deleteAttachmentFailed')
       });
     }
   }
@@ -642,15 +647,15 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     if (success) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Task updated successfully'
+        summary: this.t('common.success'),
+        detail: this.t('tasks.taskUpdated')
       });
       this.editDialogVisible = false;
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to update task'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.updateFailed')
       });
     }
   }
@@ -659,8 +664,8 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     if (!this.task) return;
 
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete "${this.task.title}"?`,
-      header: 'Confirm Delete',
+      message: this.t('tasks.confirmDelete', { name: this.task.title }),
+      header: this.t('common.confirm'),
       icon: 'pi pi-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
@@ -676,15 +681,15 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     if (success) {
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Task deleted successfully'
+        summary: this.t('common.success'),
+        detail: this.t('tasks.taskDeleted')
       });
       this.router.navigate(['/projects', this.task.projectId]);
     } else {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to delete task'
+        summary: this.t('common.error'),
+        detail: this.t('tasks.deleteFailed')
       });
     }
   }
