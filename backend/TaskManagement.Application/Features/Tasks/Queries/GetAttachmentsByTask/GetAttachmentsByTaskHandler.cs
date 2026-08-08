@@ -8,10 +8,14 @@ namespace TaskManagement.Application.Features.Tasks.Queries.GetAttachmentsByTask
 public class GetAttachmentsByTaskHandler : IRequestHandler<GetAttachmentsByTaskQuery, BaseResponse<List<TaskAttachmentDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILocalizer _localizer;
 
-    public GetAttachmentsByTaskHandler(IUnitOfWork unitOfWork)
+    public GetAttachmentsByTaskHandler(
+        IUnitOfWork unitOfWork,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<List<TaskAttachmentDto>>> Handle(
@@ -36,7 +40,7 @@ public class GetAttachmentsByTaskHandler : IRequestHandler<GetAttachmentsByTaskQ
         return new BaseResponse<List<TaskAttachmentDto>>
         {
             Success = true,
-            Message = "Attachments retrieved successfully",
+            Message = _localizer.Get("AttachmentsRetrieved"),
             Data = dtoList
         };
     }

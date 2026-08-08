@@ -12,15 +12,18 @@ public class GetProfileHandler : IRequestHandler<GetProfileQuery, BaseResponse<P
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
     private readonly UserManager<User> _userManager;
+    private readonly ILocalizer _localizer;
 
     public GetProfileHandler(
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUserService,
-        UserManager<User> userManager)
+        UserManager<User> userManager,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
         _userManager = userManager;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<ProfileDto>> Handle(
@@ -33,7 +36,7 @@ public class GetProfileHandler : IRequestHandler<GetProfileQuery, BaseResponse<P
             return new BaseResponse<ProfileDto>
             {
                 Success = false,
-                Message = "User not authenticated"
+                Message = _localizer.Get("UserNotAuthenticated")
             };
         }
 
@@ -43,7 +46,7 @@ public class GetProfileHandler : IRequestHandler<GetProfileQuery, BaseResponse<P
             return new BaseResponse<ProfileDto>
             {
                 Success = false,
-                Message = "User not found"
+                Message = _localizer.Get("UserNotFound")
             };
         }
 
@@ -64,7 +67,7 @@ public class GetProfileHandler : IRequestHandler<GetProfileQuery, BaseResponse<P
         return new BaseResponse<ProfileDto>
         {
             Success = true,
-            Message = "Profile retrieved successfully",
+            Message = _localizer.Get("ProfileRetrieved"),
             Data = profile
         };
     }

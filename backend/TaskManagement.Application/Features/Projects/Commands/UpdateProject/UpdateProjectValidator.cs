@@ -1,17 +1,22 @@
 using FluentValidation;
+using TaskManagement.Application.Common.Interfaces;
 
 namespace TaskManagement.Application.Features.Projects.Commands.UpdateProject;
 
 public class UpdateProjectValidator : AbstractValidator<UpdateProjectCommand>
 {
-    public UpdateProjectValidator()
+    private readonly ILocalizer _localizer;
+
+    public UpdateProjectValidator(ILocalizer localizer)
     {
+        _localizer = localizer;
+
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Project ID is required");
+            .NotEmpty().WithMessage(_localizer.Get("ProjectIdRequired"));
 
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Project name is required")
-            .MinimumLength(3).WithMessage("Project name must be at least 3 characters")
-            .MaximumLength(100).WithMessage("Project name must not exceed 100 characters");
+            .NotEmpty().WithMessage(_localizer.Get("ProjectNameRequired"))
+            .MinimumLength(3).WithMessage(_localizer.Get("ProjectNameMinLength"))
+            .MaximumLength(100).WithMessage(_localizer.Get("ProjectNameMaxLength"));
     }
 }

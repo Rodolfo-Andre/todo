@@ -11,15 +11,18 @@ public class UploadAttachmentHandler : IRequestHandler<UploadAttachmentCommand, 
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
     private readonly IFileStorageService _fileStorageService;
+    private readonly ILocalizer _localizer;
 
     public UploadAttachmentHandler(
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUserService,
-        IFileStorageService fileStorageService)
+        IFileStorageService fileStorageService,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
         _fileStorageService = fileStorageService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<TaskAttachmentDto>> Handle(
@@ -32,7 +35,7 @@ public class UploadAttachmentHandler : IRequestHandler<UploadAttachmentCommand, 
             return new BaseResponse<TaskAttachmentDto>
             {
                 Success = false,
-                Message = "User not authenticated"
+                Message = _localizer.Get("UserNotAuthenticated")
             };
         }
 
@@ -42,7 +45,7 @@ public class UploadAttachmentHandler : IRequestHandler<UploadAttachmentCommand, 
             return new BaseResponse<TaskAttachmentDto>
             {
                 Success = false,
-                Message = "Task not found"
+                Message = _localizer.Get("TaskNotFound")
             };
         }
 
@@ -77,7 +80,7 @@ public class UploadAttachmentHandler : IRequestHandler<UploadAttachmentCommand, 
         return new BaseResponse<TaskAttachmentDto>
         {
             Success = true,
-            Message = "File uploaded successfully",
+            Message = _localizer.Get("AttachmentUploaded"),
             Data = dto
         };
     }

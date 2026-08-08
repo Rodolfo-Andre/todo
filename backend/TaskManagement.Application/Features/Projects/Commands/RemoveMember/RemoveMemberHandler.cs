@@ -8,10 +8,12 @@ namespace TaskManagement.Application.Features.Projects.Commands.RemoveMember;
 public class RemoveMemberHandler : IRequestHandler<RemoveMemberCommand, BaseResponse<bool>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILocalizer _localizer;
 
-    public RemoveMemberHandler(IUnitOfWork unitOfWork)
+    public RemoveMemberHandler(IUnitOfWork unitOfWork, ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(RemoveMemberCommand request, CancellationToken cancellationToken)
@@ -22,7 +24,7 @@ public class RemoveMemberHandler : IRequestHandler<RemoveMemberCommand, BaseResp
 
         if (member == null)
         {
-            return BaseResponse<bool>.Failure("Member not found in this project");
+            return BaseResponse<bool>.Failure(_localizer.Get("MemberNotFoundInProject"));
         }
 
         _unitOfWork.ProjectMembers.Delete(member);

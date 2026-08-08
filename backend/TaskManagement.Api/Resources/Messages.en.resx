@@ -274,4 +274,168 @@
     <value>Password must be at least {0} characters</value>
   </data>
 
+  <!-- Error Messages (used by handlers) -->
+  <data name="EmailAlreadyExists" xml:space="preserve">
+    <value>Email already exists</value>
+  </data>
+  <data name="UsernameAlreadyExists" xml:space="preserve">
+    <value>Username already exists</value>
+  </data>
+  <data name="AccountDeactivated" xml:space="preserve">
+    <value>Account is deactivated</value>
+  </data>
+  <data name="InvalidRefreshToken" xml:space="preserve">
+    <value>Invalid refresh token</value>
+  </data>
+  <data name="InvalidOrExpiredRefreshToken" xml:space="preserve">
+    <value>Invalid or expired refresh token</value>
+  </data>
+  <data name="CannotDeleteOwnAccount" xml:space="preserve">
+    <value>You cannot delete your own account</value>
+  </data>
+  <data name="EmailAlreadyTakenByAnother" xml:space="preserve">
+    <value>Email is already taken by another user</value>
+  </data>
+  <data name="UserAlreadyMember" xml:space="preserve">
+    <value>User is already a member of this project</value>
+  </data>
+  <data name="MemberNotFoundInProject" xml:space="preserve">
+    <value>Member not found in this project</value>
+  </data>
+
+  <!-- Middleware Messages -->
+  <data name="BusinessRuleViolation" xml:space="preserve">
+    <value>Business rule violation</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>An unexpected error occurred</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Internal server error</value>
+  </data>
+
+  <!-- Retrieved Messages -->
+  <data name="UserNotAuthenticated" xml:space="preserve">
+    <value>User not authenticated</value>
+  </data>
+  <data name="ProfileRetrieved" xml:space="preserve">
+    <value>Profile retrieved successfully</value>
+  </data>
+  <data name="NotificationsRetrieved" xml:space="preserve">
+    <value>Notifications retrieved successfully</value>
+  </data>
+  <data name="UnreadCountRetrieved" xml:space="preserve">
+    <value>Unread count retrieved successfully</value>
+  </data>
+  <data name="AttachmentsRetrieved" xml:space="preserve">
+    <value>Attachments retrieved successfully</value>
+  </data>
+
+  <!-- Field Validation Messages -->
+  <data name="UsernameRequired" xml:space="preserve">
+    <value>Username is required</value>
+  </data>
+  <data name="UsernameMinLength" xml:space="preserve">
+    <value>Username must be at least 3 characters</value>
+  </data>
+  <data name="UsernameMaxLength" xml:space="preserve">
+    <value>Username must not exceed 50 characters</value>
+  </data>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>Email is required</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Password is required</value>
+  </data>
+  <data name="PasswordMinLength" xml:space="preserve">
+    <value>Password must be at least 8 characters</value>
+  </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+    <value>Password must contain at least one uppercase letter</value>
+  </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+    <value>Password must contain at least one lowercase letter</value>
+  </data>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+    <value>Password must contain at least one digit</value>
+  </data>
+  <data name="FullNameRequired" xml:space="preserve">
+    <value>Full name is required</value>
+  </data>
+  <data name="FullNameMinLength" xml:space="preserve">
+    <value>Full name must be at least 2 characters</value>
+  </data>
+  <data name="FullNameMaxLength" xml:space="preserve">
+    <value>Full name must not exceed 100 characters</value>
+  </data>
+  <data name="RefreshTokenRequired" xml:space="preserve">
+    <value>Refresh token is required</value>
+  </data>
+  <data name="ProjectNameRequired" xml:space="preserve">
+    <value>Project name is required</value>
+  </data>
+  <data name="ProjectNameMinLength" xml:space="preserve">
+    <value>Project name must be at least 3 characters</value>
+  </data>
+  <data name="ProjectNameMaxLength" xml:space="preserve">
+    <value>Project name must not exceed 100 characters</value>
+  </data>
+  <data name="ProjectKeyRequired" xml:space="preserve">
+    <value>Project key is required</value>
+  </data>
+  <data name="ProjectKeyMinLength" xml:space="preserve">
+    <value>Project key must be at least 2 characters</value>
+  </data>
+  <data name="ProjectKeyMaxLength" xml:space="preserve">
+    <value>Project key must not exceed 10 characters</value>
+  </data>
+  <data name="ProjectKeyPattern" xml:space="preserve">
+    <value>Project key must contain only uppercase letters and numbers</value>
+  </data>
+  <data name="ProjectIdRequired" xml:space="preserve">
+    <value>Project ID is required</value>
+  </data>
+  <data name="ProjectRequired" xml:space="preserve">
+    <value>Project is required</value>
+  </data>
+  <data name="TaskTitleRequired" xml:space="preserve">
+    <value>Task title is required</value>
+  </data>
+  <data name="TaskTitleMinLength" xml:space="preserve">
+    <value>Task title must be at least 3 characters</value>
+  </data>
+  <data name="TaskTitleMaxLength" xml:space="preserve">
+    <value>Task title must not exceed 200 characters</value>
+  </data>
+  <data name="TaskIdRequired" xml:space="preserve">
+    <value>Task ID is required</value>
+  </data>
+  <data name="TaskRequired" xml:space="preserve">
+    <value>Task is required</value>
+  </data>
+  <data name="InvalidStatus" xml:space="preserve">
+    <value>Status must be between 0 and 4</value>
+  </data>
+  <data name="InvalidPriority" xml:space="preserve">
+    <value>Priority must be between 0 and 3</value>
+  </data>
+  <data name="InvalidStoryPoints" xml:space="preserve">
+    <value>Story points must be between 1 and 100</value>
+  </data>
+  <data name="CommentRequired" xml:space="preserve">
+    <value>Comment content is required</value>
+  </data>
+  <data name="CommentMaxLength" xml:space="preserve">
+    <value>Comment must not exceed 2000 characters</value>
+  </data>
+  <data name="RoleRequired" xml:space="preserve">
+    <value>Role is required</value>
+  </data>
+  <data name="InvalidRole" xml:space="preserve">
+    <value>Invalid role. Must be: Admin, ProjectManager, Developer, or Viewer</value>
+  </data>
+  <data name="UserIdRequired" xml:space="preserve">
+    <value>User ID is required</value>
+  </data>
+
 </root>

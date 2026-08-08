@@ -7,10 +7,14 @@ namespace TaskManagement.Application.Features.Notifications.Commands.MarkAsRead;
 public class MarkAsReadHandler : IRequestHandler<MarkAsReadCommand, BaseResponse<bool>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILocalizer _localizer;
 
-    public MarkAsReadHandler(IUnitOfWork unitOfWork)
+    public MarkAsReadHandler(
+        IUnitOfWork unitOfWork,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(
@@ -23,7 +27,7 @@ public class MarkAsReadHandler : IRequestHandler<MarkAsReadCommand, BaseResponse
             return new BaseResponse<bool>
             {
                 Success = false,
-                Message = "Notification not found"
+                Message = _localizer.Get("NotificationNotFound")
             };
         }
 
@@ -34,7 +38,7 @@ public class MarkAsReadHandler : IRequestHandler<MarkAsReadCommand, BaseResponse
         return new BaseResponse<bool>
         {
             Success = true,
-            Message = "Notification marked as read",
+            Message = _localizer.Get("NotificationMarkedAsRead"),
             Data = true
         };
     }

@@ -9,11 +9,13 @@ public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, BaseRe
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
-    public DeleteProjectHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+    public DeleteProjectHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
@@ -22,7 +24,7 @@ public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, BaseRe
 
         if (project == null || project.DeletedAt.HasValue)
         {
-            return BaseResponse<bool>.Failure("Project not found");
+            return BaseResponse<bool>.Failure(_localizer.Get("ProjectNotFound"));
         }
 
         // Soft delete

@@ -9,11 +9,13 @@ public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, BaseRe
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
-    public UpdateProjectHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+    public UpdateProjectHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
@@ -22,7 +24,7 @@ public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, BaseRe
 
         if (project == null || project.DeletedAt.HasValue)
         {
-            return BaseResponse<bool>.Failure("Project not found");
+            return BaseResponse<bool>.Failure(_localizer.Get("ProjectNotFound"));
         }
 
         project.Name = request.Name;

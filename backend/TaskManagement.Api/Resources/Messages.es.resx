@@ -274,4 +274,168 @@
     <value>La contraseña debe tener al menos {0} caracteres</value>
   </data>
 
+  <!-- Error Messages (usados por handlers) -->
+  <data name="EmailAlreadyExists" xml:space="preserve">
+    <value>El correo electrónico ya existe</value>
+  </data>
+  <data name="UsernameAlreadyExists" xml:space="preserve">
+    <value>El nombre de usuario ya existe</value>
+  </data>
+  <data name="AccountDeactivated" xml:space="preserve">
+    <value>La cuenta está desactivada</value>
+  </data>
+  <data name="InvalidRefreshToken" xml:space="preserve">
+    <value>Token de refresco inválido</value>
+  </data>
+  <data name="InvalidOrExpiredRefreshToken" xml:space="preserve">
+    <value>Token de refresco inválido o expirado</value>
+  </data>
+  <data name="CannotDeleteOwnAccount" xml:space="preserve">
+    <value>No puedes eliminar tu propia cuenta</value>
+  </data>
+  <data name="EmailAlreadyTakenByAnother" xml:space="preserve">
+    <value>El correo electrónico ya está en uso por otro usuario</value>
+  </data>
+  <data name="UserAlreadyMember" xml:space="preserve">
+    <value>El usuario ya es miembro de este proyecto</value>
+  </data>
+  <data name="MemberNotFoundInProject" xml:space="preserve">
+    <value>Miembro no encontrado en este proyecto</value>
+  </data>
+
+  <!-- Middleware Messages -->
+  <data name="BusinessRuleViolation" xml:space="preserve">
+    <value>Violación de regla de negocio</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>Ocurrió un error inesperado</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Error interno del servidor</value>
+  </data>
+
+  <!-- Retrieved Messages -->
+  <data name="UserNotAuthenticated" xml:space="preserve">
+    <value>Usuario no autenticado</value>
+  </data>
+  <data name="ProfileRetrieved" xml:space="preserve">
+    <value>Perfil obtenido exitosamente</value>
+  </data>
+  <data name="NotificationsRetrieved" xml:space="preserve">
+    <value>Notificaciones obtenidas exitosamente</value>
+  </data>
+  <data name="UnreadCountRetrieved" xml:space="preserve">
+    <value>Cantidad de no leídas obtenida exitosamente</value>
+  </data>
+  <data name="AttachmentsRetrieved" xml:space="preserve">
+    <value>Archivos adjuntos obtenidos exitosamente</value>
+  </data>
+
+  <!-- Field Validation Messages -->
+  <data name="UsernameRequired" xml:space="preserve">
+    <value>El nombre de usuario es requerido</value>
+  </data>
+  <data name="UsernameMinLength" xml:space="preserve">
+    <value>El nombre de usuario debe tener al menos 3 caracteres</value>
+  </data>
+  <data name="UsernameMaxLength" xml:space="preserve">
+    <value>El nombre de usuario no puede exceder 50 caracteres</value>
+  </data>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>El correo electrónico es requerido</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>La contraseña es requerida</value>
+  </data>
+  <data name="PasswordMinLength" xml:space="preserve">
+    <value>La contraseña debe tener al menos 8 caracteres</value>
+  </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+    <value>La contraseña debe contener al menos una letra mayúscula</value>
+  </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+    <value>La contraseña debe contener al menos una letra minúscula</value>
+  </data>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+    <value>La contraseña debe contener al menos un número</value>
+  </data>
+  <data name="FullNameRequired" xml:space="preserve">
+    <value>El nombre completo es requerido</value>
+  </data>
+  <data name="FullNameMinLength" xml:space="preserve">
+    <value>El nombre completo debe tener al menos 2 caracteres</value>
+  </data>
+  <data name="FullNameMaxLength" xml:space="preserve">
+    <value>El nombre completo no puede exceder 100 caracteres</value>
+  </data>
+  <data name="RefreshTokenRequired" xml:space="preserve">
+    <value>El token de refresco es requerido</value>
+  </data>
+  <data name="ProjectNameRequired" xml:space="preserve">
+    <value>El nombre del proyecto es requerido</value>
+  </data>
+  <data name="ProjectNameMinLength" xml:space="preserve">
+    <value>El nombre del proyecto debe tener al menos 3 caracteres</value>
+  </data>
+  <data name="ProjectNameMaxLength" xml:space="preserve">
+    <value>El nombre del proyecto no puede exceder 100 caracteres</value>
+  </data>
+  <data name="ProjectKeyRequired" xml:space="preserve">
+    <value>La clave del proyecto es requerida</value>
+  </data>
+  <data name="ProjectKeyMinLength" xml:space="preserve">
+    <value>La clave del proyecto debe tener al menos 2 caracteres</value>
+  </data>
+  <data name="ProjectKeyMaxLength" xml:space="preserve">
+    <value>La clave del proyecto no puede exceder 10 caracteres</value>
+  </data>
+  <data name="ProjectKeyPattern" xml:space="preserve">
+    <value>La clave del proyecto debe contener solo letras mayúsculas y números</value>
+  </data>
+  <data name="ProjectIdRequired" xml:space="preserve">
+    <value>El ID del proyecto es requerido</value>
+  </data>
+  <data name="ProjectRequired" xml:space="preserve">
+    <value>El proyecto es requerido</value>
+  </data>
+  <data name="TaskTitleRequired" xml:space="preserve">
+    <value>El título de la tarea es requerido</value>
+  </data>
+  <data name="TaskTitleMinLength" xml:space="preserve">
+    <value>El título de la tarea debe tener al menos 3 caracteres</value>
+  </data>
+  <data name="TaskTitleMaxLength" xml:space="preserve">
+    <value>El título de la tarea no puede exceder 200 caracteres</value>
+  </data>
+  <data name="TaskIdRequired" xml:space="preserve">
+    <value>El ID de la tarea es requerido</value>
+  </data>
+  <data name="TaskRequired" xml:space="preserve">
+    <value>La tarea es requerida</value>
+  </data>
+  <data name="InvalidStatus" xml:space="preserve">
+    <value>El estado debe estar entre 0 y 4</value>
+  </data>
+  <data name="InvalidPriority" xml:space="preserve">
+    <value>La prioridad debe estar entre 0 y 3</value>
+  </data>
+  <data name="InvalidStoryPoints" xml:space="preserve">
+    <value>Los story points deben estar entre 1 y 100</value>
+  </data>
+  <data name="CommentRequired" xml:space="preserve">
+    <value>El contenido del comentario es requerido</value>
+  </data>
+  <data name="CommentMaxLength" xml:space="preserve">
+    <value>El comentario no puede exceder 2000 caracteres</value>
+  </data>
+  <data name="RoleRequired" xml:space="preserve">
+    <value>El rol es requerido</value>
+  </data>
+  <data name="InvalidRole" xml:space="preserve">
+    <value>Rol inválido. Debe ser: Admin, ProjectManager, Developer o Viewer</value>
+  </data>
+  <data name="UserIdRequired" xml:space="preserve">
+    <value>El ID del usuario es requerido</value>
+  </data>
+
 </root>

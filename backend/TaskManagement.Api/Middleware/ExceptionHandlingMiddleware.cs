@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using TaskManagement.Application.Common.Interfaces;
 using TaskManagement.Domain.Exceptions;
 using TaskManagement.Shared.Exceptions;
 using TaskManagement.Shared.Models;
@@ -10,11 +11,13 @@ public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+    private readonly ILocalizer _localizer;
 
-    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger, ILocalizer localizer)
     {
         _next = next;
         _logger = logger;
+        _localizer = localizer;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -41,28 +44,28 @@ public class ExceptionHandlingMiddleware
                 statusCode = (int)HttpStatusCode.BadRequest,
                 success = false,
                 errors = validationEx.Errors.Values.SelectMany(e => e).ToArray(),
-                message = "Validation failed"
+                message = _localizer.Get("ValidationError")
             },
             NotFoundException notFoundEx => new
             {
                 statusCode = (int)HttpStatusCode.NotFound,
                 success = false,
                 errors = new[] { notFoundEx.Message },
-                message = "Resource not found"
+                message = _localizer.Get("NotFound")
             },
             DomainException domainEx => new
             {
                 statusCode = (int)HttpStatusCode.BadRequest,
                 success = false,
                 errors = new[] { domainEx.Message },
-                message = "Business rule violation"
+                message = _localizer.Get("BusinessRuleViolation")
             },
             _ => new
             {
                 statusCode = (int)HttpStatusCode.InternalServerError,
                 success = false,
-                errors = new[] { "An unexpected error occurred" },
-                message = "Internal server error"
+                errors = new[] { _localizer.Get("UnexpectedError") },
+                message = _localizer.Get("InternalServerError")
             }
         };
 

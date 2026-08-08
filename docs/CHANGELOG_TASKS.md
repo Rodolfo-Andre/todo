@@ -437,6 +437,29 @@ C:\Cursos\MimoCode\
 
 ---
 
+### Fase 13: Limpieza de Backend + Localización de Respuestas API
+
+#### Limpieza de archivos no utilizados
+- Eliminados 4 archivos `Class1.cs` de plantilla (Application, Domain, Infrastructure, Shared)
+- Eliminadas carpetas vacías residuales (Application/Common/Exceptions, Application/Features/Attachments, Api/Filters, etc.)
+
+#### Localización de respuestas del backend (i18n completo)
+- **ILocalizer movido a Application**: Nueva interfaz en `TaskManagement.Application/Common/Interfaces/ILocalizer.cs` para que los handlers puedan traducir sin referenciar `Api.Resources`. `Localizer` en `Api/Resources` ahora la implementa
+- **38 handlers localizados**: Todos los mensajes de éxito/error de handlers (Auth, Users, Projects, Tasks, Notifications, Profile, Audit, Dashboard) ahora usan `_localizer.Get("Key")`
+- **ExceptionHandlingMiddleware localizado**: Mensajes de validación, NotFound, reglas de negocio y errores internos traducidos según idioma
+- **11 validators FluentValidation localizados**: Mensajes de validación de campos (EmailRequired, UsernameMinLength, InvalidRole, etc.) traducidos
+- **~70 keys agregadas** a `Messages.es.resx` y `Messages.en.resx`
+- **Fix RefreshToken**: Token de refresco malformado devolvía 500; ahora se captura la excepción y responde 400 con "InvalidRefreshToken"
+- **Frontend**: El interceptor `auth.interceptor.ts` ahora envía el header `Accept-Language` (desde `localStorage['language']`) en TODAS las peticiones, incluidas las de login/register sin token
+
+#### Verificación runtime
+- Login fallido: `es` → "Credenciales inválidas" / `en` → "Invalid credentials"
+- Validación: `es` → "El correo electrónico no es válido" / `en` → "The email is not valid"
+- Refresh token inválido: `es` → "Token de refresco inválido" / `en` → "Invalid refresh token"
+- Middleware de excepciones: `es` → "Ocurrió un error inesperado" / `en` → "An unexpected error occurred"
+
+---
+
 ## Pendientes / Mejoras Futuras
 
 1. **Filtros avanzados**: Agregar filtros por fecha, etiquetas y miembros

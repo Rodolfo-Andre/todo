@@ -1,17 +1,22 @@
 using FluentValidation;
+using TaskManagement.Application.Common.Interfaces;
 using TaskManagement.Shared.Constants;
 
 namespace TaskManagement.Application.Features.Users.Commands.ChangeRole;
 
 public class ChangeRoleValidator : AbstractValidator<ChangeRoleCommand>
 {
-    public ChangeRoleValidator()
+    private readonly ILocalizer _localizer;
+
+    public ChangeRoleValidator(ILocalizer localizer)
     {
+        _localizer = localizer;
+
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("User ID is required");
+            .NotEmpty().WithMessage(_localizer.Get("UserIdRequired"));
 
         RuleFor(x => x.Role)
-            .NotEmpty().WithMessage("Role is required")
+            .NotEmpty().WithMessage(_localizer.Get("RoleRequired"))
             .Must(role => new[] 
             { 
                 RoleConstants.Admin, 
@@ -19,6 +24,6 @@ public class ChangeRoleValidator : AbstractValidator<ChangeRoleCommand>
                 RoleConstants.Developer, 
                 RoleConstants.Viewer 
             }.Contains(role))
-            .WithMessage("Invalid role. Must be: Admin, ProjectManager, Developer, or Viewer");
+            .WithMessage(_localizer.Get("InvalidRole"));
     }
 }

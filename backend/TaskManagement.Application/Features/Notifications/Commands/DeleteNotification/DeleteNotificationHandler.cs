@@ -7,10 +7,14 @@ namespace TaskManagement.Application.Features.Notifications.Commands.DeleteNotif
 public class DeleteNotificationHandler : IRequestHandler<DeleteNotificationCommand, BaseResponse<bool>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILocalizer _localizer;
 
-    public DeleteNotificationHandler(IUnitOfWork unitOfWork)
+    public DeleteNotificationHandler(
+        IUnitOfWork unitOfWork,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(
@@ -23,7 +27,7 @@ public class DeleteNotificationHandler : IRequestHandler<DeleteNotificationComma
             return new BaseResponse<bool>
             {
                 Success = false,
-                Message = "Notification not found"
+                Message = _localizer.Get("NotificationNotFound")
             };
         }
 
@@ -33,7 +37,7 @@ public class DeleteNotificationHandler : IRequestHandler<DeleteNotificationComma
         return new BaseResponse<bool>
         {
             Success = true,
-            Message = "Notification deleted successfully",
+            Message = _localizer.Get("NotificationDeleted"),
             Data = true
         };
     }

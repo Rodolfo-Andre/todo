@@ -11,15 +11,18 @@ public class UpdateProfileHandler : IRequestHandler<UpdateProfileCommand, BaseRe
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
     private readonly UserManager<User> _userManager;
+    private readonly ILocalizer _localizer;
 
     public UpdateProfileHandler(
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUserService,
-        UserManager<User> userManager)
+        UserManager<User> userManager,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
         _userManager = userManager;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(
@@ -32,7 +35,7 @@ public class UpdateProfileHandler : IRequestHandler<UpdateProfileCommand, BaseRe
             return new BaseResponse<bool>
             {
                 Success = false,
-                Message = "User not authenticated"
+                Message = _localizer.Get("UserNotAuthenticated")
             };
         }
 
@@ -42,7 +45,7 @@ public class UpdateProfileHandler : IRequestHandler<UpdateProfileCommand, BaseRe
             return new BaseResponse<bool>
             {
                 Success = false,
-                Message = "User not found"
+                Message = _localizer.Get("UserNotFound")
             };
         }
 
@@ -55,7 +58,7 @@ public class UpdateProfileHandler : IRequestHandler<UpdateProfileCommand, BaseRe
                 return new BaseResponse<bool>
                 {
                     Success = false,
-                    Message = "Email is already taken"
+                    Message = _localizer.Get("EmailAlreadyTaken")
                 };
             }
         }
@@ -72,7 +75,7 @@ public class UpdateProfileHandler : IRequestHandler<UpdateProfileCommand, BaseRe
             return new BaseResponse<bool>
             {
                 Success = false,
-                Message = "Failed to update profile",
+                Message = _localizer.Get("ProfileUpdateFailed"),
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }
@@ -80,7 +83,7 @@ public class UpdateProfileHandler : IRequestHandler<UpdateProfileCommand, BaseRe
         return new BaseResponse<bool>
         {
             Success = true,
-            Message = "Profile updated successfully",
+            Message = _localizer.Get("ProfileUpdated"),
             Data = true
         };
     }

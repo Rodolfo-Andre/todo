@@ -12,11 +12,13 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, BaseResponse<Aut
 {
     private readonly UserManager<User> _userManager;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly ILocalizer _localizer;
 
-    public RegisterHandler(UserManager<User> userManager, IJwtTokenService jwtTokenService)
+    public RegisterHandler(UserManager<User> userManager, IJwtTokenService jwtTokenService, ILocalizer localizer)
     {
         _userManager = userManager;
         _jwtTokenService = jwtTokenService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<AuthResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -25,14 +27,14 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, BaseResponse<Aut
         var existingUser = await _userManager.FindByEmailAsync(request.Email);
         if (existingUser != null)
         {
-            return BaseResponse<AuthResponse>.Failure("Email already exists");
+            return BaseResponse<AuthResponse>.Failure(_localizer.Get("EmailAlreadyExists"));
         }
 
         // Check if username already exists
         var existingUserName = await _userManager.FindByNameAsync(request.UserName);
         if (existingUserName != null)
         {
-            return BaseResponse<AuthResponse>.Failure("Username already exists");
+            return BaseResponse<AuthResponse>.Failure(_localizer.Get("UsernameAlreadyExists"));
         }
 
         var user = new User

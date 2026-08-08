@@ -59,12 +59,13 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 | Dashboard | ✅ | GetDashboardData |
 | Profile | ✅ | GetProfile, UpdateProfile, ChangePassword |
 | Audit | ✅ | GetAuditLogs, GetAuditSummary, IAuditService |
-| i18n | ✅ | Messages.es.resx, Messages.en.resx, Localizer |
-| Application Common | ✅ | IUnitOfWork, IRepository, IJwtTokenService, ICurrentUserService, IFileStorageService, IAuditService, Behaviors (Validation, Performance, Logging) |
+| i18n | ✅ | Messages.es.resx, Messages.en.resx, Localizer, ILocalizer (Application) |
+| Application Common | ✅ | IUnitOfWork, IRepository, IJwtTokenService, ICurrentUserService, IFileStorageService, IAuditService, ILocalizer, Behaviors (Validation, Performance, Logging) |
 | Infrastructure | ✅ | AppDbContext, JwtTokenService, CurrentUserService, UnitOfWork, FileStorageService, AuditService, Seeds (Roles, Admin) |
 | API Controllers | ✅ | AuthController, UsersController, ProjectsController, TasksController, DashboardController, NotificationsController, ProfileController, AuditController |
-| Middleware | ✅ | ExceptionHandlingMiddleware |
+| Middleware | ✅ | ExceptionHandlingMiddleware (localizado) |
 | Swagger | ✅ | CustomSchemaIds (FullName) para evitar conflictos de schemaId |
+| Respuestas localizadas | ✅ | Handlers, validators y middleware usan ILocalizer según Accept-Language |
 
 ### 4.2 Backend — Pendiente
 
@@ -111,6 +112,7 @@ Infrastructure (EF Core, JWT, Services, Repositories)
 ## 5. Git History
 
 ```
+feat: localize backend responses + cleanup unused files (i18n)
 feat: restructure repo folders + fix Swagger schemaId conflict
 feat: i18n - traducir todos los componentes frontend
 bd9e6d1 feat: fix compilation errors (Audit handlers, Localizer, angular.json)
@@ -127,7 +129,7 @@ dcf7258 feat: implement Users Management and improve UI
 ```
 
 **Rama actual:** `master`
-**Último commit:** reestructura del repositorio + fix Swagger
+**Último commit:** localización de respuestas backend + limpieza de archivos
 
 ---
 

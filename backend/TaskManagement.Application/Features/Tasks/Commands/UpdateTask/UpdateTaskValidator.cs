@@ -1,24 +1,29 @@
 using FluentValidation;
+using TaskManagement.Application.Common.Interfaces;
 
 namespace TaskManagement.Application.Features.Tasks.Commands.UpdateTask;
 
 public class UpdateTaskValidator : AbstractValidator<UpdateTaskCommand>
 {
-    public UpdateTaskValidator()
+    private readonly ILocalizer _localizer;
+
+    public UpdateTaskValidator(ILocalizer localizer)
     {
+        _localizer = localizer;
+
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Task ID is required");
+            .NotEmpty().WithMessage(_localizer.Get("TaskIdRequired"));
 
         RuleFor(x => x.Title)
-            .NotEmpty().WithMessage("Task title is required")
-            .MinimumLength(3).WithMessage("Task title must be at least 3 characters")
-            .MaximumLength(200).WithMessage("Task title must not exceed 200 characters");
+            .NotEmpty().WithMessage(_localizer.Get("TaskTitleRequired"))
+            .MinimumLength(3).WithMessage(_localizer.Get("TaskTitleMinLength"))
+            .MaximumLength(200).WithMessage(_localizer.Get("TaskTitleMaxLength"));
 
         RuleFor(x => x.Priority)
-            .InclusiveBetween(0, 3).WithMessage("Priority must be between 0 and 3");
+            .InclusiveBetween(0, 3).WithMessage(_localizer.Get("InvalidPriority"));
 
         RuleFor(x => x.StoryPoints)
             .InclusiveBetween(1, 100).When(x => x.StoryPoints.HasValue)
-            .WithMessage("Story points must be between 1 and 100");
+            .WithMessage(_localizer.Get("InvalidStoryPoints"));
     }
 }

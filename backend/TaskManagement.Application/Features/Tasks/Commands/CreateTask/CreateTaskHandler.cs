@@ -9,11 +9,13 @@ public class CreateTaskHandler : IRequestHandler<CreateTaskCommand, BaseResponse
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
-    public CreateTaskHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+    public CreateTaskHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<Guid>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
@@ -21,7 +23,7 @@ public class CreateTaskHandler : IRequestHandler<CreateTaskCommand, BaseResponse
         var project = await _unitOfWork.Projects.GetByIdAsync(request.ProjectId, cancellationToken);
         if (project == null)
         {
-            return BaseResponse<Guid>.Failure("Project not found");
+            return BaseResponse<Guid>.Failure(_localizer.Get("ProjectNotFound"));
         }
 
         var userId = Guid.Parse(_currentUserService.UserId);

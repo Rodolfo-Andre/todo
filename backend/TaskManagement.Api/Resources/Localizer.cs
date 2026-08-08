@@ -1,17 +1,9 @@
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
+using TaskManagement.Application.Common.Interfaces;
 
 namespace TaskManagement.Api.Resources;
-
-public interface ILocalizer
-{
-    string this[string key] { get; }
-    string this[string key, params object[] args] { get; }
-    string Get(string key);
-    string Get(string key, params object[] args);
-    CultureInfo CurrentCulture { get; }
-}
 
 public class Localizer : ILocalizer
 {

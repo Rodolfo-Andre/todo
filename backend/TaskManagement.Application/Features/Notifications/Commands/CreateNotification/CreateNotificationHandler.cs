@@ -9,10 +9,14 @@ namespace TaskManagement.Application.Features.Notifications.Commands.CreateNotif
 public class CreateNotificationHandler : IRequestHandler<CreateNotificationCommand, BaseResponse<NotificationDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILocalizer _localizer;
 
-    public CreateNotificationHandler(IUnitOfWork unitOfWork)
+    public CreateNotificationHandler(
+        IUnitOfWork unitOfWork,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<NotificationDto>> Handle(
@@ -39,7 +43,7 @@ public class CreateNotificationHandler : IRequestHandler<CreateNotificationComma
         return new BaseResponse<NotificationDto>
         {
             Success = true,
-            Message = "Notification created successfully",
+            Message = _localizer.Get("NotificationCreated"),
             Data = dto
         };
     }

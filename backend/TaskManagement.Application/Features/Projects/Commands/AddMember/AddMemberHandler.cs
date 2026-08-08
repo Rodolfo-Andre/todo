@@ -8,10 +8,12 @@ namespace TaskManagement.Application.Features.Projects.Commands.AddMember;
 public class AddMemberHandler : IRequestHandler<AddMemberCommand, BaseResponse<bool>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILocalizer _localizer;
 
-    public AddMemberHandler(IUnitOfWork unitOfWork)
+    public AddMemberHandler(IUnitOfWork unitOfWork, ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(AddMemberCommand request, CancellationToken cancellationToken)
@@ -20,7 +22,7 @@ public class AddMemberHandler : IRequestHandler<AddMemberCommand, BaseResponse<b
 
         if (project == null || project.DeletedAt.HasValue)
         {
-            return BaseResponse<bool>.Failure("Project not found");
+            return BaseResponse<bool>.Failure(_localizer.Get("ProjectNotFound"));
         }
 
         // Check if user is already a member
@@ -30,7 +32,7 @@ public class AddMemberHandler : IRequestHandler<AddMemberCommand, BaseResponse<b
 
         if (existingMember != null)
         {
-            return BaseResponse<bool>.Failure("User is already a member of this project");
+            return BaseResponse<bool>.Failure(_localizer.Get("UserAlreadyMember"));
         }
 
         var member = new ProjectMember

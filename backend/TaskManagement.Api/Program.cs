@@ -6,6 +6,7 @@ using Serilog;
 using TaskManagement.Api.Middleware;
 using TaskManagement.Api.Resources;
 using TaskManagement.Application;
+using TaskManagement.Application.Common.Interfaces;
 using TaskManagement.Domain.Entities;
 using TaskManagement.Infrastructure;
 using TaskManagement.Infrastructure.Data;

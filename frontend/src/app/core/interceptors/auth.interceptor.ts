@@ -5,15 +5,18 @@ import { AuthService } from '../auth/auth.service';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = localStorage.getItem('accessToken');
+  const language = localStorage.getItem('language') || 'es';
 
-  if (!token) {
-    return next(req);
+  const headers: Record<string, string> = {
+    'Accept-Language': language
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const cloned = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`
-    }
+    setHeaders: headers
   });
 
   return next(cloned);

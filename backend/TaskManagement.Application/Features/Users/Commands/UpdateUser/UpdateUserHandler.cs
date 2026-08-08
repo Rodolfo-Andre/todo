@@ -10,11 +10,13 @@ public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, BaseResponse
 {
     private readonly UserManager<User> _userManager;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
-    public UpdateUserHandler(UserManager<User> userManager, ICurrentUserService currentUserService)
+    public UpdateUserHandler(UserManager<User> userManager, ICurrentUserService currentUserService, ILocalizer localizer)
     {
         _userManager = userManager;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
@@ -23,14 +25,14 @@ public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, BaseResponse
 
         if (user == null)
         {
-            return BaseResponse<bool>.Failure("User not found");
+            return BaseResponse<bool>.Failure(_localizer.Get("UserNotFound"));
         }
 
         // Check if email is already taken by another user
         var existingUser = await _userManager.FindByEmailAsync(request.Email);
         if (existingUser != null && existingUser.Id != request.Id)
         {
-            return BaseResponse<bool>.Failure("Email is already taken by another user");
+            return BaseResponse<bool>.Failure(_localizer.Get("EmailAlreadyTakenByAnother"));
         }
 
         user.FullName = request.FullName;

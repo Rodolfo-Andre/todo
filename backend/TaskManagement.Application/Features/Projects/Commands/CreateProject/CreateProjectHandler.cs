@@ -9,11 +9,13 @@ public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, BaseRe
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
-    public CreateProjectHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+    public CreateProjectHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
@@ -24,7 +26,7 @@ public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, BaseRe
 
         if (existingProject != null)
         {
-            return BaseResponse<Guid>.Failure("Project key already exists");
+            return BaseResponse<Guid>.Failure(_localizer.Get("ProjectKeyAlreadyExists"));
         }
 
         var userId = Guid.Parse(_currentUserService.UserId);

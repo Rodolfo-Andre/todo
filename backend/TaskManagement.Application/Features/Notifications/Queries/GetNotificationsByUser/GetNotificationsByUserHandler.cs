@@ -10,13 +10,16 @@ public class GetNotificationsByUserHandler : IRequestHandler<GetNotificationsByU
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
     public GetNotificationsByUserHandler(
         IUnitOfWork unitOfWork,
-        ICurrentUserService currentUserService)
+        ICurrentUserService currentUserService,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<List<NotificationDto>>> Handle(
@@ -29,7 +32,7 @@ public class GetNotificationsByUserHandler : IRequestHandler<GetNotificationsByU
             return new BaseResponse<List<NotificationDto>>
             {
                 Success = false,
-                Message = "User not authenticated"
+                Message = _localizer.Get("UserNotAuthenticated")
             };
         }
 
@@ -56,7 +59,7 @@ public class GetNotificationsByUserHandler : IRequestHandler<GetNotificationsByU
         return new BaseResponse<List<NotificationDto>>
         {
             Success = true,
-            Message = "Notifications retrieved successfully",
+            Message = _localizer.Get("NotificationsRetrieved"),
             Data = dtoList
         };
     }

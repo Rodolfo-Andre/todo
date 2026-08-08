@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using TaskManagement.Application.Common.Interfaces;
 using TaskManagement.Domain.Entities;
 using TaskManagement.Shared.DTOs.Auth;
@@ -11,39 +12,50 @@ public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, BaseResp
 {
     private readonly UserManager<User> _userManager;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly ILocalizer _localizer;
 
-    public RefreshTokenHandler(UserManager<User> userManager, IJwtTokenService jwtTokenService)
+    public RefreshTokenHandler(UserManager<User> userManager, IJwtTokenService jwtTokenService, ILocalizer localizer)
     {
         _userManager = userManager;
         _jwtTokenService = jwtTokenService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<AuthResponse>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var principal = _jwtTokenService.GetPrincipalFromExpiredToken(request.RefreshToken);
+        ClaimsPrincipal? principal;
+
+        try
+        {
+            principal = _jwtTokenService.GetPrincipalFromExpiredToken(request.RefreshToken);
+        }
+        catch (Exception)
+        {
+            return BaseResponse<AuthResponse>.Failure(_localizer.Get("InvalidRefreshToken"));
+        }
 
         if (principal == null)
         {
-            return BaseResponse<AuthResponse>.Failure("Invalid refresh token");
+            return BaseResponse<AuthResponse>.Failure(_localizer.Get("InvalidRefreshToken"));
         }
 
         var userId = principal.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrEmpty(userId))
         {
-            return BaseResponse<AuthResponse>.Failure("Invalid refresh token");
+            return BaseResponse<AuthResponse>.Failure(_localizer.Get("InvalidRefreshToken"));
         }
 
         var user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)
         {
-            return BaseResponse<AuthResponse>.Failure("User not found");
+            return BaseResponse<AuthResponse>.Failure(_localizer.Get("UserNotFound"));
         }
 
         if (user.RefreshToken != request.RefreshToken || user.RefreshTokenExpiry <= DateTime.UtcNow)
         {
-            return BaseResponse<AuthResponse>.Failure("Invalid or expired refresh token");
+            return BaseResponse<AuthResponse>.Failure(_localizer.Get("InvalidOrExpiredRefreshToken"));
         }
 
         var roles = await _userManager.GetRolesAsync(user);

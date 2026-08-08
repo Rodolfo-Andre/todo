@@ -1,15 +1,20 @@
 using FluentValidation;
+using TaskManagement.Application.Common.Interfaces;
 
 namespace TaskManagement.Application.Features.Tasks.Commands.ChangeStatus;
 
 public class ChangeStatusValidator : AbstractValidator<ChangeStatusCommand>
 {
-    public ChangeStatusValidator()
+    private readonly ILocalizer _localizer;
+
+    public ChangeStatusValidator(ILocalizer localizer)
     {
+        _localizer = localizer;
+
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Task ID is required");
+            .NotEmpty().WithMessage(_localizer.Get("TaskIdRequired"));
 
         RuleFor(x => x.Status)
-            .InclusiveBetween(0, 4).WithMessage("Status must be between 0 and 4");
+            .InclusiveBetween(0, 4).WithMessage(_localizer.Get("InvalidStatus"));
     }
 }

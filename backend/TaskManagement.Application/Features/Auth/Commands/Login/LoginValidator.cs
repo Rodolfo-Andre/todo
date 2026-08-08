@@ -1,16 +1,21 @@
 using FluentValidation;
+using TaskManagement.Application.Common.Interfaces;
 
 namespace TaskManagement.Application.Features.Auth.Commands.Login;
 
 public class LoginValidator : AbstractValidator<LoginCommand>
 {
-    public LoginValidator()
+    private readonly ILocalizer _localizer;
+
+    public LoginValidator(ILocalizer localizer)
     {
+        _localizer = localizer;
+
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .EmailAddress().WithMessage("Invalid email format");
+            .NotEmpty().WithMessage(_localizer.Get("EmailRequired"))
+            .EmailAddress().WithMessage(_localizer.Get("InvalidEmail"));
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required");
+            .NotEmpty().WithMessage(_localizer.Get("PasswordRequired"));
     }
 }

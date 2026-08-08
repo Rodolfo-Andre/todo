@@ -10,11 +10,13 @@ public class LogoutHandler : IRequestHandler<LogoutCommand, BaseResponse<bool>>
 {
     private readonly UserManager<User> _userManager;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
-    public LogoutHandler(UserManager<User> userManager, ICurrentUserService currentUserService)
+    public LogoutHandler(UserManager<User> userManager, ICurrentUserService currentUserService, ILocalizer localizer)
     {
         _userManager = userManager;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(LogoutCommand request, CancellationToken cancellationToken)
@@ -23,7 +25,7 @@ public class LogoutHandler : IRequestHandler<LogoutCommand, BaseResponse<bool>>
 
         if (user == null)
         {
-            return BaseResponse<bool>.Failure("User not found");
+            return BaseResponse<bool>.Failure(_localizer.Get("UserNotFound"));
         }
 
         // Clear refresh token

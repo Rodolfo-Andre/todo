@@ -8,10 +8,12 @@ namespace TaskManagement.Application.Features.Projects.Queries.GetProjectById;
 public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, BaseResponse<ProjectDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILocalizer _localizer;
 
-    public GetProjectByIdHandler(IUnitOfWork unitOfWork)
+    public GetProjectByIdHandler(IUnitOfWork unitOfWork, ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<ProjectDto>> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
@@ -20,7 +22,7 @@ public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, BaseRe
 
         if (project == null || project.DeletedAt.HasValue)
         {
-            return BaseResponse<ProjectDto>.Failure("Project not found");
+            return BaseResponse<ProjectDto>.Failure(_localizer.Get("ProjectNotFound"));
         }
 
         var taskCount = (await _unitOfWork.Tasks.FindAsync(

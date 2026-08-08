@@ -1,30 +1,35 @@
 using FluentValidation;
+using TaskManagement.Application.Common.Interfaces;
 
 namespace TaskManagement.Application.Features.Auth.Commands.Register;
 
 public class RegisterValidator : AbstractValidator<RegisterCommand>
 {
-    public RegisterValidator()
+    private readonly ILocalizer _localizer;
+
+    public RegisterValidator(ILocalizer localizer)
     {
+        _localizer = localizer;
+
         RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage("Username is required")
-            .MinimumLength(3).WithMessage("Username must be at least 3 characters")
-            .MaximumLength(50).WithMessage("Username must not exceed 50 characters");
+            .NotEmpty().WithMessage(_localizer.Get("UsernameRequired"))
+            .MinimumLength(3).WithMessage(_localizer.Get("UsernameMinLength"))
+            .MaximumLength(50).WithMessage(_localizer.Get("UsernameMaxLength"));
 
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .EmailAddress().WithMessage("Invalid email format");
+            .NotEmpty().WithMessage(_localizer.Get("EmailRequired"))
+            .EmailAddress().WithMessage(_localizer.Get("InvalidEmail"));
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required")
-            .MinimumLength(8).WithMessage("Password must be at least 8 characters")
-            .Matches("[A-Z]").WithMessage("Password must contain at least one uppercase letter")
-            .Matches("[a-z]").WithMessage("Password must contain at least one lowercase letter")
-            .Matches("[0-9]").WithMessage("Password must contain at least one digit");
+            .NotEmpty().WithMessage(_localizer.Get("PasswordRequired"))
+            .MinimumLength(8).WithMessage(_localizer.Get("PasswordMinLength"))
+            .Matches("[A-Z]").WithMessage(_localizer.Get("PasswordRequiresUpper"))
+            .Matches("[a-z]").WithMessage(_localizer.Get("PasswordRequiresLower"))
+            .Matches("[0-9]").WithMessage(_localizer.Get("PasswordRequiresDigit"));
 
         RuleFor(x => x.FullName)
-            .NotEmpty().WithMessage("Full name is required")
-            .MinimumLength(2).WithMessage("Full name must be at least 2 characters")
-            .MaximumLength(100).WithMessage("Full name must not exceed 100 characters");
+            .NotEmpty().WithMessage(_localizer.Get("FullNameRequired"))
+            .MinimumLength(2).WithMessage(_localizer.Get("FullNameMinLength"))
+            .MaximumLength(100).WithMessage(_localizer.Get("FullNameMaxLength"));
     }
 }

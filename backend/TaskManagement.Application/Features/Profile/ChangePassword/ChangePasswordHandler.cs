@@ -10,13 +10,16 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Base
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly UserManager<User> _userManager;
+    private readonly ILocalizer _localizer;
 
     public ChangePasswordHandler(
         ICurrentUserService currentUserService,
-        UserManager<User> userManager)
+        UserManager<User> userManager,
+        ILocalizer localizer)
     {
         _currentUserService = currentUserService;
         _userManager = userManager;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(
@@ -29,7 +32,7 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Base
             return new BaseResponse<bool>
             {
                 Success = false,
-                Message = "User not authenticated"
+                Message = _localizer.Get("UserNotAuthenticated")
             };
         }
 
@@ -39,7 +42,7 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Base
             return new BaseResponse<bool>
             {
                 Success = false,
-                Message = "New password and confirmation do not match"
+                Message = _localizer.Get("PasswordsDoNotMatch")
             };
         }
 
@@ -49,7 +52,7 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Base
             return new BaseResponse<bool>
             {
                 Success = false,
-                Message = "User not found"
+                Message = _localizer.Get("UserNotFound")
             };
         }
 
@@ -59,7 +62,7 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Base
             return new BaseResponse<bool>
             {
                 Success = false,
-                Message = "Failed to change password",
+                Message = _localizer.Get("PasswordChangeFailed"),
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }
@@ -67,7 +70,7 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Base
         return new BaseResponse<bool>
         {
             Success = true,
-            Message = "Password changed successfully",
+            Message = _localizer.Get("PasswordChanged"),
             Data = true
         };
     }

@@ -9,13 +9,16 @@ public class GetDashboardDataHandler : IRequestHandler<GetDashboardDataQuery, Ba
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
     public GetDashboardDataHandler(
         IUnitOfWork unitOfWork,
-        ICurrentUserService currentUserService)
+        ICurrentUserService currentUserService,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<DashboardDto>> Handle(
@@ -28,7 +31,7 @@ public class GetDashboardDataHandler : IRequestHandler<GetDashboardDataQuery, Ba
             return new BaseResponse<DashboardDto>
             {
                 Success = false,
-                Message = "User not authenticated"
+                Message = _localizer.Get("UserNotAuthenticated")
             };
         }
 
@@ -164,7 +167,7 @@ public class GetDashboardDataHandler : IRequestHandler<GetDashboardDataQuery, Ba
         return new BaseResponse<DashboardDto>
         {
             Success = true,
-            Message = "Dashboard data retrieved successfully",
+            Message = _localizer.Get("DashboardDataRetrieved"),
             Data = dashboard
         };
     }

@@ -9,10 +9,14 @@ namespace TaskManagement.Application.Features.Audit.GetAuditSummary;
 public class GetAuditSummaryHandler : IRequestHandler<GetAuditSummaryQuery, BaseResponse<AuditLogSummaryDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILocalizer _localizer;
 
-    public GetAuditSummaryHandler(IUnitOfWork unitOfWork)
+    public GetAuditSummaryHandler(
+        IUnitOfWork unitOfWork,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<AuditLogSummaryDto>> Handle(
@@ -78,7 +82,7 @@ public class GetAuditSummaryHandler : IRequestHandler<GetAuditSummaryQuery, Base
         return new BaseResponse<AuditLogSummaryDto>
         {
             Success = true,
-            Message = "Audit summary retrieved successfully",
+            Message = _localizer.Get("AuditSummaryRetrieved"),
             Data = summary
         };
     }

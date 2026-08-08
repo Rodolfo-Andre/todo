@@ -11,11 +11,13 @@ public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, BaseRe
 {
     private readonly UserManager<User> _userManager;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
-    public GetCurrentUserHandler(UserManager<User> userManager, ICurrentUserService currentUserService)
+    public GetCurrentUserHandler(UserManager<User> userManager, ICurrentUserService currentUserService, ILocalizer localizer)
     {
         _userManager = userManager;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<UserDto>> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
@@ -24,7 +26,7 @@ public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserQuery, BaseRe
 
         if (user == null)
         {
-            return BaseResponse<UserDto>.Failure("User not found");
+            return BaseResponse<UserDto>.Failure(_localizer.Get("UserNotFound"));
         }
 
         var roles = await _userManager.GetRolesAsync(user);

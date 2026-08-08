@@ -9,11 +9,13 @@ public class AssignTaskHandler : IRequestHandler<AssignTaskCommand, BaseResponse
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
-    public AssignTaskHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+    public AssignTaskHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(AssignTaskCommand request, CancellationToken cancellationToken)
@@ -21,7 +23,7 @@ public class AssignTaskHandler : IRequestHandler<AssignTaskCommand, BaseResponse
         var task = await _unitOfWork.Tasks.GetByIdAsync(request.Id, cancellationToken);
         if (task == null)
         {
-            return BaseResponse<bool>.Failure("Task not found");
+            return BaseResponse<bool>.Failure(_localizer.Get("TaskNotFound"));
         }
 
         var userId = Guid.Parse(_currentUserService.UserId);

@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using TaskManagement.Application.Common.Interfaces;
 using TaskManagement.Domain.Entities;
 using TaskManagement.Shared.DTOs.Users;
 using TaskManagement.Shared.Models;
@@ -9,10 +10,12 @@ namespace TaskManagement.Application.Features.Users.Queries.GetUserById;
 public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, BaseResponse<UserDto>>
 {
     private readonly UserManager<User> _userManager;
+    private readonly ILocalizer _localizer;
 
-    public GetUserByIdHandler(UserManager<User> userManager)
+    public GetUserByIdHandler(UserManager<User> userManager, ILocalizer localizer)
     {
         _userManager = userManager;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<UserDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
@@ -21,7 +24,7 @@ public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, BaseResponse
 
         if (user == null)
         {
-            return BaseResponse<UserDto>.Failure("User not found");
+            return BaseResponse<UserDto>.Failure(_localizer.Get("UserNotFound"));
         }
 
         var roles = await _userManager.GetRolesAsync(user);

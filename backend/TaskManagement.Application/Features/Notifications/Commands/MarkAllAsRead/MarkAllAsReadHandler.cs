@@ -8,13 +8,16 @@ public class MarkAllAsReadHandler : IRequestHandler<MarkAllAsReadCommand, BaseRe
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
     public MarkAllAsReadHandler(
         IUnitOfWork unitOfWork,
-        ICurrentUserService currentUserService)
+        ICurrentUserService currentUserService,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(
@@ -27,7 +30,7 @@ public class MarkAllAsReadHandler : IRequestHandler<MarkAllAsReadCommand, BaseRe
             return new BaseResponse<bool>
             {
                 Success = false,
-                Message = "User not authenticated"
+                Message = _localizer.Get("UserNotAuthenticated")
             };
         }
 
@@ -47,7 +50,7 @@ public class MarkAllAsReadHandler : IRequestHandler<MarkAllAsReadCommand, BaseRe
         return new BaseResponse<bool>
         {
             Success = true,
-            Message = "All notifications marked as read",
+            Message = _localizer.Get("AllNotificationsMarkedAsRead"),
             Data = true
         };
     }

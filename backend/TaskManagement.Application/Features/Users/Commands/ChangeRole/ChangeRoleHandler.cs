@@ -10,11 +10,13 @@ public class ChangeRoleHandler : IRequestHandler<ChangeRoleCommand, BaseResponse
 {
     private readonly UserManager<User> _userManager;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
-    public ChangeRoleHandler(UserManager<User> userManager, ICurrentUserService currentUserService)
+    public ChangeRoleHandler(UserManager<User> userManager, ICurrentUserService currentUserService, ILocalizer localizer)
     {
         _userManager = userManager;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<bool>> Handle(ChangeRoleCommand request, CancellationToken cancellationToken)
@@ -23,7 +25,7 @@ public class ChangeRoleHandler : IRequestHandler<ChangeRoleCommand, BaseResponse
 
         if (user == null)
         {
-            return BaseResponse<bool>.Failure("User not found");
+            return BaseResponse<bool>.Failure(_localizer.Get("UserNotFound"));
         }
 
         // Get current roles

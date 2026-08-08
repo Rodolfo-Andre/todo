@@ -10,10 +10,14 @@ namespace TaskManagement.Application.Features.Audit.GetAuditLogs;
 public class GetAuditLogsHandler : IRequestHandler<GetAuditLogsQuery, BaseResponse<List<AuditLogDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILocalizer _localizer;
 
-    public GetAuditLogsHandler(IUnitOfWork unitOfWork)
+    public GetAuditLogsHandler(
+        IUnitOfWork unitOfWork,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<List<AuditLogDto>>> Handle(
@@ -79,7 +83,7 @@ public class GetAuditLogsHandler : IRequestHandler<GetAuditLogsQuery, BaseRespon
         return new BaseResponse<List<AuditLogDto>>
         {
             Success = true,
-            Message = "Audit logs retrieved successfully",
+            Message = _localizer.Get("AuditLogsRetrieved"),
             Data = logDtos
         };
     }

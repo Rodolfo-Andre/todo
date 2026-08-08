@@ -8,13 +8,16 @@ public class GetUnreadCountHandler : IRequestHandler<GetUnreadCountQuery, BaseRe
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILocalizer _localizer;
 
     public GetUnreadCountHandler(
         IUnitOfWork unitOfWork,
-        ICurrentUserService currentUserService)
+        ICurrentUserService currentUserService,
+        ILocalizer localizer)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _localizer = localizer;
     }
 
     public async Task<BaseResponse<int>> Handle(
@@ -27,7 +30,7 @@ public class GetUnreadCountHandler : IRequestHandler<GetUnreadCountQuery, BaseRe
             return new BaseResponse<int>
             {
                 Success = false,
-                Message = "User not authenticated"
+                Message = _localizer.Get("UserNotAuthenticated")
             };
         }
 
@@ -39,7 +42,7 @@ public class GetUnreadCountHandler : IRequestHandler<GetUnreadCountQuery, BaseRe
         return new BaseResponse<int>
         {
             Success = true,
-            Message = "Unread count retrieved successfully",
+            Message = _localizer.Get("UnreadCountRetrieved"),
             Data = count
         };
     }
