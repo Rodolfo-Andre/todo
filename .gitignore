@@ -66,3 +66,6 @@ appsettings.Development.json
 
 ## Playwright
 .playwright-mcp/
+
+## Opencode
+.opencode/
